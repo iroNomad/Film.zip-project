@@ -44,11 +44,13 @@ public class MainController {
                 // Extract specific fields to send to the HTML page
                 String title = movie.get("title").asText();
                 String release_date = movie.get("release_date").asText();
+                String poster = movie.get("poster_path").asText();
 
                 // Add each movie as a map (key-value pairs) to the list
                 movieList.add(Map.of(
                         "title", title,
-                        "release_date", release_date
+                        "release_date", release_date,
+                        "poster_path", poster
                 ));
             }
 

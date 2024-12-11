@@ -1,12 +1,24 @@
 <html layout:decorate="~{layout}">
-  <div layout:fragment="content" class="container my-3">
-    <h1>Trending Movies</h1>
-    <ul>
-      <!-- Loop through the 'movies' list from the controller -->
-      <li th:each="movie : ${movies}">
-        <strong th:text="${movie.title}"></strong>
-        (Release Date: <span th:text="${movie.release_date}"></span>)
-      </li>
-    </ul>
+<div layout:fragment="content" class="container my-3">
+  <h1>Trending Movies</h1>
+  <div class="row g-4">
+    <!-- Loop through the movies list -->
+    <div th:each="movie : ${movies}" class="col-md-4">
+      <div class="card mb-3" style="width: 100%; height: 100%;">
+        <!-- Dynamically set the image source -->
+        <img th:src="'https://image.tmdb.org/t/p/original' + ${movie.poster_path}"
+             th:alt="${movie.title}"
+             class="card-img-top" alt="Movie Poster">
+        <div class="card-body">
+          <!-- Display movie title -->
+          <h5 class="card-title">[[${movie.title}]]</h5>
+        </div>
+        <div class="card-footer">
+          <!-- Display movie release date -->
+          <small class="text-body-secondary">[[${movie.release_date}]]</small>
+        </div>
+      </div>
+    </div>
   </div>
+</div>
 </html>
