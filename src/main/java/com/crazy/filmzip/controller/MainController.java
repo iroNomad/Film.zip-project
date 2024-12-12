@@ -107,7 +107,7 @@ public class MainController {
                 }
 
                 if (movie.get("poster_path").isNull()) {
-                    poster_path = "/images/Fallback_poster.png";
+                    poster_path = "/images/NotFound.jpg";
                 }
                 else {
                     poster_path = "https://image.tmdb.org/t/p/original" + poster_path;
