@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
-    <!-- sbb CSS -->
-    <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/styles.css}">
+
     <title>HomePage</title>
 </head>
 <body class="bg-dark text-white">
@@ -15,13 +15,15 @@
 <nav class="navbar navbar-expand-lg bg-dark p-3">
     <div class="container-fluid">
         <!-- Left Side: Logo -->
-        <a class="navbar-brand text-white" href="#">Film.zip</a>
+        <a class="navbar-brand text-white" href="/main">Film.zip</a>
 
         <!-- Middle: Form and Links (collapse area) -->
-        <form class="d-flex me-3 w-50" role="search">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-light" type="submit">검색</button>
+        <form action="/search" method="GET" class="d-flex me-3 w-50" role="search">
+            <!-- Input field for search query -->
+            <input class="form-control me-2" type="search" name="keyword" placeholder="Search" aria-label="Search" required>
+            <button class="btn btn-outline-light w-25" type="submit">검색</button>
         </form>
+
 
         <!-- Right Side: Login Button -->
         <ul class="navbar-nav d-flex align-items-center flex-row">

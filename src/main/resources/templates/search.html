@@ -1,0 +1,20 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
+    <h1>검색 결과</h1>
+    <div class="movie-grid">
+        <!-- Loop through the movies list -->
+        <div th:each="movie : ${movies}" class="movie-card">
+            <div class="card mb-3 bg-dark text-white border-white">
+                <!-- Dynamically set the image source -->
+                <img th:src="${movie.poster_path}"
+                     class="card-img-top" alt="Movie Poster" style="object-fit: cover; aspect-ratio: 2 / 3;">
+                <div class="card-body">
+                    <!-- Display movie title -->
+                    <h6 class="card-title">[[${movie.title}]]</h6>
+                    <p class="card-text text-end mt-auto">[[${movie.release_date}]]</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>
