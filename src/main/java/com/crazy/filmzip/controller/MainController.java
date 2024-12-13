@@ -1,6 +1,7 @@
 package com.crazy.filmzip.controller;
 
 import com.crazy.filmzip.TmdbApiEndpoint;
+import com.crazy.filmzip.service.ResponseService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.HttpUrl;
@@ -27,45 +28,18 @@ public class MainController {
 
     String baseUrl = "https://api.themoviedb.org/3/";
 
-    private final OkHttpClient client = new OkHttpClient();
+//    private final OkHttpClient client = new OkHttpClient();
 
     @GetMapping("/main")
     public String index(Model model) {
         Request request = new Request.Builder()
-                .url(TmdbApiEndpoint.TRENDING.getFullUrl(baseUrl))
+                .url(TmdbApiEndpoint.TRENDING.getFullUrl(baseUrl) + "?language=ko")
                 .get()
                 .addHeader("accept", "application/json")
                 .addHeader("Authorization", "Bearer " + apiKey)
                 .build();
 
-        List<Map<String, Object>> movieList = new ArrayList<>();
-
-        try (Response response = client.newCall(request).execute()) {
-            String jsonResponse = response.body().string();
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode rootNode = mapper.readTree(jsonResponse);
-            JsonNode results = rootNode.get("results");
-
-            for (JsonNode movie : results) {
-                // Extract specific fields to send to the HTML page
-                String title = movie.get("title").asText();
-                String release_date = movie.get("release_date").asText();
-                String poster_path = movie.get("poster_path").asText();
-                if (release_date.isEmpty()) {
-                    release_date = "NO DATA";
-                }
-
-                // Add each movie as a map (key-value pairs) to the list
-                movieList.add(Map.of(
-                        "title", title,
-                        "release_date", release_date,
-                        "poster_path", poster_path
-                ));
-            }
-
-        } catch (IOException e) {
-            return "Error occurred: " + e.getMessage();
-        }
+        List movieList = ResponseService.responseHandler(request);
 
         // Pass the movie list to the view (index.html)
         model.addAttribute("movies", movieList);
@@ -79,6 +53,7 @@ public class MainController {
         HttpUrl url = HttpUrl.parse(TmdbApiEndpoint.SEARCH.getFullUrl(baseUrl))
                     .newBuilder()
                     .addQueryParameter("query", keyword)
+                    .addQueryParameter("language", "ko")
                     .build();
 
         // Create the request
@@ -89,40 +64,7 @@ public class MainController {
                     .addHeader("Authorization", "Bearer " + apiKey)
                     .build();
 
-        // Send the API request
-        List<Map<String, Object>> movieList = new ArrayList<>();
-
-        try (Response response = client.newCall(request).execute()) {
-            String jsonResponse = response.body().string();
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode rootNode = mapper.readTree(jsonResponse);
-            JsonNode results = rootNode.get("results");
-            for (JsonNode movie : results) {
-                // Extract specific fields to send to the HTML page
-                String title = movie.get("title").asText();
-                String release_date = movie.get("release_date").asText();
-                String poster_path = movie.get("poster_path").asText();
-                if (release_date.isEmpty()) {
-                    release_date = "NO DATA";
-                }
-
-                if (movie.get("poster_path").isNull()) {
-                    poster_path = "/images/NotFound.jpg";
-                }
-                else {
-                    poster_path = "https://image.tmdb.org/t/p/original" + poster_path;
-                }
-                // Add each movie as a map (key-value pairs) to the list
-                movieList.add(Map.of(
-                        "title", title,
-                        "release_date", release_date,
-                        "poster_path", poster_path
-                ));
-            }
-
-        } catch (IOException e) {
-            return "Error occurred: " + e.getMessage();
-        }
+        List movieList = ResponseService.responseHandler(request);
 
         // Pass the movie list to the view (index.html)
         model.addAttribute("movies", movieList);

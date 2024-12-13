@@ -8,9 +8,13 @@
                 <!-- Dynamically set the image source -->
                 <img th:src="${movie.poster_path}"
                      class="card-img-top" alt="Movie Poster" style="object-fit: cover; aspect-ratio: 2 / 3;">
+                <!-- Rating badge in the upper-right corner -->
+                <div class="position-absolute top-0 end-0">
+                    <span class="badge text-white fs-5" style="background-color: rgba(0, 0, 0, 0.6);">⭐[[${movie.rating}]]</span>
+                </div>
                 <div class="card-body">
                     <!-- Display movie title -->
-                    <h6 class="card-title">[[${movie.title}]]</h6>
+                    <p class="card-title fw-bold">[[${movie.title}]]</p>
                     <p class="card-text text-end mt-auto">[[${movie.release_date}]]</p>
                 </div>
             </div>
