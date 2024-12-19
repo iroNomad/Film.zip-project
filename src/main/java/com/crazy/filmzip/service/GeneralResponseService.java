@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class ResponseService {
+public class GeneralResponseService {
 
     private static final OkHttpClient client = new OkHttpClient();
 
@@ -35,6 +35,7 @@ public class ResponseService {
                 String poster_path = imgBaseUrl + movie.get("poster_path").asText();
                 Double RawRating = movie.get("vote_average").asDouble();
                 String rating = String.format("%.1f", RawRating);
+                String movieID = movie.get("id").asText();
 
                 if (release_date.isEmpty()) {
                     release_date = "NO DATA";
@@ -50,7 +51,8 @@ public class ResponseService {
                         "release_date", release_date,
                         "backdrop_path", backdrop_path,
                         "poster_path", poster_path,
-                        "rating", rating
+                        "rating", rating,
+                        "movieID", movieID
                 ));
             }
 
