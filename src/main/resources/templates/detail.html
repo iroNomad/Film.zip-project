@@ -1,10 +1,24 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
+<html layout:decorate="~{layout}">
+    <div layout:fragment="content" class="container my-3">
+        <div class="card mb-3 bg-transparent border-white rounded-0 text-white">
+            <div class="row g-0">
+                <div class="col-md-4">
+                    <img th:src="${movie.posterPath}"
+                         class="img-fluid rounded-start"
+                         alt="Movie poster"
+                         style="object-fit: cover; aspect-ratio: 2 / 3;">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body p-5">
+                        <h4 class="fw-bold">[[${movie.title}]]</h4>
+                        <p class="card-text"><small>[[${movie.releaseDate}]]</small></p>
+                        <br>
+                        <p class="card-text fst-italic">"[[${movie.tagline}]]"</p>
+                        <p class="card-text">[[${movie.overview}]]</p>
+                        <p class="card-text"><small>Last updated 3 mins ago</small></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </html>
