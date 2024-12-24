@@ -2,6 +2,7 @@ package com.crazy.filmzip.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
@@ -64,8 +65,14 @@ public class Movie {
     @JsonProperty("vote_average")
     private double voteAverage;
 
+    @Setter
+    private String rating;
+
     @JsonProperty("vote_count")
-    private long voteCount;
+    private long voteCountRaw;
+
+    @Setter
+    private String voteCount;
 
     // Nested objects
     public static class Collection {
@@ -85,6 +92,7 @@ public class Movie {
     @JsonProperty("belongs_to_collection")
     private Collection belongsToCollection;
 
+    @Getter
     public static class Genre {
         @JsonProperty("id")
         private int id;
@@ -145,4 +153,6 @@ public class Movie {
     public String getBackdropPath() {
         return imgBaseUrl + backdropPath;
     }
+
+
 }

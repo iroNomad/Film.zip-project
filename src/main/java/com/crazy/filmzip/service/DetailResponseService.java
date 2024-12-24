@@ -38,6 +38,8 @@ public class DetailResponseService {
                 String jsonResponse = body.string();
                 Movie movie = mapper.readValue(jsonResponse, Movie.class);
                 logger.info("Successfully fetched movie data: {}", movie.getTitle());
+                movie.setRating(String.format("%.1f", movie.getVoteAverage()));
+                movie.setVoteCount(String.format("%,d", movie.getVoteCountRaw()));
                 return movie;
             }
 

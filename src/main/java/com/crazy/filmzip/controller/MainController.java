@@ -79,6 +79,7 @@ public class MainController {
                 .build();
 
         Movie movie = detailResponseService.getMovieData(request);
+        System.out.println(movie.getGenres().getFirst().getName());
 
         // Pass the movie list to the view (detail.html)
         model.addAttribute("movie", movie);

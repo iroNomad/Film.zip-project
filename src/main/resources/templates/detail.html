@@ -12,13 +12,27 @@
                     <div class="card-body p-5">
                         <h4 class="fw-bold">[[${movie.title}]]</h4>
                         <p class="card-text"><small>[[${movie.releaseDate}]]</small></p>
-                        <br>
+                        <p class="border border-white px-3 rounded" th:each="genre : ${movie.genres}" style="display: inline-block">
+                            [[${genre.name}]]
+                        </p>
+                        <p class="card-text">
+                            <strong>⭐[[${movie.rating}]]</strong> <small>([[${movie.voteCount}]])</small>
+                        </p>
+                        <hr>
                         <p class="card-text fst-italic">"[[${movie.tagline}]]"</p>
                         <p class="card-text">[[${movie.overview}]]</p>
-                        <p class="card-text"><small>Last updated 3 mins ago</small></p>
                     </div>
                 </div>
             </div>
         </div>
+        <iframe
+                width="560"
+                height="315"
+                src="https://www.youtube.com/embed/Ko2NWhXI9e8"
+                title="[어벤져스: 엔드게임] 메인 예고편"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+        </iframe>
     </div>
 </html>
