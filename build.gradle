@@ -72,6 +72,9 @@ dependencies {
 
 	// OAuth2를 사용하기 위한 스타터 추가
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+	// Spring-dotenv
+	implementation 'io.github.cdimascio:dotenv-java:3.0.0'
 }
 
 tasks.named('test') {
