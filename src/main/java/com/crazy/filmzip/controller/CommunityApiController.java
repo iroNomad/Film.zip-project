@@ -4,11 +4,14 @@ import com.crazy.filmzip.dto.*;
 import com.crazy.filmzip.entity.CommunityPost;
 import com.crazy.filmzip.service.CommunityService;
 import lombok.RequiredArgsConstructor;
+import oracle.jdbc.proxy.annotation.Post;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
@@ -24,12 +27,11 @@ public class CommunityApiController {
         return ResponseEntity.ok(posts);
     }
 
-    // 게시글 상세 조회
+    // 게시글 상세 조회 (추천/비추천 포함)
     @GetMapping("/{id}")
     public ResponseEntity<CommunityPostDetailResponse> getPostById(@PathVariable Long id) {
-
-        CommunityPost post = communityService.findById(id);
-        return ResponseEntity.ok(new CommunityPostDetailResponse(post));
+        CommunityPostDetailResponse postDetail = communityService.findById(id); // 수정된 메서드 호출
+        return ResponseEntity.ok(postDetail);
     }
 
     // 게시글 생성
@@ -57,5 +59,26 @@ public class CommunityApiController {
     public ResponseEntity<Void> deletePost(@PathVariable Long id) {
         communityService.delete(id);
         return ResponseEntity.ok().build();
+    }
+
+    // 게시글 추천/비추천
+    @PostMapping("/{id}/react")
+    public ResponseEntity<Void> reactToPost(@PathVariable Long id,
+                                            @RequestParam Long userId,
+                                            @RequestParam String reactionType) {
+        communityService.reactToPost(id, userId, reactionType);
+        return ResponseEntity.ok().build();
+    }
+
+    // 게시글의 추천/비추천 수 조회
+    @GetMapping("/{id}/reactions")
+    public ResponseEntity<Map<String, Integer>> getReactions(@PathVariable Long id) {
+        int likes = communityService.countReactions(id, "LIKE");
+        int dislikes = communityService.countReactions(id, "DISLIKE");
+
+        Map<String, Integer> response = new HashMap<>();
+        response.put("likes", likes);
+        response.put("dislikes", dislikes);
+        return ResponseEntity.ok(response);
     }
 }
