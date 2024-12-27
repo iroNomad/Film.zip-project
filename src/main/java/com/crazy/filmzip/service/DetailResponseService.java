@@ -1,6 +1,8 @@
 package com.crazy.filmzip.service;
 
 import com.crazy.filmzip.dto.Movie;
+import com.crazy.filmzip.dto.Video;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -9,7 +11,6 @@ import okhttp3.ResponseBody;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 
 @Service
@@ -47,5 +48,30 @@ public class DetailResponseService {
             e.printStackTrace();
             throw new RuntimeException("Failed to fetch movie data", e);
         }
+    }
+
+    public Video getVideoData(Request request) {
+
+        Video videoObject = new Video();
+        try (Response response = client.newCall(request).execute()) {
+            String jsonResponse = response.body().string();
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode rootNode = mapper.readTree(jsonResponse);
+            JsonNode results = rootNode.get("results");
+
+            for (JsonNode video : results) {
+                if ("Trailer".equals(video.get("type").asText()) && "YouTube".equals(video.get("site").asText())) {
+                    String name = video.get("name").asText();
+                    String key = video.get("key").asText();
+                    videoObject.setName(name);
+                    videoObject.setKey(key);
+                    return videoObject;
+                }
+            }
+        }
+        catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+        return videoObject;
     }
 }

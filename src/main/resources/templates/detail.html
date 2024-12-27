@@ -28,8 +28,8 @@
         <iframe
                 width="560"
                 height="315"
-                src="https://www.youtube.com/embed/Ko2NWhXI9e8"
-                title="[어벤져스: 엔드게임] 메인 예고편"
+                th:src="'https://www.youtube.com/embed/' + ${video.key}"
+                th:title="${video.name}"
                 frameborder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowfullscreen>
