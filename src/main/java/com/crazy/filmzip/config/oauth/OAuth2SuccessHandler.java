@@ -10,7 +10,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -36,6 +35,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
+
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
 
         // provider 정보 확인
@@ -58,7 +58,10 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             email = (String) responseAttributes.get("email");
         } else if ("google".equals(provider)) {
             email = (String) attributes.get("email");
-        } else {
+        } else if("kakao".equals(provider)) {
+            Map<String, Object> kakaoAccountAttributes = (Map<String, Object>) attributes.get("kakao_account");
+            email = (String) kakaoAccountAttributes.get("email");
+        }else{
             throw new IllegalArgumentException("Unknown OAuth2 Provider: " + provider);
         }
 

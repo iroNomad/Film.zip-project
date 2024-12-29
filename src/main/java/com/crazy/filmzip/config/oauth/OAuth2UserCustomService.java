@@ -46,6 +46,11 @@ public class OAuth2UserCustomService extends DefaultOAuth2UserService {
         }else if("google".equals(provider)) {
             email = (String) attributes.get("email");
             name = (String) attributes.get("name");
+        }else if("kakao".equals(provider)) {
+            Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
+            email = (String) kakaoAccount.get("email");
+            Map<String, Object> profile = (Map<String, Object>) kakaoAccount.get("profile");
+            name = (String) profile.get("nickname");
         }else{
             email = null;
             name = null;

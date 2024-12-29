@@ -11,6 +11,16 @@
       background: -webkit-linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1));
       background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1))
     }
+
+    .mb-2 img {
+      width: 200px; /* 버튼 너비 */
+      height: auto; /* 자동 비율 유지 */
+      margin: 10px 0; /* 버튼 사이 간격 */
+    }
+
+    .mb-2 a {
+      display: inline-block; /* 이미지 버튼 간격 유지 */
+    }
   </style>
 </head>
 <body class="gradient-custom">
@@ -28,6 +38,10 @@
           <br/>
           <a href="/oauth2/authorization/naver">
             <img src="/img/naver.png">
+          </a>
+          <br/>
+          <a href="/oauth2/authorization/kakao">
+            <img src="/img/kakao.png">
           </a>
         </div>
       </div>
