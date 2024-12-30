@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 상세</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="p-5 mb-5 text-center bg-light">
+    <h1 class="mb-3">게시글 상세</h1>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h4>작성자: <span th:text="${article.writer}">익명</span></span></h4>
+                    <h6>조회수: <span th:text="${article.views}"></span></h6>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${article.title}">제목</h5>
+                    <p class="card-text" th:text="${article.content}">내용</p>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <!-- 추천/비추천 수 -->
+                        <div>
+                            <span>👍 추천: <span th:text="${article.likes}">0</span></span>
+                            <span>👎 비추천: <span th:text="${article.dislikes}">0</span></span>
+                        </div>
+                        <!-- 추천/비추천 버튼 -->
+                        <div class="reaction-buttons">
+                            <!-- 추천 버튼 -->
+                            <button type="button" class="btn btn-success btn-sm"
+                                    th:onclick="|reactToPost(${article.id}, 'LIKE')|">
+                                👍 추천
+                            </button>
+
+                            <!-- 비추천 버튼 -->
+                            <button type="button" class="btn btn-danger btn-sm"
+                                    th:onclick="|reactToPost(${article.id}, 'DISLIKE')|">
+                                👎 비추천
+                            </button>
+
+
+                        </div>
+                    </div>
+                    <hr>
+                    <!-- 수정 버튼 -->
+                    <button type="button" class="btn btn-primary btn-sm"
+                            th:onclick="|location.href='@{/community/new?id={articleId}(articleId=${article.id})}'|">
+                        수정
+                    </button>
+                    <!-- 삭제 버튼 -->
+                    <button type="button" class="btn btn-danger btn-sm" onclick="deleteArticle()">삭제</button>
+                    <!-- 목록으로 돌아가기 -->
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="location.href='/community/list'">목록</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function reactToPost(postId, reactionType) {
+        console.log(`Reacting to post ${postId} with ${reactionType}`); // 디버깅용 로그
+
+        fetch(`/api/community/${postId}/react?userId=7&reactionType=${reactionType}`, {
+            method: 'POST'
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert(`${reactionType === 'LIKE' ? '추천' : '비추천'}이 완료되었습니다.`);
+                    location.reload(); // 페이지 새로고침
+                } else {
+                    alert(`${reactionType === 'LIKE' ? '추천' : '비추천'}에 실패했습니다.`);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('서버와의 통신 중 문제가 발생했습니다.');
+            });
+    }
+
+
+    // 삭제 처리 함수
+    function deleteArticle() {
+        const id = new URL(window.location.href).pathname.split('/').pop();
+        if (confirm('정말 삭제하시겠습니까?')) {
+            fetch(`/api/community/${id}`, {
+                method: 'DELETE',
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert('삭제가 완료되었습니다.');
+                        location.replace('/community/list');
+                    } else {
+                        alert('삭제에 실패했습니다.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('서버와의 통신 중 문제가 발생했습니다.');
+                });
+        }
+    }
+</script>
+</body>
+</html>

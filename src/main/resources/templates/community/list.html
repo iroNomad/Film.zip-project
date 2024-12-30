@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>커뮤니티 글 목록</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .card {
+            margin-bottom: 20px;
+        }
+        .btn-success {
+            margin-bottom: 20px;
+        }
+        .reaction-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .reaction-buttons {
+            display: flex;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="p-5 mb-5 text-center bg-light">
+    <h1 class="mb-3">My Community</h1>
+    <h4 class="mb-3">커뮤니티에 오신 것을 환영합니다.</h4>
+</div>
+
+<div class="container">
+    <!-- 검색 폼 -->
+    <form method="get" action="/community/list" class="mb-4">
+        <div class="input-group">
+            <input type="text" name="keyword" class="form-control" placeholder="검색"
+                   th:value="${keyword}" />
+            <button type="submit" class="btn btn-primary">검색</button>
+        </div>
+    </form>
+    <!-- 글 등록 버튼 -->
+    <div class="d-flex justify-content-end">
+        <button type="button" class="btn btn-success btn-sm"
+                th:onclick="|location.href='@{/community/new}'|">글 등록</button>
+    </div>
+
+    <!-- 게시글 목록 -->
+    <div class="row">
+        <!-- 게시글이 없을 때 -->
+        <div th:if="${articles.size() == 0}" class="col-lg-12">
+            <div class="alert alert-info text-center" role="alert">
+                등록된 게시글이 없습니다. 새로운 게시글을 등록해보세요!
+            </div>
+        </div>
+
+        <!-- 게시글이 있을 때 -->
+        <div th:each="item : ${articles}" class="col-lg-12">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <span>작성자: <span th:text="${item.writer}">익명</span></span>
+                    <span class="float-right">조회수: <span th:text="${item.views}">0</span></span> <!-- 조회수 표시 -->
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${item.title}">게시글 제목</h5>
+                    <p class="card-text text-truncate" th:text="${item.content}">게시글 내용</p>
+                    <a th:href="@{/community/{id}(id=${item.id})}" class="btn btn-primary btn-sm">보러가기</a>
+                </div>
+                <div class="card-footer">
+                    <div class="reaction-container">
+                        <!-- 추천/비추천 수 -->
+                        <div>
+                            <span>👍 추천: <span th:text="${item.likes}">0</span></span>
+                            <span>👎 비추천: <span th:text="${item.dislikes}">0</span></span>
+                        </div>
+                        <!-- 추천/비추천 버튼 -->
+                        <div class="reaction-buttons">
+                            <button type="button" class="btn btn-success btn-sm"
+                                    th:onclick="|reactToPost(${item.id}, 'LIKE')|">
+                                👍 추천
+                            </button>
+                            <button type="button" class="btn btn-danger btn-sm"
+                                    th:onclick="|reactToPost(${item.id}, 'DISLIKE')|">
+                                👎 비추천
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 페이징 버튼 -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            <!-- 이전 버튼 -->
+            <li th:classappend="${currentPage == 0} ? 'disabled' : ''" class="page-item">
+                <a th:href="@{/community/list(page=${currentPage - 1}, keyword=${keyword})}" class="page-link">이전</a>
+            </li>
+            <!-- 페이지 번호 -->
+            <li th:each="i : ${#numbers.sequence(0, totalPage - 1)}"
+                th:classappend="${currentPage == i} ? 'active' : ''" class="page-item">
+                <a th:href="@{/community/list(page=${i}, keyword=${keyword})}" class="page-link"
+                   th:text="${i + 1}">1</a>
+            </li>
+            <!-- 다음 버튼 -->
+            <li th:classappend="${currentPage == totalPage - 1} ? 'disabled' : ''" class="page-item">
+                <a th:href="@{/community/list(page=${currentPage + 1}, keyword=${keyword})}" class="page-link">다음</a>
+            </li>
+        </ul>
+    </nav>
+
+</div>
+
+<script>
+    // 추천/비추천 처리 함수
+    function reactToPost(postId, reactionType) {
+        fetch(`/api/community/${postId}/react?userId=7&reactionType=${reactionType}`, {
+            method: 'POST'
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert(`${reactionType === 'LIKE' ? '추천' : '비추천'}이 완료되었습니다.`);
+                    location.reload(); // 페이지 새로고침
+                } else {
+                    alert(`${reactionType === 'LIKE' ? '추천' : '비추천'}에 실패했습니다.`);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('서버와의 통신 중 문제가 발생했습니다.');
+            });
+    }
+</script>
+</body>
+</html>
