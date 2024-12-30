@@ -9,4 +9,8 @@ public class AddUserRequest {
 
     private String email;
     private String password;
+    private Integer birth;
+    private String name;
+    private String nickname;
+    private String profileImage;
 }

@@ -35,32 +35,39 @@ public class OAuth2UserCustomService extends DefaultOAuth2UserService {
     private User saveOrUpdate(OAuth2User oAuth2User, String provider) {
         String email;
         String name;
+        Integer birth;
 
         Map<String, Object> attributes = oAuth2User.getAttributes();
+
+        log.info("attributes: {}", attributes);
 
         // 네이버
         if("naver".equals(provider)) {
             Map<String, Object> response = (Map<String, Object>) attributes.get("response");
             email = (String) response.get("email");
             name = (String) response.get("name");
+            birth = Integer.parseInt((String) response.get("birthyear"));
         }else if("google".equals(provider)) {
             email = (String) attributes.get("email");
             name = (String) attributes.get("name");
+            birth = -1;
         }else if("kakao".equals(provider)) {
             Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
             email = (String) kakaoAccount.get("email");
-            Map<String, Object> profile = (Map<String, Object>) kakaoAccount.get("profile");
-            name = (String) profile.get("nickname");
+            name = (String) kakaoAccount.get("name");
+            birth = Integer.parseInt((String) kakaoAccount.get("birthyear"));
         }else{
             email = null;
             name = null;
+            birth = null;
         }
 
         User user = userRepository.findByEmail(email)
                 .map(entity -> entity.update(name))
                 .orElse(User.builder()
                         .email(email)
-                        .nickname(name)
+                        .name(name)
+                        .birth(birth)
                         .build());
 
         return userRepository.save(user);

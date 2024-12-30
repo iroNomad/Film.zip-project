@@ -33,11 +33,15 @@ public class User implements UserDetails {
     private String password;
 
     @Column(nullable = false)
+    private String name;
+
+    @Column(unique = true)
     private String nickname;
 
     private String profileImage;
 
-    private String birthDate;
+    @Column(nullable = false)
+    private Integer birth;
 
     @Column(updatable = false)
     @CreatedDate
@@ -66,10 +70,13 @@ public class User implements UserDetails {
 
     // 생성자에 nickname 추가
     @Builder
-    public User(String email, String password, String nickname) {
+    public User(String email, String password, String name, Integer birth, String nickname, String profileImage) {
         this.email = email;
         this.password = password;
+        this.name = name;
+        this.birth = birth;
         this.nickname = nickname;
+        this.profileImage = profileImage;
     }
 
     @Override
@@ -107,9 +114,9 @@ public class User implements UserDetails {
         return true;
     }
 
-    // 사용자 이름 변경
-    public User update(String nickname) {
-        this.nickname = nickname;
+    // 사용자 이름, 출생 연도 변경
+    public User update(String name) {
+        this.name = name;
 
         return this;
     }

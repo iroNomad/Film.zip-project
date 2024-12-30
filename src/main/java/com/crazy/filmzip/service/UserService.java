@@ -21,6 +21,10 @@ public class UserService {
         return userRepository.save(User.builder()
                 .email(dto.getEmail())
                 .password(encoder.encode(dto.getPassword()))
+                .birth(dto.getBirth())
+                .name(dto.getName())
+                .nickname(dto.getNickname())
+                .profileImage(dto.getProfileImage())
                 .build()).getId();
     }
 

@@ -1,10 +1,10 @@
 package com.crazy.filmzip.controller;
 
+import oracle.jdbc.proxy.annotation.Post;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class UserViewController {
@@ -12,7 +12,7 @@ public class UserViewController {
     @GetMapping("/login")
     public String login() {
 
-        return "oauthLogin";
+        return "login";
     }
 
     @GetMapping("/signup")
