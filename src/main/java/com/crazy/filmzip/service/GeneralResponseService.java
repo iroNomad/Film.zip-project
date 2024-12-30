@@ -43,7 +43,7 @@ public class GeneralResponseService {
                 String movieID = movie.get("id").asText();
 
                 if (release_date.isEmpty()) {
-                    release_date = "NO DATA";
+                    release_date = "N/A ";
                 }
 
                 if (movie.get("poster_path").isNull()) {

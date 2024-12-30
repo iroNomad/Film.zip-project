@@ -31,13 +31,13 @@ public class MainController {
     }
 
     @GetMapping("/main")
-    public String index(Model model) {
+    public String main(Model model) {
 
         HttpUrl trendingURL = HttpUrl.parse(TmdbApiEndpoint.TRENDING.getFullUrl() + "?language=ko");
         List movieList = GeneralResponseService.responseHandler(createRequest(trendingURL));
 
         model.addAttribute("movies", movieList);
-        return "index"; // This points to templates/index.html
+        return "main"; // This points to templates/main.html
     }
 
     @GetMapping("/search/{pageNum}")
