@@ -38,7 +38,7 @@ public class CommunityApiController {
     @PostMapping
     public ResponseEntity<CommunityPostResponse> addPost(@RequestBody AddCommunityPostRequest request) {
         // 기본 테스트 사용자 ID를 설정
-        request.setUserId(7L);
+        request.setUserId(26L);
 
         CommunityPost savedPost = communityService.save(request);
         return ResponseEntity.status(HttpStatus.CREATED)

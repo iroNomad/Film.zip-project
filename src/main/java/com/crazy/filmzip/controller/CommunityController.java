@@ -22,9 +22,18 @@ public class CommunityController {
      * 게시글 목록 조회
      */
     @GetMapping("/list")
-    public String getArticles(Model model) {
-        List<CommunityListViewResponse> articles = communityService.findAll();
+    public String getArticles(@RequestParam(value = "keyword", required = false) String keyword, Model model) {
+        List<CommunityListViewResponse> articles;
+
+        if (keyword != null && !keyword.isEmpty()) {
+            articles = communityService.searchPosts(keyword); // 검색 로직 호출
+        } else {
+            articles = communityService.findAll(); // 전체 게시글 조회
+        }
+
         model.addAttribute("articles", articles);
+        model.addAttribute("keyword", keyword); // 검색어 유지
+
         return "community/list";
     }
 

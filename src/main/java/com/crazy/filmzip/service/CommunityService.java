@@ -116,5 +116,21 @@ public class CommunityService {
         return postReactionRepository.countByCommunityPostIdAndReactionType(postId, reactionType);
     }
 
+    // 검색 기능
+    public List<CommunityListViewResponse> searchPosts(String keyword){
+
+        // 검색 결과 조회
+        List<CommunityPost> posts = communityPostRepository.findByTitleContainingOrContentContainingOrUser_NicknameContaining(keyword, keyword, keyword);
+
+        // 검색 결과 DTO 변환
+        return posts.stream()
+                .map(post -> {
+                    int likes = postReactionRepository.countByCommunityPostIdAndReactionType(post.getId(), "LIKE");
+                    int dislikes = postReactionRepository.countByCommunityPostIdAndReactionType(post.getId(), "DISLIKE");
+                    return new CommunityListViewResponse(post, likes, dislikes);
+                })
+                .toList();
+
+    }
 
 }
