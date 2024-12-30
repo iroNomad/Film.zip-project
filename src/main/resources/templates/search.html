@@ -17,10 +17,32 @@
                 <div class="card-body">
                     <!-- Display movie title -->
                     <p class="card-title fw-bold">[[${movie.title}]]</p>
-                    <p class="card-text text-end mt-auto">[[${movie.release_date}]]</p>
+                    <p class="card-text text-end mt-auto">[[${movie.release_date.substring(0, 4)}]]</p>
                 </div>
             </div>
         </div>
     </div>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                <a class="page-link" th:href="@{/search/{pageNum}(pageNum=${currentPage - 1}, keyword=${keyword})}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li class="page-item"
+                th:each="i : ${#numbers.sequence(startPage, endPage)}"
+                th:classappend="${i == currentPage} ? 'disabled'">
+                <a class="page-link"
+                   th:href="@{/search/{pageNum}?keyword={word}(pageNum=${i}, word=${keyword})}">
+                    [[${i}]]
+                </a>
+            </li>
+            <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                <a class="page-link" th:href="@{/search/{pageNum}(pageNum=${currentPage + 1}, keyword=${keyword})}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
 </div>
 </html>

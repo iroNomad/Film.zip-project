@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class MainController {
@@ -39,19 +40,30 @@ public class MainController {
         return "index"; // This points to templates/index.html
     }
 
-    @GetMapping("/search")
-    public String search(@RequestParam("keyword") String keyword, Model model) {
+    @GetMapping("/search/{pageNum}")
+    public String search(@RequestParam("keyword") String keyword, @PathVariable("pageNum") int pageNum, Model model) {
 
         // Build the URL with the query parameter
         HttpUrl searchURL = HttpUrl.parse(TmdbApiEndpoint.SEARCH.getFullUrl())
                     .newBuilder()
                     .addQueryParameter("query", keyword)
                     .addQueryParameter("language", "ko")
+                    .addQueryParameter("page", String.valueOf(pageNum))
                     .build();
 
         List movieList = GeneralResponseService.responseHandler(createRequest(searchURL));
+        int totalPages = GeneralResponseService.getTotalPages();
+        int startPage = Math.max(pageNum - 5, 1);
+        int endPage = Math.min(pageNum + 4, totalPages);
 
-        model.addAttribute("movies", movieList);
+        model.addAllAttributes(Map.of(
+                "movies", movieList,
+                "keyword", keyword,
+                "totalPages", totalPages,
+                "currentPage", pageNum,
+                "startPage", startPage,
+                "endPage", endPage
+        ));
         return "search"; // This points to templates/search.html
     }
 

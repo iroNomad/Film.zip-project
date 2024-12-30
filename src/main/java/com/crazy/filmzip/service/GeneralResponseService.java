@@ -2,6 +2,7 @@ package com.crazy.filmzip.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.Getter;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -13,6 +14,9 @@ import java.util.Map;
 
 @Service
 public class GeneralResponseService {
+
+    @Getter
+    static int totalPages;
 
     private static final OkHttpClient client = new OkHttpClient();
 
@@ -26,6 +30,7 @@ public class GeneralResponseService {
             ObjectMapper mapper = new ObjectMapper();
             JsonNode rootNode = mapper.readTree(jsonResponse);
             JsonNode results = rootNode.get("results");
+            totalPages = rootNode.get("total_pages").asInt();
 
             for (JsonNode movie : results) {
                 // Extract specific fields to send to the HTML page
