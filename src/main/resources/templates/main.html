@@ -16,16 +16,18 @@
         <div class="carousel-inner">
             <div class="carousel-item" th:each="movie, iterStat : ${movies}" th:classappend="${iterStat.index == 0} ? 'active'" data-bs-interval="3000">
                 <a th:href="@{/detail/{id}(id=${movie.movieID})}">
-                  <img th:src="|https://image.tmdb.org/t/p/original${movie.backdrop_path}|" class="card-img-top" alt="Movie Poster">
+                    <img th:src="|https://image.tmdb.org/t/p/original${movie.backdrop_path}|" class="card-img-top" alt="Movie Poster">
                 </a>
 
                 <!-- Rating badge in the upper-right corner -->
                 <div class="position-absolute top-0 end-0 p-3">
-                  <span class="badge text-white fs-3" style="background-color: rgba(0, 0, 0, 0.6);">⭐[[${movie.rating}]]</span>
+                    <span class="badge text-white fs-3" style="background-color: rgba(0, 0, 0, 0.6);">⭐[[${movie.rating}]]</span>
                 </div>
 
                 <div class="carousel-caption d-none d-md-block">
-                    <h3 style="background-color: rgba(0, 0, 0, 0.6); color: #fff; padding: 10px;">[[${movie.title}]]</h3>
+                    <a th:href="@{/detail/{id}(id=${movie.movieID})}" style="text-decoration: none;">
+                        <h3 style="background-color: rgba(0, 0, 0, 0.6); color: #fff; padding: 10px;">[[${movie.title}]]</h3>
+                    </a>
                 </div>
             </div>
         </div>
