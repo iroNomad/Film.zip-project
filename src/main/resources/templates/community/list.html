@@ -32,7 +32,7 @@
     <!-- 검색 폼 -->
     <form method="get" action="/community/list" class="mb-4">
         <div class="input-group">
-            <input type="text" name="keyword" class="form-control" placeholder="제목 또는 작성자 검색"
+            <input type="text" name="keyword" class="form-control" placeholder="검색"
                    th:value="${keyword}" />
             <button type="submit" class="btn btn-primary">검색</button>
         </div>
@@ -87,6 +87,26 @@
             </div>
         </div>
     </div>
+    <!-- 페이징 버튼 -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            <!-- 이전 버튼 -->
+            <li th:classappend="${currentPage == 0} ? 'disabled' : ''" class="page-item">
+                <a th:href="@{/community/list(page=${currentPage - 1}, keyword=${keyword})}" class="page-link">이전</a>
+            </li>
+            <!-- 페이지 번호 -->
+            <li th:each="i : ${#numbers.sequence(0, totalPage - 1)}"
+                th:classappend="${currentPage == i} ? 'active' : ''" class="page-item">
+                <a th:href="@{/community/list(page=${i}, keyword=${keyword})}" class="page-link"
+                   th:text="${i + 1}">1</a>
+            </li>
+            <!-- 다음 버튼 -->
+            <li th:classappend="${currentPage == totalPage - 1} ? 'disabled' : ''" class="page-item">
+                <a th:href="@{/community/list(page=${currentPage + 1}, keyword=${keyword})}" class="page-link">다음</a>
+            </li>
+        </ul>
+    </nav>
+
 </div>
 
 <script>

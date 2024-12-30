@@ -12,6 +12,8 @@ import com.crazy.filmzip.repository.PostReactionRepository;
 import com.crazy.filmzip.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,14 +27,15 @@ public class CommunityService {
     private final PostReactionRepository postReactionRepository;
 
     // 게시글 목록 조회
-    public List<CommunityListViewResponse> findAll() {
-        return communityPostRepository.findAll().stream()
-                .map(post -> {
+    public Page<CommunityListViewResponse> findAll(Pageable pageable) {
+
+        Page<CommunityPost> posts = communityPostRepository.findAll(pageable);
+
+        return posts.map(post -> {
                     int likes = postReactionRepository.countByCommunityPostIdAndReactionType(post.getId(), "LIKE");
                     int dislikes = postReactionRepository.countByCommunityPostIdAndReactionType(post.getId(), "DISLIKE");
                     return new CommunityListViewResponse(post, likes, dislikes);
-                })
-                .toList();
+        });
     }
 
     // 게시글 상세 조회
@@ -117,19 +120,17 @@ public class CommunityService {
     }
 
     // 검색 기능
-    public List<CommunityListViewResponse> searchPosts(String keyword){
+    public Page<CommunityListViewResponse> searchPosts(String keyword, Pageable pageable){
 
         // 검색 결과 조회
-        List<CommunityPost> posts = communityPostRepository.findByTitleContainingOrContentContainingOrUser_NicknameContaining(keyword, keyword, keyword);
+        Page<CommunityPost> posts = communityPostRepository.findByTitleContainingOrContentContainingOrUser_NicknameContaining(keyword, keyword, keyword, pageable);
 
         // 검색 결과 DTO 변환
-        return posts.stream()
-                .map(post -> {
+        return posts.map(post -> {
                     int likes = postReactionRepository.countByCommunityPostIdAndReactionType(post.getId(), "LIKE");
                     int dislikes = postReactionRepository.countByCommunityPostIdAndReactionType(post.getId(), "DISLIKE");
                     return new CommunityListViewResponse(post, likes, dislikes);
-                })
-                .toList();
+        });
 
     }
 

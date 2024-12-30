@@ -5,12 +5,13 @@ import com.crazy.filmzip.entity.CommunityPost;
 import com.crazy.filmzip.service.CommunityService;
 import lombok.RequiredArgsConstructor;
 import oracle.jdbc.proxy.annotation.Post;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -22,8 +23,8 @@ public class CommunityApiController {
 
     // 게시글 목록 조회
     @GetMapping
-    public ResponseEntity<List<CommunityListViewResponse>> getAllPosts() {
-        List<CommunityListViewResponse> posts = communityService.findAll();
+    public ResponseEntity<Page<CommunityListViewResponse>> getAllPosts(Pageable pageable) {
+        Page<CommunityListViewResponse> posts = communityService.findAll(pageable);
         return ResponseEntity.ok(posts);
     }
 
