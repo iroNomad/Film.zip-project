@@ -10,6 +10,7 @@ import com.crazy.filmzip.entity.User;
 import com.crazy.filmzip.repository.CommunityRepository;
 import com.crazy.filmzip.repository.PostReactionRepository;
 import com.crazy.filmzip.repository.UserRepository;
+import com.crazy.filmzip.util.ForbiddenWordFilter;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -55,7 +56,14 @@ public class CommunityService {
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다. ID: " + request.getUserId()));
 
-        return communityPostRepository.save(request.toEntity(user));
+        String filteredTitle = ForbiddenWordFilter.filterForbiddenWords(request.getTitle());
+        String filteredContent = ForbiddenWordFilter.filterForbiddenWords(request.getContent());
+
+        CommunityPost post = request.toEntity(user);
+        post.setTitle(filteredTitle);
+        post.setContent(filteredContent);
+
+        return communityPostRepository.save(post);
     }
 
     // 게시글 수정
