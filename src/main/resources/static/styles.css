@@ -1,0 +1,20 @@
+.card-title {
+  display: -webkit-box;               /* Enables flexbox-based layout */
+  -webkit-line-clamp: 2;              /* Limits the text to 2 lines */
+  -webkit-box-orient: vertical;       /* Specifies the box orientation (vertical for lines) */
+  overflow: hidden;                   /* Hides content that overflows the box */
+  text-overflow: ellipsis;            /* Adds "..." at the end of the text if it overflows */
+  line-height: 1.5;                   /* Set line height */
+  font-size: 16px;                    /* Set font size */
+  height: 3rem;                       /* Set the height to accommodate 2 lines (adjust if needed) */
+}
+
+.movie-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* 5 columns */
+  gap: 1rem; /* Space between the cards */
+
+.movie-card {
+  display: flex;
+  flex-direction: column;
+}

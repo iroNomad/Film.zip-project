@@ -36,7 +36,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
 
-        OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
+        String email;
 
         // provider 정보 확인
         String provider = null;
@@ -46,24 +46,41 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             provider = oauthToken.getAuthorizedClientRegistrationId();
         }
 
-        if (provider == null) {
-            throw new IllegalArgumentException("OAuth2 provider 정보를 가져올 수 없습니다.");
-        }
+        System.out.println("provider = " + provider);
 
-        String email;
-        Map<String, Object> attributes = oAuth2User.getAttributes();
+        if (provider != null) {
 
-        if ("naver".equals(provider)) {
-            Map<String, Object> responseAttributes = (Map<String, Object>) attributes.get("response");
-            email = (String) responseAttributes.get("email");
-        } else if ("google".equals(provider)) {
-            email = (String) attributes.get("email");
-        } else if("kakao".equals(provider)) {
-            Map<String, Object> kakaoAccountAttributes = (Map<String, Object>) attributes.get("kakao_account");
-            email = (String) kakaoAccountAttributes.get("email");
+            // OAuth2 로그인 처리
+            OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
+
+            Map<String, Object> attributes = oAuth2User.getAttributes();
+
+            if ("naver".equals(provider)) {
+                Map<String, Object> responseAttributes = (Map<String, Object>) attributes.get("response");
+                email = (String) responseAttributes.get("email");
+            } else if ("google".equals(provider)) {
+                email = (String) attributes.get("email");
+            } else if ("kakao".equals(provider)) {
+                Map<String, Object> kakaoAccountAttributes = (Map<String, Object>) attributes.get("kakao_account");
+                email = (String) kakaoAccountAttributes.get("email");
+            } else {
+                throw new IllegalArgumentException("Unknown OAuth2 Provider: " + provider);
+            }
+
         }else{
-            throw new IllegalArgumentException("Unknown OAuth2 Provider: " + provider);
+
+            // 일반 로그인 처리
+            Object principal = authentication.getPrincipal();
+
+            if (principal instanceof User) {
+                User user = (User) principal;
+                email = user.getUsername(); // 일반 로그인 사용자의 이메일
+            } else {
+                throw new IllegalArgumentException("Unknown Authentication Principal: " + principal);
+            }
         }
+
+        System.out.println("email = " + email);
 
         User user = userService.findByEmail(email);
 

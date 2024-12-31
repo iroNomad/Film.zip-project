@@ -1,3 +1,39 @@
+// 페이지 접근 제어
+document.addEventListener('DOMContentLoaded', function () {
+    if (!isAuthenticated()) {
+        // 인증되지 않은 경우 로그인 페이지로 이동
+        alert('로그인이 필요합니다.');
+        window.location.href = '/login';
+    }
+});
+
+// 사용자 인증 상태 확인 함수
+function isAuthenticated() {
+    // 로컬 스토리지에서 액세스 토큰 확인
+    const accessToken = localStorage.getItem('access_token');
+    const refreshToken = getCookie('refresh_token');
+
+    // 액세스 토큰 또는 리프레시 토큰이 없으면 인증되지 않은 상태로 간주
+    if (!accessToken || !refreshToken) {
+        return false;
+    }
+
+    // 액세스 토큰 유효성을 확인하기 위해 API 호출 (옵션)
+    return validateToken(accessToken);
+}
+
+// 액세스 토큰 유효성 확인 함수 (선택적 구현)
+function validateToken(token) {
+    // 간단한 유효성 체크 구현 (옵션)
+    try {
+        const payload = JSON.parse(atob(token.split('.')[1])); // JWT 디코드
+        const currentTime = Math.floor(Date.now() / 1000);
+        return payload.exp > currentTime; // 토큰 만료 시간 체크
+    } catch (e) {
+        return false; // 토큰이 올바르지 않으면 false 반환
+    }
+}
+
 // 로그아웃 기능
 const logoutButton = document.getElementById('logout-btn');
 
