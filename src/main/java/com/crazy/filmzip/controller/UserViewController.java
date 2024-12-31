@@ -19,9 +19,4 @@ public class UserViewController {
     public String signup() {
         return "signup";
     }
-
-    @GetMapping("/main")
-    public String getMain() {
-        return "main";
-    }
 }
