@@ -1,0 +1,53 @@
+<html layout:decorate="~{layout}">
+    <div layout:fragment="content" class="container my-3">
+        <div class="card mb-3 bg-transparent border-white rounded-0 text-white">
+            <div class="row g-0">
+                <div class="col-md-4">
+                    <img th:src="${movie.posterPath}"
+                         class="img-fluid rounded-start"
+                         alt="Movie poster"
+                         style="object-fit: cover; aspect-ratio: 2 / 3;">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body p-5">
+                        <h4 class="fw-bold">[[${movie.title}]]</h4>
+                        <p class="card-text"><small>[[${movie.releaseDate}]]</small></p>
+                        <p class="border border-white px-3 rounded" th:each="genre : ${movie.genres}" style="display: inline-block">
+                            [[${genre.name}]]
+                        </p>
+                        <p class="card-text">
+                            <strong>⭐[[${movie.rating}]]</strong> <small>([[${movie.voteCount}]])</small>
+                        </p>
+                        <hr>
+                        <p class="card-text fst-italic">"[[${movie.tagline}]]"</p>
+                        <p class="card-text">[[${movie.overview}]]</p>
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#videoModal">
+                            예고편 보기
+                        </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content bg-dark">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">[[${video.name}]]</h5>
+                                        <button type="button" class="btn-close btn-close-white me-1" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <iframe style="position: relative; width: 100%; aspect-ratio: 16 / 9;"
+                                                th:src="'https://www.youtube.com/embed/' + ${video.key} + '?enablejsapi=1'"
+                                                th:title="${video.name}"
+                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                allowfullscreen>
+                                        </iframe>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</html>

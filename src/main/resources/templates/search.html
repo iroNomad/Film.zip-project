@@ -1,0 +1,48 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
+    <h1>검색 결과</h1>
+    <div class="movie-grid">
+        <!-- Loop through the movies list -->
+        <div th:each="movie : ${movies}" class="movie-card">
+            <div class="card mb-3 bg-dark text-white border-white">
+                <!-- Dynamically set the image source -->
+                <a th:href="@{/detail/{id}(id=${movie.movieID})}">
+                    <img th:src="${movie.poster_path}"
+                         class="card-img-top" alt="Movie Poster" style="object-fit: cover; aspect-ratio: 2 / 3;">
+                </a>
+                <!-- Rating badge in the upper-right corner -->
+                <div class="position-absolute top-0 end-0">
+                    <span class="badge text-white fs-5" style="background-color: rgba(0, 0, 0, 0.6);">⭐[[${movie.rating}]]</span>
+                </div>
+                <div class="card-body">
+                    <!-- Display movie title -->
+                    <p class="card-title fw-bold">[[${movie.title}]]</p>
+                    <p class="card-text text-end mt-auto">[[${movie.release_date.substring(0, 4)}]]</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <nav aria-label="Pagination">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                <a class="page-link" th:href="@{/search/{pageNum}(pageNum=${currentPage - 1}, keyword=${keyword})}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li class="page-item"
+                th:each="i : ${#numbers.sequence(startPage, endPage)}"
+                th:classappend="${i == currentPage} ? 'disabled'">
+                <a class="page-link"
+                   th:href="@{/search/{pageNum}?keyword={word}(pageNum=${i}, word=${keyword})}">
+                    [[${i}]]
+                </a>
+            </li>
+            <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                <a class="page-link" th:href="@{/search/{pageNum}(pageNum=${currentPage + 1}, keyword=${keyword})}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+</html>
