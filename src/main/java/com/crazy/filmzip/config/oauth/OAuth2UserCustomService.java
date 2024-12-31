@@ -36,6 +36,7 @@ public class OAuth2UserCustomService extends DefaultOAuth2UserService {
         String email;
         String name;
         Integer birth;
+        String profileImage = "profile0.png";
 
         Map<String, Object> attributes = oAuth2User.getAttributes();
 
@@ -50,7 +51,7 @@ public class OAuth2UserCustomService extends DefaultOAuth2UserService {
         }else if("google".equals(provider)) {
             email = (String) attributes.get("email");
             name = (String) attributes.get("name");
-            birth = -1;
+            birth = 1900;
         }else if("kakao".equals(provider)) {
             Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
             email = (String) kakaoAccount.get("email");
@@ -68,7 +69,14 @@ public class OAuth2UserCustomService extends DefaultOAuth2UserService {
                         .email(email)
                         .name(name)
                         .birth(birth)
+                        .profileImage(profileImage)
                         .build());
+
+        userRepository.save(user);
+
+        if (user.getNickname() == null) {
+            user.setNickname("광인" + user.getId());
+        }
 
         return userRepository.save(user);
     }
