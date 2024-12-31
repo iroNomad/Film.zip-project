@@ -9,6 +9,29 @@
         .gradient-custom {
             background: linear-gradient(to right, rgba(254, 238, 229, 1), rgba(229, 193, 197, 1))
         }
+        .profile-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            cursor: pointer;
+            border: 2px solid #fff;
+        }
+        .profile-img:hover {
+            border-color: #007bff;
+        }
+        .profile-option img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            cursor: pointer;
+            object-fit: cover;
+            margin: 5px;
+            border: 2px solid transparent;
+        }
+        .profile-option img.selected {
+            border-color: #007bff;
+        }
     </style>
 </head>
 <body class="gradient-custom">
@@ -79,6 +102,5 @@
         }
     });
 </script>
-
 </body>
 </html>
