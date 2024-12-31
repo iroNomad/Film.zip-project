@@ -15,12 +15,16 @@ public class CommunityListViewResponse {
     private String content;
     private String writer;
     private int views;
+    private int likes;
+    private int dislikes;
 
-    public CommunityListViewResponse(CommunityPost post) {
+    public CommunityListViewResponse(CommunityPost post, int likes, int dislikes) {
         this.id = post.getId();
         this.title = post.getTitle();
         this.content = post.getContent();
         this.writer = post.getUser().getNickname();
         this.views = post.getViews();
+        this.likes = likes;
+        this.dislikes = dislikes;
     }
 }

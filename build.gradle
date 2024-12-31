@@ -24,20 +24,20 @@ repositories {
 }
 
 dependencies {
-	//web
+	// web
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
-	//devtools
+	// devtools
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
-	//lombok
+	// lombok
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
-	//lombok test에도 적용
+	// lombok test에도 적용
 	testCompileOnly 'org.projectlombok:lombok'
 	testAnnotationProcessor 'org.projectlombok:lombok'
 
-	//test
+	// test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test' // 이 친구가 주피터도 가지고 있음
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
@@ -47,22 +47,42 @@ dependencies {
 	implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4:1.16'
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 
-	//thymeleaf
+	// thymeleaf
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
 
-	//Spring Boot Validation
+	// Spring Boot Validation
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-//	//Spring Security
-//	implementation 'org.springframework.boot:spring-boot-starter-security'
-//	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+//	// Spring Security
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+	testImplementation 'org.springframework.security:spring-security-test'
 
-	//markdown
+	// markdown
 	implementation 'org.commonmark:commonmark:0.21.0'
 
 	// mybatis
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
+
+	// define a BOM and its version
+	implementation(platform("com.squareup.okhttp3:okhttp-bom:4.12.0"))
+
+	// define any required OkHttp artifacts without version
+	implementation("com.squareup.okhttp3:okhttp")
+	implementation("com.squareup.okhttp3:logging-interceptor")
+
+	// 자바 JWT 라이브러리
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+	// XML 문서와 Java 객체 간 매핑 자동화
+	implementation 'javax.xml.bind:jaxb-api:2.3.1'
+
+	// OAuth2를 사용하기 위한 스타터 추가
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+	// Spring-dotenv
+	implementation 'io.github.cdimascio:dotenv-java:3.0.0'
+
 }
 
 tasks.named('test') {

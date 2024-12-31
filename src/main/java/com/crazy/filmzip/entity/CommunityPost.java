@@ -47,7 +47,7 @@ public class CommunityPost {
 
     @OneToMany(mappedBy = "communityPost", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
-
+    
     @OneToMany(mappedBy = "communityPost", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PostReaction> reactions = new ArrayList<>();
 

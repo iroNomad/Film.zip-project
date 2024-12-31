@@ -1,6 +1,7 @@
 package com.crazy.filmzip.dto;
 
 import com.crazy.filmzip.entity.CommunityPost;
+import com.crazy.filmzip.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,8 +15,10 @@ public class CommunityPostDetailResponse {
     private int views;       // 조회수
     private String createdAt;// 작성일
     private String updatedAt;// 수정일
+    private int likes;       // 추천 수
+    private int dislikes;    // 비추천 수
 
-    public CommunityPostDetailResponse(CommunityPost post) {
+    public CommunityPostDetailResponse(CommunityPost post, int likes, int dislikes) {
         this.id = post.getId();
         this.title = post.getTitle();
         this.content = post.getContent();
@@ -23,5 +26,7 @@ public class CommunityPostDetailResponse {
         this.views = post.getViews();
         this.createdAt = post.getCreatedAt().toString();
         this.updatedAt = post.getUpdatedAt().toString();
+        this.likes = likes;
+        this.dislikes = dislikes;
     }
 }
