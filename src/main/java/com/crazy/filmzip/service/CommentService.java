@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class CommentService {
 
-    private final CommentRepository commentRepository;
     private final CommunityRepository communityRepository;
 
 }
