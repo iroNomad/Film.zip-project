@@ -41,6 +41,8 @@ public class CommunityApiController {
         return userService.findByEmail(email);
     }
 
+    private CommentService commentService;
+
     // 게시글 목록 조회
     @GetMapping
     public ResponseEntity<Page<CommunityListViewResponse>> getAllPosts(Pageable pageable) {
