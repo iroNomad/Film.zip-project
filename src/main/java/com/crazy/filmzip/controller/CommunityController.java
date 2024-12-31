@@ -2,9 +2,12 @@ package com.crazy.filmzip.controller;
 
 import com.crazy.filmzip.dto.CommunityListViewResponse;
 import com.crazy.filmzip.dto.CommunityPostDetailResponse;
+import com.crazy.filmzip.entity.Comment;
 import com.crazy.filmzip.entity.CommunityPost;
+import com.crazy.filmzip.service.CommentService;
 import com.crazy.filmzip.service.CommunityService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +21,9 @@ import java.util.List;
 @Controller
 @RequestMapping("/community")
 public class CommunityController {
+
+    @Autowired
+    private CommentService commentService;
 
     private final CommunityService communityService;
 
@@ -36,6 +42,9 @@ public class CommunityController {
         CommunityPostDetailResponse article = new CommunityPostDetailResponse(communityService.findById(id));
         model.addAttribute("article", article);
 
+        List<Comment> comments = commentService.findByPostId(id);
+        model.addAttribute("comments", comments);
+
         return "community/article";
     }
 
@@ -51,4 +60,5 @@ public class CommunityController {
 
         return "community/new";
     }
+
 }

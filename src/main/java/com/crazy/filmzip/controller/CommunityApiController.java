@@ -2,8 +2,10 @@ package com.crazy.filmzip.controller;
 
 import com.crazy.filmzip.dto.*;
 import com.crazy.filmzip.entity.CommunityPost;
+import com.crazy.filmzip.service.CommentService;
 import com.crazy.filmzip.service.CommunityService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,9 @@ import java.util.List;
 public class CommunityApiController {
 
     private final CommunityService communityService;
+
+    @Autowired
+    private CommentService commentService;
 
     // 게시글 목록 조회
     @GetMapping
