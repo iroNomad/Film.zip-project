@@ -1,7 +1,8 @@
 <html layout:decorate="~{layout}">
-<div layout:fragment="content" class="container my-3 w-50">
-    <h1>인기 영화</h1>
-    <div id="carouselAutoplaying" class="carousel slide" data-bs-ride="carousel" data-bs-pause="false">
+<div layout:fragment="content" class="container my-3">
+
+    <div id="carouselAutoplaying" class="carousel slide w-50 m-auto" data-bs-ride="carousel" data-bs-pause="false">
+        <h1>인기 영화</h1>
         <div class="carousel-indicators">
             <button
                     type="button"
@@ -40,5 +41,25 @@
             <span class="visually-hidden">Next</span>
         </button>
     </div>
+    <br>
+    <h2>지민님에게 추천</h2>
+    <div class="d-flex overflow-auto gap-1">
+        <div th:each="movie : ${movies}"
+             class="card mb-3 bg-transparent text-white rounded-0"
+             style="flex: 0 0 auto; width: 300px; height: auto;">
+            <!-- Dynamically set the image source -->
+            <a th:href="@{/detail/{id}(id=${movie.movieID})}">
+                <img th:src="${movie.backdrop_path}"
+                     class="card-img-top rounded-0"
+                     alt="Movie Poster"
+                     style="object-fit: cover;">
+            </a>
+            <div class="card-body p-1" style="height: 30px; overflow: hidden;">
+                <!-- Display movie title -->
+                <p class="text-center">[[${movie.title}]]</p>
+            </div>
+        </div>
+    </div>
+
 </div>
 </html>

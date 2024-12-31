@@ -90,7 +90,6 @@ public class MainController {
                 .addHeader("accept", "application/json")
                 .addHeader("Authorization", "Bearer " + apiKey)
                 .build();
-
         return request;
     }
 }
