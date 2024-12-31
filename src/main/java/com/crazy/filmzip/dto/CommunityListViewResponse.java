@@ -18,6 +18,7 @@ public class CommunityListViewResponse {
     private int likes;
     private int dislikes;
 
+
     public CommunityListViewResponse(CommunityPost post, int likes, int dislikes) {
         this.id = post.getId();
         this.title = post.getTitle();
