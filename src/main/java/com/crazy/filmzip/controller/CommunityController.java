@@ -2,7 +2,9 @@ package com.crazy.filmzip.controller;
 
 import com.crazy.filmzip.dto.CommunityListViewResponse;
 import com.crazy.filmzip.dto.CommunityPostDetailResponse;
+import com.crazy.filmzip.entity.Comment;
 import com.crazy.filmzip.entity.CommunityPost;
+import com.crazy.filmzip.service.CommentService;
 import com.crazy.filmzip.service.CommunityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,6 +24,7 @@ import java.util.List;
 public class CommunityController {
 
     private final CommunityService communityService;
+    private final CommentService commentService;
 
     /**
      * 게시글 목록 조회
@@ -56,6 +59,11 @@ public class CommunityController {
     public String getArticle(@PathVariable Long id, Model model) {
         communityService.incrementViewCount(id); // 조회수 증가
         CommunityPostDetailResponse article = communityService.findById(id); // findById 사용
+
+        // 댓글 목록 가져오기
+        List<Comment> comments = commentService.findByPostId(id);
+
+        model.addAttribute("comments", comments);
         model.addAttribute("article", article);
         return "community/article";
     }

@@ -23,14 +23,14 @@ import java.util.List;
 @Service
 public class CommunityService {
 
-    private final CommunityRepository communityPostRepository;
+    private final CommunityRepository communityRepository;
     private final UserRepository userRepository;
     private final PostReactionRepository postReactionRepository;
 
     // 게시글 목록 조회
     public Page<CommunityListViewResponse> findAll(Pageable pageable) {
 
-        Page<CommunityPost> posts = communityPostRepository.findAll(pageable);
+        Page<CommunityPost> posts = communityRepository.findAll(pageable);
 
         return posts.map(post -> {
                     int likes = postReactionRepository.countByCommunityPostIdAndReactionType(post.getId(), "LIKE");
@@ -42,7 +42,7 @@ public class CommunityService {
     // 게시글 상세 조회
     @Transactional
     public CommunityPostDetailResponse findById(Long postId) {
-        CommunityPost post = communityPostRepository.findById(postId)
+        CommunityPost post = communityRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다. ID: " + postId));
 
         int likes = countReactions(postId, "LIKE");
@@ -63,32 +63,32 @@ public class CommunityService {
         post.setTitle(filteredTitle);
         post.setContent(filteredContent);
 
-        return communityPostRepository.save(post);
+        return communityRepository.save(post);
     }
 
     // 게시글 수정
     @Transactional
     public CommunityPost update(Long id, UpdateCommunityPostRequest request) {
-        CommunityPost post = communityPostRepository.findById(id)
+        CommunityPost post = communityRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다. ID: " + id));
 
         post.setTitle(request.getTitle());
         post.setContent(request.getContent());
-        return communityPostRepository.save(post);
+        return communityRepository.save(post);
     }
 
     // 게시글 삭제
     public void delete(Long id) {
-        if (!communityPostRepository.existsById(id)) {
+        if (!communityRepository.existsById(id)) {
             throw new IllegalArgumentException("게시글을 찾을 수 없습니다. ID: " + id);
         }
-        communityPostRepository.deleteById(id);
+        communityRepository.deleteById(id);
     }
 
     // 조회수
     @Transactional
     public void incrementViewCount(Long id) {
-        CommunityPost post = communityPostRepository.findById(id)
+        CommunityPost post = communityRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다. ID: " + id));
         post.setViews(post.getViews() + 1); // 조회수 증가
     }
@@ -96,7 +96,7 @@ public class CommunityService {
     // 추천 비추천 기능
     @Transactional
     public void reactToPost(Long postId, Long userId, String reactionType) {
-        CommunityPost post = communityPostRepository.findById(postId)
+        CommunityPost post = communityRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다. ID: " + postId));
 
         User user = userRepository.findById(userId)
@@ -131,7 +131,7 @@ public class CommunityService {
     public Page<CommunityListViewResponse> searchPosts(String keyword, Pageable pageable){
 
         // 검색 결과 조회
-        Page<CommunityPost> posts = communityPostRepository.findByTitleContainingOrContentContainingOrUser_NicknameContaining(keyword, keyword, keyword, pageable);
+        Page<CommunityPost> posts = communityRepository.findByTitleContainingOrContentContainingOrUser_NicknameContaining(keyword, keyword, keyword, pageable);
 
         // 검색 결과 DTO 변환
         return posts.map(post -> {
@@ -142,4 +142,8 @@ public class CommunityService {
 
     }
 
+    public CommunityPost findPostById(Long postId) {
+        return communityRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다. ID : " +postId));
+    }
 }

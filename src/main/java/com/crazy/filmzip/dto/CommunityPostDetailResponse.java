@@ -29,4 +29,5 @@ public class CommunityPostDetailResponse {
         this.likes = likes;
         this.dislikes = dislikes;
     }
+
 }
