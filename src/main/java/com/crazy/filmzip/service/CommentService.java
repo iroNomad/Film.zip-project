@@ -1,13 +1,20 @@
 package com.crazy.filmzip.service;
 
+import com.crazy.filmzip.dto.AddCommunityPostRequest;
 import com.crazy.filmzip.dto.CommentRequest;
 import com.crazy.filmzip.dto.CommentResponse;
+import com.crazy.filmzip.entity.Comment;
+import com.crazy.filmzip.entity.CommunityPost;
 import com.crazy.filmzip.entity.User;
 import com.crazy.filmzip.repository.CommentRepository;
+import com.crazy.filmzip.repository.CommunityPostRepository;
 import com.crazy.filmzip.repository.CommunityRepository;
 import com.crazy.filmzip.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -76,7 +83,7 @@ public class CommentService {
     // 특정 게시글에 달린 댓글들 조회
     public List<Comment> findByPostId(Long postId) {
         //return commentRepository.findByCommunityPostId(postId);
-        return commentRepository.findByCommunityPostIdAndParentCommentIdIsNull(postId);
+        return commentRepository.findByCommunityPostIdAndParentCommentIsNull(postId);
     }
     // CommunityPost를 ID로 조회하는 메소드 추가
     public CommunityPost findPostById(Long postId) {
