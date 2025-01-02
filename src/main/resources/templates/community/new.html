@@ -34,42 +34,7 @@
   </div>
 </div>
 
-<script>
-  function saveArticle() {
-    const id = document.getElementById('article-id').value; // 수정 시 ID
-    const title = document.getElementById('title').value; // 제목 입력값
-    const content = document.getElementById('content').value; // 내용 입력값
-
-    if (!title || !content) {
-      alert('제목과 내용을 모두 입력해주세요.');
-      return;
-    }
-
-    const isEdit = !!id; // 수정 여부를 ID 존재 여부로 판단
-    const url = isEdit ? `/api/community/${id}` : '/api/community';
-    const method = isEdit ? 'PUT' : 'POST';
-
-    fetch(url, {
-      method: method,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ title, content }),
-    })
-            .then(response => {
-              if (response.ok) {
-                alert(isEdit ? '수정이 완료되었습니다.' : '등록이 완료되었습니다.');
-                location.replace('/community/list'); // 목록 페이지로 이동
-              } else {
-                alert(isEdit ? '수정에 실패했습니다.' : '등록에 실패했습니다.');
-              }
-            })
-            .catch(error => {
-              console.error('Error:', error);
-              alert('서버와의 통신 중 문제가 발생했습니다.');
-            });
-  }
-</script>
 <script src="/js/token.js"></script>
+<script src="/js/article.js"></script>
 </body>
 </html>
