@@ -5,8 +5,6 @@ document.addEventListener('DOMContentLoaded', function () {
         alert('로그인이 필요합니다.');
         window.location.href = '/login';
     }
-
-    httpRequest('GET',`/main`, null, null, null);
 });
 
 // 사용자 인증 상태 확인 함수
@@ -82,6 +80,45 @@ function deleteCookie(name) {
     document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
 
+function addToWatchList() {
+
+    const movieApiId = parseInt(document.getElementById('movieID').textContent, 10);
+    const title = document.getElementById('title').textContent;
+    const backdropPath = document.getElementById('backdropPath').textContent;
+
+    const url = "/api/toWatchList";
+
+    console.log(movieApiId, title, backdropPath);
+
+    fetch(url, {
+        method: "POST",
+        headers: {
+            "Authorization": 'Bearer ' + localStorage.getItem('access_token'),
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(
+            {
+                movieApiId,
+                title,
+                backdropPath
+            }
+        )
+    })
+        .then(response => {
+
+            if (response.ok) {
+                alert('내 리스트에 추가되었습니다.');
+//                location.replace('/main');
+            }
+            else {
+                alert('등록에 실패했습니다.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('서버와의 통신 중 문제가 발생했습니다.');
+        });
+}
 
 // HTTP 요청을 보내는 함수
 function httpRequest(method, url, body, success, fail) {
