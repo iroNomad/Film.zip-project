@@ -23,8 +23,7 @@ import java.util.List;
 @RequestMapping("/community")
 public class CommunityController {
 
-    @Autowired
-    private CommentService commentService;
+    private final CommentService commentService;
 
     private final CommunityService communityService;
 

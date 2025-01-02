@@ -142,4 +142,10 @@ public class CommunityService {
 
     }
 
+    public CommunityPost findPostById(Long postId) {
+        return communityPostRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다. ID: " + postId));
+    }
+
+
 }

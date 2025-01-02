@@ -5,6 +5,7 @@ import com.crazy.filmzip.entity.Comment;
 import com.crazy.filmzip.entity.CommunityPost;
 import com.crazy.filmzip.entity.User;
 import com.crazy.filmzip.repository.CommentRepository;
+import com.crazy.filmzip.repository.CommunityPostRepository;
 import com.crazy.filmzip.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
+    private final CommunityPostRepository communityPostRepository;
 
     public Comment create(CommunityPost post, String content, AddCommunityPostRequest request, Long parentCommentId) {
         // 사용자를 찾기
@@ -82,6 +84,9 @@ public class CommentService {
         //return commentRepository.findByCommunityPostId(postId);
         return commentRepository.findByCommunityPostIdAndParentCommentIdIsNull(postId);
     }
-
-
+    // CommunityPost를 ID로 조회하는 메소드 추가
+    public CommunityPost findPostById(Long postId) {
+        return communityPostRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다. ID: " + postId));
+    }
 }

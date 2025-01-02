@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -25,6 +26,7 @@ import java.util.Map;
 
 @RequestMapping("/comments")
 @RequiredArgsConstructor
+//@RestController
 @Controller
 public class CommentController {
 
@@ -42,7 +44,11 @@ public class CommentController {
             Principal principal) {
 
         // 게시글 가져오기
-        CommunityPost post = communityService.findById(postId);
+        CommunityPost post = communityService.findPostById(postId);
+
+        if (post == null) {
+            throw new IllegalArgumentException("게시글을 찾을 수 없습니다. ID: ");
+        }
 
         // AddCommunityPostRequest에 사용자 정보 넣기
         AddCommunityPostRequest request = new AddCommunityPostRequest();
@@ -113,31 +119,25 @@ public class CommentController {
         return ResponseEntity.ok(response);
     }
 
+    // 대댓글 생성
     @PostMapping("/reply/{postId}/{parentCommentId}")
     public String createReply(@PathVariable Long postId, @PathVariable Long parentCommentId,
                               @RequestParam String content) {
-        try {
-            Comment parentComment = commentService.findById(parentCommentId); // 부모 댓글 조회
 
-            // 게시글 조회
-            CommunityPost post = communityService.findById(postId);
+        // 댓글 저장 (대댓글도 동일하게 처리됨)
+        AddCommunityPostRequest request = new AddCommunityPostRequest();
+        request.setUserId(7L);
 
-            // 대댓글 생성
-            AddCommunityPostRequest request = new AddCommunityPostRequest();
-            request.setUserId(7L); // 예시 사용자 ID
+        CommunityPost post = communityService.findPostById(postId);
 
-            commentService.create(post, content, request, parentCommentId);  // 대댓글 생성
-
-            // 게시글 상세 페이지로 리디렉션
-            return "redirect:/community/" + postId;
-        } catch (Exception e) {
-            // 오류 처리
-            return "errorPage";  // 에러 페이지로 이동하거나 적절한 메시지 표시
+        if (post == null) {
+            throw new IllegalArgumentException("게시글을 찾을 수 없습니다.");
         }
+
+        // 대댓글 생성
+        commentService.create(post, content, request, parentCommentId);
+
+        // 게시글 상세 페이지로 리디렉션
+        return "redirect:/community/" + postId;
     }
-
-
-
-
-
 }
