@@ -14,4 +14,6 @@ public class CommentResponse {
     private int likes;
     private int dislikes;
     private List<CommentResponse> replies;
+
 }
+

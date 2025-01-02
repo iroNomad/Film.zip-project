@@ -7,7 +7,7 @@ import com.crazy.filmzip.entity.Comment;
 import com.crazy.filmzip.entity.CommunityPost;
 import com.crazy.filmzip.entity.User;
 import com.crazy.filmzip.repository.CommentRepository;
-import com.crazy.filmzip.repository.CommunityPostRepository;
+
 import com.crazy.filmzip.repository.CommunityRepository;
 import com.crazy.filmzip.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,8 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
-    private final CommunityPostRepository communityPostRepository;
+
+    private final CommunityRepository communityRepository;
 
     public Comment create(CommunityPost post, String content, AddCommunityPostRequest request, Long parentCommentId) {
         // 사용자를 찾기
@@ -83,11 +84,12 @@ public class CommentService {
     // 특정 게시글에 달린 댓글들 조회
     public List<Comment> findByPostId(Long postId) {
         //return commentRepository.findByCommunityPostId(postId);
-        return commentRepository.findByCommunityPostIdAndParentCommentIsNull(postId);
+
+        return commentRepository.findByCommunityPostIdAndParentCommentIdIsNull(postId);
     }
     // CommunityPost를 ID로 조회하는 메소드 추가
     public CommunityPost findPostById(Long postId) {
-        return communityPostRepository.findById(postId)
+        return communityRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다. ID: " + postId));
     }
 }

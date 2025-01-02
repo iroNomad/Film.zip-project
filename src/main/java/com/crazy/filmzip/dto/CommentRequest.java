@@ -10,4 +10,5 @@ public class CommentRequest {
 
     // 부모 댓글 ID
     private Long parentCommentId;
+
 }
