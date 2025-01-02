@@ -3,8 +3,6 @@ package com.crazy.filmzip.controller;
 import com.crazy.filmzip.TmdbApiEndpoint;
 import com.crazy.filmzip.dto.Movie;
 import com.crazy.filmzip.dto.Video;
-import com.crazy.filmzip.entity.User;
-import com.crazy.filmzip.repository.UserRepository;
 import com.crazy.filmzip.service.DetailResponseService;
 import com.crazy.filmzip.service.GeneralResponseService;
 import okhttp3.HttpUrl;
@@ -14,8 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 
-import java.security.Principal;
-import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 
@@ -23,26 +19,17 @@ import java.util.Map;
 public class MainController {
 
     private final DetailResponseService detailResponseService;
-    private final UserRepository userRepository;
 
     @Value("${themoviedb.api.key}")
     private String apiKey;
 
     // Constructor-based dependency injection
-    public MainController(DetailResponseService detailResponseService, UserRepository userRepository) {
+    public MainController(DetailResponseService detailResponseService) {
         this.detailResponseService = detailResponseService;
-        this.userRepository = userRepository;
     }
 
     @GetMapping("/main")
-    public String main(Model model, Principal principal) {
-
-        if(principal != null) {
-            User user = userRepository.findByEmail(principal.getName())
-                    .orElseThrow(() -> new IllegalArgumentException("Unexpected user"));
-            model.addAttribute("userId", user.getId());
-            System.out.println("id: " + user.getId());
-        }
+    public String main(Model model) {
 
         HttpUrl trendingURL = HttpUrl.parse(TmdbApiEndpoint.TRENDING.getFullUrl() + "?language=ko");
         HttpUrl recommendedURL = HttpUrl.parse(TmdbApiEndpoint.DISCOVER.getFullUrl())

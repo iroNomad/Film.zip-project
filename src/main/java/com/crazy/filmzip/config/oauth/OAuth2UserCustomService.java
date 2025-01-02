@@ -70,6 +70,7 @@ public class OAuth2UserCustomService extends DefaultOAuth2UserService {
                         .name(name)
                         .birth(birth)
                         .profileImage(profileImage)
+                        .genre("28 OR 12 OR 16")
                         .build());
 
         userRepository.save(user);
