@@ -34,14 +34,12 @@ public class UserApiController {
     @GetMapping("/check-email")
     public ResponseEntity<Boolean> checkEmail(@RequestParam String email) {
         boolean exists = userService.existsByEmail(email);
-        System.out.println("이메일 있냐 = " + exists);
         return ResponseEntity.ok(exists);
     }
 
     @GetMapping("/check-nickname")
     public ResponseEntity<Boolean> checkNickname(@RequestParam String nickname) {
         boolean exists = userService.existsByNickname(nickname);
-        System.out.println("닉네임 있냐 = " + exists);
         return ResponseEntity.ok(exists);
     }
 }

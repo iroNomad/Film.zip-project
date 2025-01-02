@@ -20,7 +20,6 @@ import java.util.List;
 @Table(name = "users")
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-
 public class User implements UserDetails {
 
     @Id
