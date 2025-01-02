@@ -23,6 +23,7 @@ import java.util.List;
 @RequestMapping("/community")
 public class CommunityController {
 
+
     private final CommentService commentService;
 
     private final CommunityService communityService;
@@ -61,10 +62,6 @@ public class CommunityController {
         communityService.incrementViewCount(id); // 조회수 증가
         CommunityPostDetailResponse article = communityService.findById(id); // findById 사용
         model.addAttribute("article", article);
-
-        List<Comment> comments = commentService.findByPostId(id);
-        model.addAttribute("comments", comments);
-
         return "community/article";
     }
 

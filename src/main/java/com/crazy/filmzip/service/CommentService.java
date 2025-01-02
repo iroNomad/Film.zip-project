@@ -1,20 +1,14 @@
 package com.crazy.filmzip.service;
 
-import com.crazy.filmzip.dto.AddCommunityPostRequest;
-import com.crazy.filmzip.entity.Comment;
-import com.crazy.filmzip.entity.CommunityPost;
+import com.crazy.filmzip.dto.CommentRequest;
+import com.crazy.filmzip.dto.CommentResponse;
 import com.crazy.filmzip.entity.User;
 import com.crazy.filmzip.repository.CommentRepository;
-import com.crazy.filmzip.repository.CommunityPostRepository;
+import com.crazy.filmzip.repository.CommunityRepository;
 import com.crazy.filmzip.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
-
-@Transactional
 @RequiredArgsConstructor
 @Service
 public class CommentService {
@@ -90,3 +84,4 @@ public class CommentService {
                 .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다. ID: " + postId));
     }
 }
+
