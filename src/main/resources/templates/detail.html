@@ -10,7 +10,10 @@
                 </div>
                 <div class="col-md-8">
                     <div class="card-body p-5">
-                        <h4 class="fw-bold">[[${movie.title}]]</h4>
+                        <p id="movieID" class="d-none">[[${movie.id}]]</p>
+                        <p id="backdropPath" class="d-none">[[${movie.backdropPath}]]</p>
+                        <button onclick="addToWatchList()" class="position-absolute top-0 end-0 m-3 btn btn-outline-light rounded-0">관심 리스트에 추가</button>
+                        <h4 id="title" class="fw-bold">[[${movie.title}]]</h4>
                         <p class="card-text"><small>[[${movie.releaseDate}]]</small></p>
                         <p class="border border-white px-3 rounded" th:each="genre : ${movie.genres}" style="display: inline-block">
                             [[${genre.name}]]

@@ -13,8 +13,29 @@
   display: grid;
   grid-template-columns: repeat(5, 1fr); /* 5 columns */
   gap: 1rem; /* Space between the cards */
+}
 
 .movie-card {
   display: flex;
   flex-direction: column;
+}
+
+/* Customize scrollbar */
+
+.overflow-auto::-webkit-scrollbar {
+    height: 10px; /* Height of the scrollbar (for horizontal scrolling) */
+}
+
+.overflow-auto::-webkit-scrollbar-track {
+    background: #333; /* Track color */
+    border-radius: 5px; /* Rounded track edges */
+}
+
+.overflow-auto::-webkit-scrollbar-thumb {
+    background-color: #888; /* Thumb color */
+    border-radius: 5px; /* Rounded thumb edges */
+}
+
+.overflow-auto::-webkit-scrollbar-thumb:hover {
+    background-color: #555; /* Darken thumb on hover */
 }
