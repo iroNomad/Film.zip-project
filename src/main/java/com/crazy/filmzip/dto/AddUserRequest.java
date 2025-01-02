@@ -13,4 +13,5 @@ public class AddUserRequest {
     private String name;
     private String nickname;
     private String profileImage;
+    private String genre;
 }

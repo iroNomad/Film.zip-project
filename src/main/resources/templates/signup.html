@@ -34,6 +34,15 @@
         .profile-option img.selected {
             border-color: #007bff;
         }
+        .genre-btn {
+            min-width: 100px;
+        }
+
+        .genre-btn.active {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
     </style>
 </head>
 <body class="gradient-custom">
@@ -85,6 +94,17 @@
                             <small id="nicknameHelp" class="form-text text-danger"></small>
                         </div>
 
+                        <!-- 영화 장르 선택 -->
+                        <div class="mb-3">
+                            <label class="form-label text-white">Favorite Movie Genres</label>
+                            <input type="text" class="form-control" id="genreDisplay" readonly value="액션, 모험, 애니메이션">
+                            <input type="hidden" name="genre" id="genre" value="28 OR 12 OR 16">
+                            <button type="button" class="btn btn-secondary mt-2" data-bs-toggle="modal" data-bs-target="#genreModal">
+                                Select Genres
+                            </button>
+                            <small id="genreHelp" class="form-text text-danger"></small>
+                        </div>
+
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
                 </div>
@@ -103,6 +123,26 @@
             </div>
             <div class="modal-body d-flex flex-wrap justify-content-center profile-option" id="profileOptions">
                 <!-- 이미지 옵션이 JavaScript에서 추가됩니다 -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 영화 장르 선택 모달 -->
+<div class="modal fade" id="genreModal" tabindex="-1" aria-labelledby="genreModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Select Up to 3 Movie Genres</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex flex-wrap" id="genreOptions">
+                    <!-- 장르 버튼이 JavaScript에서 동적으로 추가됩니다 -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="confirmGenres">Confirm</button>
             </div>
         </div>
     </div>
@@ -178,6 +218,7 @@
         const birth = document.getElementById('birth');
         const name = document.getElementById('name');
         const nickname = document.getElementById('nickname');
+        const genre = document.getElementById('genre').value;
 
         // 이메일 검증
         if (email.value.trim() === '') {
@@ -227,6 +268,12 @@
             isValid = false;
         }
 
+        // 영화 장르 선택 검증
+        else if (!genre || genre.trim() === '') {
+            document.getElementById('genreHelp').textContent = '영화 장르는 최소 1개 이상 선택해야 합니다.';
+            isValid = false;
+        }
+
         // 유효성 검사 실패 시 제출 방지
         if (!isValid) {
             return; // 여기서 폼 제출 방지
@@ -234,6 +281,73 @@
 
         // 유효성 검사 통과 시 폼 제출
         this.submit();
+    });
+</script>
+
+<script>
+    // 영화 장르 데이터
+    const genres = [
+        { id: 28, name: '액션' }, { id: 12, name: '모험' }, { id: 16, name: '애니메이션' },
+        { id: 35, name: '코미디' }, { id: 80, name: '범죄' }, { id: 99, name: '다큐멘터리' },
+        { id: 18, name: '드라마' }, { id: 10751, name: '가족' }, { id: 14, name: '판타지' },
+        { id: 36, name: '역사' }, { id: 27, name: '공포' }, { id: 10402, name: '음악' },
+        { id: 9648, name: '미스터리' }, { id: 10749, name: '로맨스' }, { id: 878, name: 'SF' },
+        { id: 10770, name: 'TV 영화' }, { id: 53, name: '스릴러' }, { id: 10752, name: '전쟁' },
+        { id: 37, name: '서부' }
+    ];
+
+    // 초기 선택된 장르
+    let selectedGenres = [28, 12, 16];
+
+    // 장르 선택 UI 생성
+    const genreOptions = document.getElementById('genreOptions');
+    genres.forEach(genre => {
+        const button = document.createElement('button');
+        button.className = 'btn btn-outline-primary m-1 genre-btn';
+        button.textContent = genre.name;
+        button.dataset.id = genre.id;
+
+        if (selectedGenres.includes(genre.id)) {
+            button.classList.add('active');
+        }
+
+        button.addEventListener('click', () => {
+            if (selectedGenres.includes(genre.id)) {
+                selectedGenres = selectedGenres.filter(id => id !== genre.id);
+                button.classList.remove('active');
+            } else {
+                if (selectedGenres.length >= 3) {
+                    alert('최대 3개의 장르만 선택할 수 있습니다.');
+                    return;
+                }
+                selectedGenres.push(genre.id);
+                button.classList.add('active');
+            }
+        });
+
+        genreOptions.appendChild(button);
+    });
+
+    // 장르 선택 확인 버튼
+    document.getElementById('confirmGenres').addEventListener('click', () => {
+        if (selectedGenres.length === 0) {
+            alert('최소 1개의 장르를 선택해야 합니다.');
+            return;
+        }
+
+        // 선택된 장르 이름 표시
+        const selectedGenreNames = selectedGenres
+            .map(id => genres.find(genre => genre.id === id).name)
+            .join(', ');
+
+        // 선택된 장르 ID를 OR로 연결
+        const genreString = selectedGenres.join(' OR ');
+
+        document.getElementById('genre').value = genreString; // DB 저장용
+        document.getElementById('genreDisplay').value = selectedGenreNames; // UI 표시용
+
+        const modal = bootstrap.Modal.getInstance(document.getElementById('genreModal'));
+        modal.hide();
     });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

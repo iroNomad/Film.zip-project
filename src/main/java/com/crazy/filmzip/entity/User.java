@@ -30,18 +30,23 @@ public class User implements UserDetails {
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
+    @Column(name = "password")
     private String password;
 
-    @Column(nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(unique = true)
+    @Column(name = "nickname", unique = true, nullable = false)
     private String nickname;
 
+    @Column(name = "profileImage", nullable = false)
     private String profileImage;
 
-    @Column(nullable = false)
+    @Column(name = "birth", nullable = false)
     private Integer birth;
+
+    @Column(name = "genre", nullable = false)
+    private String genre;
 
     @Column(updatable = false)
     @CreatedDate
@@ -70,13 +75,14 @@ public class User implements UserDetails {
 
     // 생성자에 nickname 추가
     @Builder
-    public User(String email, String password, String name, Integer birth, String nickname, String profileImage) {
+    public User(String email, String password, String name, Integer birth, String nickname, String profileImage, String genre) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.birth = birth;
         this.nickname = nickname;
         this.profileImage = profileImage;
+        this.genre = genre;
     }
 
     @Override
