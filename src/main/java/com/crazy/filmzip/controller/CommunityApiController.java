@@ -3,6 +3,7 @@ package com.crazy.filmzip.controller;
 import com.crazy.filmzip.dto.*;
 import com.crazy.filmzip.entity.CommunityPost;
 import com.crazy.filmzip.entity.User;
+import com.crazy.filmzip.service.CommentService;
 import com.crazy.filmzip.service.CommunityService;
 import com.crazy.filmzip.service.UserService;
 import lombok.RequiredArgsConstructor;

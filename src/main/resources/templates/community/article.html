@@ -56,55 +56,52 @@
                         </div>
                         <div class="card-body">
                             <div th:each="comment : ${comments}" class="comment-container">
-                                <div th:if="${comment.parentComment == null}">
-                                    <p>
-                                        <strong th:text="${comment.user.nickname}">작성자</strong>:
-                                        <span th:id="'commentContent_' + ${comment.id}" th:text="${comment.content}">댓글 내용</span>
-                                    </p>
-                                    <div th:if="${comment.user.id == 7}">
-                                        <button type="button" class="btn btn-primary btn-sm" style="display: none;" onclick="saveComment('[[${comment.id}]]')">저장</button>
-                                        <button type="button" class="btn btn-secondary btn-sm" style="display: none;" onclick="cancelEdit('[[${comment.id}]]')">취소</button>
-                                        <button type="button" class="btn btn-primary btn-sm" th:onclick="editComment('[[${comment.id}]]','[[${comment.content}]]')">수정</button>
-                                        <button type="button" class="btn btn-sm btn-danger" th:onclick="deleteComment('[[${comment.id}]]')">삭제</button>
-                                    </div>
-                                    <!-- 좋아요 버튼과 좋아요 수 -->
-                                    <div style="display: inline-flex; align-items: center;">
-                                        <span id="likeCount_[[${comment.id}]]" class="mr-2 like-cnt">[[${comment.reactions.size()}]]</span>
-                                        <button type="button" class="btn btn-success btn-sm like-button" th:onclick="likeComment('[[${comment.id}]]')">👍 좋아요</button>
-                                    </div>
-
-                                    <!-- 대댓글 달기 버튼 -->
-                                    <div class="reply-button">
-                                        <button type="button" class="btn btn-sm btn-info" onclick="toggleReplyForm('[[${comment.id}]]')">답글 달기</button>
-                                    </div>
-
-                                    <!-- 대댓글 표시 -->
-                                    <div th:each="reply : ${comment.replies}" class="ml-4 mt-2">
-                                        <p>
-                                            <strong th:text="${reply.user.nickname}">작성자</strong>:
-                                            <span th:id="'commentContent_' + ${reply.id}" th:text="${reply.content}">대댓글 내용</span>
-                                        </p>
-                                        <!-- 대댓글 수정, 삭제 -->
-                                        <div th:if="${reply.user.id == 7}">
-                                            <button type="button" class="btn btn-primary btn-sm" th:onclick="editComment('[[${reply.id}]]','[[${reply.content}]]')">수정</button>
-                                            <button type="button" class="btn btn-sm btn-danger" th:onclick="deleteComment('[[${reply.id}]]')">삭제</button>
-                                        </div>
-                                    </div>
-
-                                    <!-- 대댓글 입력 폼 (토글로 보이거나 숨기기) -->
-                                    <div id="replyForm_[[${comment.id}]]" class="reply-form">
-                                        <form th:action="@{|/comments/reply/${article.id}/${comment.id}|}" method="post">
-                                            <!-- 부모 댓글 ID 전달 -->
-                                            <input type="hidden" name="parentCommentId" value="[[${comment.id}]]">
-                                            <div class="form-group">
-                                                <textarea name="content" class="form-control" rows="3" placeholder="대댓글을 입력하세요"></textarea>
-                                            </div>
-                                            <button type="submit" class="btn btn-primary btn-sm">대댓글 등록</button>
-                                            <button type="button" class="btn btn-secondary btn-sm" onclick="toggleReplyForm('[[${comment.id}]]')">취소</button>
-                                        </form>
-                                    </div>
-                                    <hr>
+                                <p>
+                                    <strong th:text="${comment.user.nickname}">작성자</strong>:
+                                    <span th:id="'commentContent_' + ${comment.id}" th:text="${comment.content}">댓글 내용</span>
+                                </p>
+                                <div th:if="${comment.user.id == 7}">
+                                    <button type="button" class="btn btn-primary btn-sm" style="display: none;" onclick="saveComment('[[${comment.id}]]')">저장</button>
+                                    <button type="button" class="btn btn-secondary btn-sm" style="display: none;" onclick="cancelEdit('[[${comment.id}]]')">취소</button>
+                                    <button type="button" class="btn btn-primary btn-sm" th:onclick="editComment(this, '[[${comment.id}]]','[[${comment.content}]]')">수정</button>
+                                    <button type="button" class="btn btn-sm btn-danger" th:onclick="deleteComment('[[${comment.id}]]')">삭제</button>
                                 </div>
+                                <!-- 좋아요 버튼과 좋아요 수 -->
+                                <div style="display: inline-flex; align-items: center;">
+                                    <span id="likeCount_[[${comment.id}]]" class="mr-2 like-cnt">[[${comment.reactions.size()}]]</span>
+                                    <button type="button" class="btn btn-success btn-sm like-button" th:onclick="likeComment('[[${comment.id}]]')">👍 좋아요</button>
+                                </div>
+
+                                <!-- 대댓글 달기 버튼 -->
+                                <div class="reply-button">
+                                    <button type="button" class="btn btn-sm btn-info" th:onclick="toggleReplyForm('[[${comment.id}]]')">답글 달기</button>
+                                </div>
+
+                                <!-- 대댓글 표시 -->
+                                <div th:each="reply : ${comment.replies}" class="ml-4 mt-2">
+                                    <p>
+                                        <strong th:text="${reply.user.nickname}">작성자</strong>:
+                                        <span th:id="'commentContent_' + ${reply.id}" th:text="${reply.content}">대댓글 내용</span>
+                                    </p>
+                                    <!-- 대댓글 수정, 삭제 -->
+                                    <div th:if="${reply.user.id == 7}">
+                                        <button type="button" class="btn btn-primary btn-sm" th:onclick="editComment(this, '[[${reply.id}]]','[[${reply.content}]]')">수정</button>
+                                        <button type="button" class="btn btn-sm btn-danger" th:onclick="deleteComment('[[${reply.id}]]')">삭제</button>
+                                    </div>
+                                </div>
+
+                                <!-- 대댓글 입력 폼 (토글로 보이거나 숨기기) -->
+                                <!--div id="replyForm_${comment.id}" class="reply-form"-->
+                                <div th:id="'replyForm_'+${comment.id}" class="reply-form">
+                                    <form th:action="@{|/comments/reply/${article.id}/${comment.id}|}" method="post">
+                                        <div class="form-group">
+                                            <textarea name="content" class="form-control" rows="3" placeholder="대댓글을 입력하세요"></textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary btn-sm">대댓글 등록</button>
+                                        <button type="button" class="btn btn-secondary btn-sm" th:onclick="toggleReplyForm('[[${comment.id}]]')">취소</button>
+                                    </form>
+                                </div>
+                                <hr>
                             </div>
                         </div>
                     </div>
@@ -165,6 +162,9 @@
         </div>
     </div>
 </div>
+
+
+<script src="/js/comment.js"></script>
 <script src="/js/token.js"></script>
 <script src="/js/article.js"></script>
 </body>

@@ -59,7 +59,8 @@ public class DetailResponseService {
             JsonNode rootNode = mapper.readTree(jsonResponse);
             JsonNode results = rootNode.get("results");
 
-            for (JsonNode video : results) {
+            for (int i = results.size() - 1; i >= 0; i--) { // Iterate in reverse order to get first(main) trailer of the movie
+                JsonNode video = results.get(i);
                 if ("Trailer".equals(video.get("type").asText()) && "YouTube".equals(video.get("site").asText())) {
                     String name = video.get("name").asText();
                     String key = video.get("key").asText();
