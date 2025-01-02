@@ -1,9 +1,11 @@
 
+
 // 좋아요 기능
 function likeComment(commentId) {
     fetch(`/comments/like/${commentId}`, {
         method: 'POST',
     })
+
         .then(response => response.json())
         .then(data => {
             if (data.message) {
@@ -17,6 +19,7 @@ function likeComment(commentId) {
             console.error('Error:', error);
             alert('좋아요 추가 중 문제가 발생했습니다.');
         });
+
 }
 
 // 댓글 수정
@@ -75,6 +78,7 @@ function saveComment(commentId) {
         },
         body: JSON.stringify({ content: newContent }),
     })
+
         .then(response => {
             if (response.ok) {
                 alert('댓글이 수정되었습니다.');
@@ -92,6 +96,7 @@ function saveComment(commentId) {
             console.error('Error:', error);
             alert('댓글 수정 중 문제가 발생했습니다.');
         });
+
 }
 
 // 편집 취소
@@ -118,6 +123,7 @@ function deleteComment(commentId) {
         fetch(`/comments/delete/${commentId}`, {
             method: 'DELETE',
         })
+
             .then(response => {
                 if (response.ok) {
                     alert('댓글이 삭제되었습니다.');
@@ -132,6 +138,7 @@ function deleteComment(commentId) {
                 console.error('Error:', error);
                 alert('댓글 삭제 중 문제가 발생했습니다.');
             });
+
     }
 }
 

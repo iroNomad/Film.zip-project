@@ -19,7 +19,6 @@ public class GeneralResponseService {
     static int totalPages;
 
     private static final OkHttpClient client = new OkHttpClient();
-
     public static List responseHandler(Request request) {
 
         List<Map<String, Object>> movieList = new ArrayList<>();

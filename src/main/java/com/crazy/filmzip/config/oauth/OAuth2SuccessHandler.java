@@ -46,8 +46,6 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             provider = oauthToken.getAuthorizedClientRegistrationId();
         }
 
-        System.out.println("provider = " + provider);
-
         if (provider != null) {
 
             // OAuth2 로그인 처리
@@ -79,8 +77,6 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                 throw new IllegalArgumentException("Unknown Authentication Principal: " + principal);
             }
         }
-
-        System.out.println("email = " + email);
 
         User user = userService.findByEmail(email);
 

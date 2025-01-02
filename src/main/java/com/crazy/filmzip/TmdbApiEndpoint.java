@@ -3,7 +3,8 @@ package com.crazy.filmzip;
 public enum TmdbApiEndpoint {
     TRENDING("trending/movie/day"),
     SEARCH("search/movie"),
-    DETAIL("movie/");
+    DETAIL("movie/"),
+    DISCOVER("discover/movie");
 
     private final String path;
     TmdbApiEndpoint(String path) {

@@ -60,7 +60,9 @@
                                     <strong th:text="${comment.user.nickname}">작성자</strong>:
                                     <span th:id="'commentContent_' + ${comment.id}" th:text="${comment.content}">댓글 내용</span>
                                 </p>
+
                                 <div th:if="${comment.user.id == 5}">
+
                                     <button type="button" class="btn btn-primary btn-sm" style="display: none;" onclick="saveComment('[[${comment.id}]]')">저장</button>
                                     <button type="button" class="btn btn-secondary btn-sm" style="display: none;" onclick="cancelEdit('[[${comment.id}]]')">취소</button>
                                     <button type="button" class="btn btn-primary btn-sm" th:onclick="editComment(this, '[[${comment.id}]]','[[${comment.content}]]')">수정</button>
@@ -84,7 +86,9 @@
                                         <span th:id="'commentContent_' + ${reply.id}" th:text="${reply.content}">대댓글 내용</span>
                                     </p>
                                     <!-- 대댓글 수정, 삭제 -->
+
                                     <div th:if="${reply.user.id == 5}">
+
                                         <button type="button" class="btn btn-primary btn-sm" th:onclick="editComment(this, '[[${reply.id}]]','[[${reply.content}]]')">수정</button>
                                         <button type="button" class="btn btn-sm btn-danger" th:onclick="deleteComment('[[${reply.id}]]')">삭제</button>
                                     </div>

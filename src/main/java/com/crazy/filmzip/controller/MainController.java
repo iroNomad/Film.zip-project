@@ -3,17 +3,19 @@ package com.crazy.filmzip.controller;
 import com.crazy.filmzip.TmdbApiEndpoint;
 import com.crazy.filmzip.dto.Movie;
 import com.crazy.filmzip.dto.Video;
+import com.crazy.filmzip.entity.User;
+import com.crazy.filmzip.repository.UserRepository;
 import com.crazy.filmzip.service.DetailResponseService;
 import com.crazy.filmzip.service.GeneralResponseService;
 import okhttp3.HttpUrl;
 import okhttp3.Request;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 
+import java.security.Principal;
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 
@@ -21,22 +23,40 @@ import java.util.Map;
 public class MainController {
 
     private final DetailResponseService detailResponseService;
+    private final UserRepository userRepository;
 
     @Value("${themoviedb.api.key}")
     private String apiKey;
 
     // Constructor-based dependency injection
-    public MainController(DetailResponseService detailResponseService) {
+    public MainController(DetailResponseService detailResponseService, UserRepository userRepository) {
         this.detailResponseService = detailResponseService;
+        this.userRepository = userRepository;
     }
 
     @GetMapping("/main")
-    public String main(Model model) {
+    public String main(Model model, Principal principal) {
+
+        if(principal != null) {
+            User user = userRepository.findByEmail(principal.getName())
+                    .orElseThrow(() -> new IllegalArgumentException("Unexpected user"));
+            model.addAttribute("userId", user.getId());
+            System.out.println("id: " + user.getId());
+        }
 
         HttpUrl trendingURL = HttpUrl.parse(TmdbApiEndpoint.TRENDING.getFullUrl() + "?language=ko");
-        List movieList = GeneralResponseService.responseHandler(createRequest(trendingURL));
+        HttpUrl recommendedURL = HttpUrl.parse(TmdbApiEndpoint.DISCOVER.getFullUrl())
+                .newBuilder()
+                .addQueryParameter("language", "ko")
+                .addQueryParameter("sort_by", "popularity.desc")
+                .addQueryParameter("with_genres", "18 OR 28 OR 36")
+                .build();
 
-        model.addAttribute("movies", movieList);
+        List recommendedList = GeneralResponseService.responseHandler(createRequest(recommendedURL));
+        List trendingList = GeneralResponseService.responseHandler(createRequest(trendingURL));
+
+        model.addAttribute("trendingList", trendingList);
+        model.addAttribute("recommendedList", recommendedList);
         return "main"; // This points to templates/main.html
     }
 
@@ -68,7 +88,7 @@ public class MainController {
     }
 
     @GetMapping("/detail/{movieID}")
-    public String detail(@PathVariable("movieID") String movieID, Model model) {
+    public String detail(@PathVariable("movieID") int movieID, Model model) {
 
         HttpUrl detailURL = HttpUrl.parse(TmdbApiEndpoint.DETAIL.getFullUrl() + movieID + "?language=ko");
         HttpUrl videoURL = HttpUrl.parse(TmdbApiEndpoint.DETAIL.getFullUrl() + movieID + "/videos?language=ko");
@@ -90,7 +110,6 @@ public class MainController {
                 .addHeader("accept", "application/json")
                 .addHeader("Authorization", "Bearer " + apiKey)
                 .build();
-
         return request;
     }
 }

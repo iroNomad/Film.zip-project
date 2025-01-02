@@ -12,4 +12,5 @@ public interface CommentReactionRepository extends JpaRepository<CommentReaction
     long countByCommentIdAndReactionType(Long commentId, String reactionType);
     // 특정 댓글과 사용자에 대한 좋아요 조회
     CommentReaction findByCommentAndUserAndReactionType(Comment comment, User user, String reactionType);
+
 }

@@ -37,4 +37,12 @@ public class UserService {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("Unexpected user"));
     }
+
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    public boolean existsByNickname(String nickname) {
+        return userRepository.existsByNickname(nickname);
+    }
 }

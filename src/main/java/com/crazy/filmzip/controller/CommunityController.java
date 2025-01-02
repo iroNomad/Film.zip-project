@@ -23,6 +23,9 @@ import java.util.List;
 @RequestMapping("/community")
 public class CommunityController {
 
+
+    private final CommentService commentService;
+
     private final CommunityService communityService;
     private final CommentService commentService;
 
@@ -84,6 +87,7 @@ public class CommunityController {
         return "community/new";
     }
 
+
     /**
      * 추천/비추천 처리
      */
@@ -92,4 +96,5 @@ public class CommunityController {
         communityService.reactToPost(id, userId, reactionType);
         return "redirect:/community/" + id; // 상세 페이지로 리다이렉트
     }
+
 }
