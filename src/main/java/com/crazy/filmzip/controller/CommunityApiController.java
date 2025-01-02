@@ -3,6 +3,7 @@ package com.crazy.filmzip.controller;
 import com.crazy.filmzip.dto.*;
 import com.crazy.filmzip.entity.CommunityPost;
 import com.crazy.filmzip.entity.User;
+import com.crazy.filmzip.service.CommentService;
 import com.crazy.filmzip.service.CommunityService;
 import com.crazy.filmzip.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +41,8 @@ public class CommunityApiController {
 
         return userService.findByEmail(email);
     }
+
+//    private CommentService commentService;
 
     // 게시글 목록 조회
     @GetMapping

@@ -4,6 +4,34 @@
     <meta charset="UTF-8">
     <title>게시글 상세</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* 좋아요 버튼을 오른쪽 하단에 위치시키는 스타일 */
+        .comment-container {
+            position: relative;
+            margin-bottom: 10px;
+        }
+        .like-button {
+            position: absolute;
+            bottom: 10px;
+            right: 50px;
+        }
+
+        .like-cnt {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+        }
+
+        .reply-form {
+            margin-top: 15px;
+            margin-left: 20px;
+            display: none;
+        }
+
+        .reply-button {
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
 <div class="p-5 mb-5 text-center bg-light">
@@ -21,7 +49,64 @@
                 <div class="card-body">
                     <h5 class="card-title" th:text="${article.title}">제목</h5>
                     <p class="card-text" th:text="${article.content}">내용</p>
+                    <!-- 댓글 리스트 -->
+                    <div class="card mt-3">
+                        <div class="card-header">
+                            <h5>댓글</h5>
+                        </div>
+                        <div class="card-body">
+                            <div th:each="comment : ${comments}" class="comment-container">
+                                <p>
+                                    <strong th:text="${comment.user.nickname}">작성자</strong>:
+                                    <span th:id="'commentContent_' + ${comment.id}" th:text="${comment.content}">댓글 내용</span>
+                                </p>
+                                <div th:if="${comment.user.id == 7}">
+                                    <button type="button" class="btn btn-primary btn-sm" style="display: none;" onclick="saveComment('[[${comment.id}]]')">저장</button>
+                                    <button type="button" class="btn btn-secondary btn-sm" style="display: none;" onclick="cancelEdit('[[${comment.id}]]')">취소</button>
+                                    <button type="button" class="btn btn-primary btn-sm" th:onclick="editComment(this, '[[${comment.id}]]','[[${comment.content}]]')">수정</button>
+                                    <button type="button" class="btn btn-sm btn-danger" th:onclick="deleteComment('[[${comment.id}]]')">삭제</button>
+                                </div>
+                                <!-- 좋아요 버튼과 좋아요 수 -->
+                                <div style="display: inline-flex; align-items: center;">
+                                    <span id="likeCount_[[${comment.id}]]" class="mr-2 like-cnt">[[${comment.reactions.size()}]]</span>
+                                    <button type="button" class="btn btn-success btn-sm like-button" th:onclick="likeComment('[[${comment.id}]]')">👍 좋아요</button>
+                                </div>
+
+                                <!-- 대댓글 달기 버튼 -->
+                                <div class="reply-button">
+                                    <button type="button" class="btn btn-sm btn-info" th:onclick="toggleReplyForm('[[${comment.id}]]')">답글 달기</button>
+                                </div>
+
+                                <!-- 대댓글 표시 -->
+                                <div th:each="reply : ${comment.replies}" class="ml-4 mt-2">
+                                    <p>
+                                        <strong th:text="${reply.user.nickname}">작성자</strong>:
+                                        <span th:id="'commentContent_' + ${reply.id}" th:text="${reply.content}">대댓글 내용</span>
+                                    </p>
+                                    <!-- 대댓글 수정, 삭제 -->
+                                    <div th:if="${reply.user.id == 7}">
+                                        <button type="button" class="btn btn-primary btn-sm" th:onclick="editComment(this, '[[${reply.id}]]','[[${reply.content}]]')">수정</button>
+                                        <button type="button" class="btn btn-sm btn-danger" th:onclick="deleteComment('[[${reply.id}]]')">삭제</button>
+                                    </div>
+                                </div>
+
+                                <!-- 대댓글 입력 폼 (토글로 보이거나 숨기기) -->
+                                <!--div id="replyForm_${comment.id}" class="reply-form"-->
+                                <div th:id="'replyForm_'+${comment.id}" class="reply-form">
+                                    <form th:action="@{|/comments/reply/${article.id}/${comment.id}|}" method="post">
+                                        <div class="form-group">
+                                            <textarea name="content" class="form-control" rows="3" placeholder="대댓글을 입력하세요"></textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary btn-sm">대댓글 등록</button>
+                                        <button type="button" class="btn btn-secondary btn-sm" th:onclick="toggleReplyForm('[[${comment.id}]]')">취소</button>
+                                    </form>
+                                </div>
+                                <hr>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
                 <div class="card-footer">
                     <div class="d-flex justify-content-between align-items-center">
                         <!-- 추천/비추천 수 -->
@@ -47,7 +132,8 @@
                         </div>
                     </div>
                     <hr>
-
+                    <!-- 수정/삭제 버튼 (작성자만 보임) -->
+<!--                    <div th:if="${isOwner}">-->
 
                         <!-- 수정 버튼 -->
                         <button type="button" class="btn btn-primary btn-sm"
@@ -57,60 +143,28 @@
                         <!-- 삭제 버튼 -->
                         <input type="hidden" id="article-id" th:value="${article.id}" />
                         <button type="button" class="btn btn-danger btn-sm" onclick="deleteArticle()">삭제</button>
-
+<!--                    </div>-->
 
                     <!-- 목록으로 돌아가기 -->
                     <button type="button" class="btn btn-secondary btn-sm" onclick="location.href='/community/list'">목록</button>
                 </div>
+
+
+                <!-- 답변 작성 폼 -->
+                <form th:action="@{|/comments/create/${article.id}|}" method="post">
+                    <div class="form-group">
+                        <textarea name="content" class="form-control" rows="5" placeholder="댓글 내용을 입력하세요"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">댓글 등록</button>
+                </form>
+
             </div>
         </div>
     </div>
 </div>
 
-<script>
-    function reactToPost(postId, reactionType) {
-        console.log(`Reacting to post ${postId} with ${reactionType}`); // 디버깅용 로그
 
-        fetch(`/api/community/${postId}/react?userId=7&reactionType=${reactionType}`, {
-            method: 'POST'
-        })
-            .then(response => {
-                if (response.ok) {
-                    alert(`${reactionType === 'LIKE' ? '추천' : '비추천'}이 완료되었습니다.`);
-                    location.reload(); // 페이지 새로고침
-                } else {
-                    alert(`${reactionType === 'LIKE' ? '추천' : '비추천'}에 실패했습니다.`);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('서버와의 통신 중 문제가 발생했습니다.');
-            });
-    }
-
-
-    // 삭제 처리 함수
-    function deleteArticle() {
-        const id = new URL(window.location.href).pathname.split('/').pop();
-        if (confirm('정말 삭제하시겠습니까?')) {
-            fetch(`/api/community/${id}`, {
-                method: 'DELETE',
-            })
-                .then(response => {
-                    if (response.ok) {
-                        alert('삭제가 완료되었습니다.');
-                        location.replace('/community/list');
-                    } else {
-                        alert('삭제에 실패했습니다.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('서버와의 통신 중 문제가 발생했습니다.');
-                });
-        }
-    }
-</script>
+<script src="/js/comment.js"></script>
 <script src="/js/token.js"></script>
 <script src="/js/article.js"></script>
 </body>
