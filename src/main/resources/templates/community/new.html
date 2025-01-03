@@ -1,9 +1,6 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html layout:decorate="~{layout}">
+<div layout:fragment="content">
 <head>
-  <meta charset="UTF-8">
-  <title>게시글 작성/수정</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <style>
     body {
       background-color: #141414;
@@ -58,14 +55,6 @@
       background-color: #3c3c3c;
       border-color: #e50914;
       box-shadow: none;
-    }
-
-    .btn {
-      border-radius: 50px;
-      font-size: 1rem;
-      font-weight: bold;
-      padding: 0.6rem 1.2rem;
-      text-transform: uppercase;
     }
 
     .btn-success {
@@ -172,8 +161,10 @@
     </div>
   </div>
 </div>
-
-<script src="/js/token.js"></script>
-<script src="/js/article.js"></script>
+<script th:inline="javascript">
+  const navSearchBar = document.getElementById("navSearchBar");
+  navSearchBar.classList.add("d-none");
+</script>
 </body>
+</div>
 </html>
