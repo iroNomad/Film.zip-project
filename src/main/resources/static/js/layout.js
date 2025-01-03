@@ -108,7 +108,7 @@ function addToWatchList() {
 
             if (response.ok) {
                 alert('내 리스트에 추가되었습니다.');
-                location.replace('/main');
+                location.reload();
             }
             else {
                 alert('등록에 실패했습니다.');
@@ -136,7 +136,7 @@ function deleteFromWatchList() {
             .then(response => {
                 if (response.ok) {
                     alert('내 관심 리스트에서 삭제되었습니다.');
-                    location.replace('/main');
+                    location.reload();
                 } else {
                     alert('삭제에 실패했습니다.');
                 }
