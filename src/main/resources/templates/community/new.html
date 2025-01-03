@@ -4,11 +4,150 @@
   <meta charset="UTF-8">
   <title>게시글 작성/수정</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #141414;
+      color: #f5f5f5;
+      font-family: 'Roboto', Arial, sans-serif;
+    }
+
+    .container {
+      max-width: 800px;
+      margin-top: 30px;
+    }
+
+    .card {
+      background-color: #1f1f1f;
+      border: none;
+      margin-bottom: 1.5rem;
+      color: #f5f5f5;
+      border-radius: 15px;
+    }
+
+    .card-header, .card-footer {
+      background-color: #2b2b2b;
+      border: none;
+      color: #f5f5f5;
+    }
+
+    .card-body {
+      padding: 2rem;
+    }
+
+    .form-control {
+      background-color: #303030;
+      border: 1px solid #333;
+      color: #f5f5f5;
+      padding: 0.75rem 1rem;
+      border-radius: 15px;
+      font-size: 1rem;
+    }
+
+    #content {
+      color: #d9dcde;
+      height: 600px;
+      border: none;
+    }
+
+     #title {
+       color: #d9dcde;
+       border: none;
+     }
+
+    .form-control:focus {
+      background-color: #3c3c3c;
+      border-color: #e50914;
+      box-shadow: none;
+    }
+
+    .btn {
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: bold;
+      padding: 0.6rem 1.2rem;
+      text-transform: uppercase;
+    }
+
+    .btn-success {
+      background-color: #7da4ad;
+      border: none;
+      color: #fff;
+    }
+
+    .btn-success:hover {
+      background-color: #0a364d;
+    }
+
+    .btn-success:active,
+    .btn-success:focus {
+      background-color: #7da4ad !important;
+      box-shadow: none !important;
+    }
+
+    .btn-secondary {
+      background-color: #606060;
+      border: none;
+      color: #fff;
+    }
+
+    .btn-secondary:hover {
+      background-color: #4b4b4b;
+    }
+
+    .d-flex {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .btn-sm {
+      font-size: 0.9rem;
+      padding: 0.5rem 1rem;
+    }
+
+    .ml-2 {
+      margin-left: 0.5rem;
+    }
+
+    .p-5 {
+      background-color: #181818;
+      color: #e50914;
+    }
+
+    .navbar {
+      background-color: #1e1e1e;
+      padding: 15px 30px;
+      margin-bottom: 1.5rem;
+      border-bottom: 2px solid #333;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+    }
+
+    .navbar h1 {
+      color: #e50914;
+      font-size: 1rem;
+      font-weight: bold;
+      margin: 0;
+      display: flex;
+      align-items: center;
+    }
+
+    .navbar i {
+      margin-right: 10px;
+      font-size: 1.2rem;
+      color: #e50914;
+    }
+
+  </style>
 </head>
 <body>
-<div class="p-5 mb-5 text-center bg-light">
-  <h1 class="mb-3">게시글 작성/수정</h1>
+
+<div class="navbar">
+  <i class="fas fa-file-archive"></i>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <h1>커뮤니티</h1>
 </div>
+
 
 <div class="container">
   <div class="row">
@@ -25,9 +164,9 @@
             <textarea class="form-control" id="content" rows="5" th:text="${article.content}" placeholder="내용을 입력하세요"></textarea>
           </div>
         </div>
-        <div class="card-footer">
-          <button type="button" class="btn btn-success btn-sm" onclick="saveArticle()">저장</button>
-          <button type="button" class="btn btn-secondary btn-sm" onclick="location.href='/community/list'">취소</button>
+        <div class="card-footer d-flex">
+          <button type="button" class="btn btn-success btn-sm" onclick="saveArticle()">등록</button>
+          <button type="button" class="btn btn-secondary btn-sm ml-2" onclick="location.href='/community/list'">취소</button>
         </div>
       </div>
     </div>
