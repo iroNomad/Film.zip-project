@@ -2,6 +2,7 @@ package com.crazy.filmzip.controller;
 
 import com.crazy.filmzip.dto.AddUserRequest;
 import com.crazy.filmzip.dto.ProfileDto;
+import com.crazy.filmzip.dto.ProfileUpdateRequest;
 import com.crazy.filmzip.entity.User;
 import com.crazy.filmzip.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
@@ -70,6 +72,32 @@ public class UserApiController {
 
         return ResponseEntity.ok(profileDto);
     }
+
+    @PostMapping("/api/user/modify")
+    public ResponseEntity<String> modifyProfile(@RequestBody ProfileUpdateRequest request) {
+        User user = getCurrentUser();
+
+        // 프로필 이미지 수정
+        if (request.getProfileImage() != null) {
+            user.setProfileImage(request.getProfileImage());
+        }
+
+        // 닉네임 수정
+        if (request.getNickname() != null) {
+            user.setNickname(request.getNickname());
+        }
+
+        // 영화 장르 수정
+        if (request.getGenre() != null) {
+            user.setGenre(request.getGenre());
+        }
+
+        userService.modifyProfile(user);
+
+        return ResponseEntity.ok("프로필이 성공적으로 수정되었습니다.");
+    }
+
+
 
     // 현재 인증된 사용자 가져오기
     private User getCurrentUser() {
