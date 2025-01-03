@@ -9,12 +9,12 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.sql.ConnectionBuilder;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @Getter
 @Setter
+@NoArgsConstructor
 @Entity
 @NoArgsConstructor
 @Table(name = "to_watch_movies")

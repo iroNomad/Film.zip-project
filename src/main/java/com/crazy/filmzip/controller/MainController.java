@@ -5,13 +5,17 @@ import com.crazy.filmzip.dto.Movie;
 import com.crazy.filmzip.dto.Video;
 import com.crazy.filmzip.service.DetailResponseService;
 import com.crazy.filmzip.service.GeneralResponseService;
+import com.crazy.filmzip.service.WatchListService;
 import okhttp3.HttpUrl;
 import okhttp3.Request;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 
+
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
@@ -19,13 +23,20 @@ import java.util.Map;
 public class MainController {
 
     private final DetailResponseService detailResponseService;
+    private final UserRepository userRepository;
+    private final WatchListService watchListService;
+
 
     @Value("${themoviedb.api.key}")
     private String apiKey;
 
     // Constructor-based dependency injection
-    public MainController(DetailResponseService detailResponseService) {
+
+    public MainController(DetailResponseService detailResponseService, UserRepository userRepository, WatchListService watchListService) {
         this.detailResponseService = detailResponseService;
+        this.userRepository = userRepository;
+        this.watchListService = watchListService;
+
     }
 
     @GetMapping("/main")
@@ -42,8 +53,13 @@ public class MainController {
         List recommendedList = GeneralResponseService.responseHandler(createRequest(recommendedURL));
         List trendingList = GeneralResponseService.responseHandler(createRequest(trendingURL));
 
+        List watchList = watchListService.getMovieListByUserID(1L);
+        System.out.println("watchList = " + watchList);
+
         model.addAttribute("trendingList", trendingList);
         model.addAttribute("recommendedList", recommendedList);
+        model.addAttribute("watchList", watchList);
+
         return "main"; // This points to templates/main.html
     }
 
@@ -82,10 +98,12 @@ public class MainController {
 
         Movie movie = detailResponseService.getMovieData(createRequest(detailURL));
         Video video = detailResponseService.getVideoData(createRequest(videoURL));
+        boolean isInWatchList = detailResponseService.checkWatchList(movieID);
 
         // Pass the movie list to the view (detail.html)
         model.addAttribute("movie", movie);
         model.addAttribute("video", video);
+        model.addAttribute("isInWatchList", isInWatchList);
         return "detail"; // This points to templates/detail.html
     }
 
