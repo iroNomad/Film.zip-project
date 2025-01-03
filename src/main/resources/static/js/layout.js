@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', function () {
         alert('로그인이 필요합니다.');
         window.location.href = '/login';
     }
+
+    httpRequest('GET','/main', null, null, null);
 });
 
 // 사용자 인증 상태 확인 함수
