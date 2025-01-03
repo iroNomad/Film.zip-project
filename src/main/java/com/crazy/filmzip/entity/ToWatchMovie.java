@@ -11,10 +11,12 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
+@NoArgsConstructor
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
+@NoArgsConstructor
 @Table(name = "to_watch_movies")
 @EntityListeners(AuditingEntityListener.class)
 public class ToWatchMovie {

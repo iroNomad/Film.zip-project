@@ -60,17 +60,27 @@
                                     <strong th:text="${comment.user.nickname}">작성자</strong>:
                                     <span th:id="'commentContent_' + ${comment.id}" th:text="${comment.content}">댓글 내용</span>
                                 </p>
-                                <div th:if="${comment.user.id == 7}">
+
+                                <div style="display: flex; justify-content: flex-end; align-items: center;">
+                                    <span th:id="'recommendCount_'+${comment.id}" class="mr-2">👍 [[${comment.recommends}]]</span>
+                                    <button type="button" class="btn btn-success btn-sm" th:onclick="recommendComment('[[${comment.id}]]')">👍 추천</button>
+                                    <span th:id="'notRecommendCount_'+${comment.id}" class="ml-2 mr-2">👎 [[${comment.notRecommends}]]</span>
+                                    <button type="button" class="btn btn-danger btn-sm" th:onclick="notRecommendComment('[[${comment.id}]]')">👎 비추천</button>
+                                </div>
+
+
+                                <div th:if="${comment.user.id == 5}">
+
                                     <button type="button" class="btn btn-primary btn-sm" style="display: none;" onclick="saveComment('[[${comment.id}]]')">저장</button>
                                     <button type="button" class="btn btn-secondary btn-sm" style="display: none;" onclick="cancelEdit('[[${comment.id}]]')">취소</button>
                                     <button type="button" class="btn btn-primary btn-sm" th:onclick="editComment(this, '[[${comment.id}]]','[[${comment.content}]]')">수정</button>
                                     <button type="button" class="btn btn-sm btn-danger" th:onclick="deleteComment('[[${comment.id}]]')">삭제</button>
                                 </div>
                                 <!-- 좋아요 버튼과 좋아요 수 -->
-                                <div style="display: inline-flex; align-items: center;">
+                                <!--div style="display: inline-flex; align-items: center;">
                                     <span id="likeCount_[[${comment.id}]]" class="mr-2 like-cnt">[[${comment.reactions.size()}]]</span>
                                     <button type="button" class="btn btn-success btn-sm like-button" th:onclick="likeComment('[[${comment.id}]]')">👍 좋아요</button>
-                                </div>
+                                </div-->
 
                                 <!-- 대댓글 달기 버튼 -->
                                 <div class="reply-button">
@@ -83,8 +93,10 @@
                                         <strong th:text="${reply.user.nickname}">작성자</strong>:
                                         <span th:id="'commentContent_' + ${reply.id}" th:text="${reply.content}">대댓글 내용</span>
                                     </p>
+
                                     <!-- 대댓글 수정, 삭제 -->
-                                    <div th:if="${reply.user.id == 7}">
+                                    <div th:if="${reply.user.id == 5}">
+
                                         <button type="button" class="btn btn-primary btn-sm" th:onclick="editComment(this, '[[${reply.id}]]','[[${reply.content}]]')">수정</button>
                                         <button type="button" class="btn btn-sm btn-danger" th:onclick="deleteComment('[[${reply.id}]]')">삭제</button>
                                     </div>
@@ -97,7 +109,7 @@
                                         <div class="form-group">
                                             <textarea name="content" class="form-control" rows="3" placeholder="대댓글을 입력하세요"></textarea>
                                         </div>
-                                        <button type="submit" class="btn btn-primary btn-sm">대댓글 등록</button>
+                                        <button type="submit" class="btn btn-primary btn-sm">답글 등록</button>
                                         <button type="button" class="btn btn-secondary btn-sm" th:onclick="toggleReplyForm('[[${comment.id}]]')">취소</button>
                                     </form>
                                 </div>
@@ -133,17 +145,17 @@
                     </div>
                     <hr>
                     <!-- 수정/삭제 버튼 (작성자만 보임) -->
-<!--                    <div th:if="${isOwner}">-->
+                    <!--                    <div th:if="${isOwner}">-->
 
-                        <!-- 수정 버튼 -->
-                        <button type="button" class="btn btn-primary btn-sm"
-                                th:onclick="|location.href='@{/community/new?id={articleId}(articleId=${article.id})}'|">
-                            수정
-                        </button>
-                        <!-- 삭제 버튼 -->
-                        <input type="hidden" id="article-id" th:value="${article.id}" />
-                        <button type="button" class="btn btn-danger btn-sm" onclick="deleteArticle()">삭제</button>
-<!--                    </div>-->
+                    <!-- 수정 버튼 -->
+                    <button type="button" class="btn btn-primary btn-sm"
+                            th:onclick="|location.href='@{/community/new?id={articleId}(articleId=${article.id})}'|">
+                        수정
+                    </button>
+                    <!-- 삭제 버튼 -->
+                    <input type="hidden" id="article-id" th:value="${article.id}" />
+                    <button type="button" class="btn btn-danger btn-sm" onclick="deleteArticle()">삭제</button>
+                    <!--                    </div>-->
 
                     <!-- 목록으로 돌아가기 -->
                     <button type="button" class="btn btn-secondary btn-sm" onclick="location.href='/community/list'">목록</button>

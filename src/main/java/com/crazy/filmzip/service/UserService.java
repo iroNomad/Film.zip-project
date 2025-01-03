@@ -25,6 +25,7 @@ public class UserService {
                 .name(dto.getName())
                 .nickname(dto.getNickname())
                 .profileImage(dto.getProfileImage())
+                .genre(dto.getGenre())
                 .build()).getId();
     }
 

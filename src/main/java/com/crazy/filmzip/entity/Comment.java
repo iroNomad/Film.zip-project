@@ -46,4 +46,10 @@ public class Comment {
     @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CommentReaction> reactions = new ArrayList<>();
 
+    @Column(nullable = false)
+    private int recommends = 0;
+
+    @Column(nullable = false)
+    private int notRecommends = 0;
+
 }
