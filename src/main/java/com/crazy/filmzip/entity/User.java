@@ -1,5 +1,7 @@
 package com.crazy.filmzip.entity;
 
+import com.crazy.filmzip.dto.ProfileDto;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -126,5 +128,4 @@ public class User implements UserDetails {
 
         return this;
     }
-
 }

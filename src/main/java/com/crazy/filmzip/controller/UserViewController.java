@@ -37,7 +37,12 @@ public class UserViewController {
     }
 
     @GetMapping("/user/mypage")
-    public String mypage(Model model) {
+    public String mypage() {
         return "user/mypage";
+    }
+
+    @GetMapping("/user/modify")
+    public String modify() {
+        return "user/modify";
     }
 }

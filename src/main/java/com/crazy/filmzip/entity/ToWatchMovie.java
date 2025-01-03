@@ -1,5 +1,6 @@
 package com.crazy.filmzip.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,10 +12,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
-@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
 @Entity
 @NoArgsConstructor
 @Table(name = "to_watch_movies")
@@ -26,6 +25,7 @@ public class ToWatchMovie {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
     private User user;
 
     @Column(name = "movie_id", nullable = false)
