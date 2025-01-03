@@ -4,103 +4,219 @@
     <meta charset="UTF-8">
     <title>커뮤니티 글 목록</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
+        body {
+            background-color: #141414;
+            color: #f5f5f5;
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+
+        .navbar {
+            background-color: #1e1e1e;
+            padding: 15px 30px;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #333;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        .navbar h1 {
+            color: #e50914;
+            font-size: 1rem;
+            font-weight: bold;
+            margin: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+            color: #e50914;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin-top: 30px;
+        }
+
         .card {
+            background-color: #1f1f1f;
+            border: none;
+            margin-bottom: 1.5rem;
+            color: #f5f5f5;
+            border-radius: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+        }
+
+        .card-header, .card-footer {
+            background-color: #2b2b2b;
+            border: none;
+            color: #f5f5f5;
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .card-text {
+            font-size: 0.8rem;
+            color: #b0b0b0;
             margin-bottom: 20px;
         }
-        .btn-success {
-            margin-bottom: 20px;
-        }
+
         .reaction-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
+
         .reaction-buttons {
             display: flex;
             gap: 10px;
         }
+
+        .btn-success, .btn-danger {
+            font-size: 0.7rem;
+            padding: 0.6rem 1rem;
+            text-transform: uppercase;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-success {
+            background-color: #606466 !important;
+            color: white;
+            border: none;
+            box-shadow: none !important;
+        }
+
+        .btn-success:hover {
+            background-color: #3a3c3d !important;
+            border: none;
+            box-shadow: none !important;
+        }
+
+        .btn-danger {
+            background-color: #606466;
+            color: white;
+            border: none;
+        }
+
+        .btn-danger:hover {
+            background-color: #3a3c3d;
+            border: none;
+        }
+
+        .pagination .page-item .page-link {
+            background-color: #2b2b2b;
+            color: #f5f5f5;
+            border: none;
+            font-size: 1rem;
+            font-weight: bold;
+            margin: 0 5px;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #e50914;
+            color: #fff;
+        }
+
+        .btn-primary {
+            font-size: 0.7rem;
+            background-color: #7da4ad;
+            color: #082f38;
+            padding: 0.4rem 0.7rem;
+            text-transform: uppercase;
+            border: none;
+        }
+
+        .btn-primary:hover {
+             background-color: #0a364d;
+             border: none;
+        }
+
+
     </style>
 </head>
 <body>
-<div class="p-5 mb-5 text-center bg-light">
-    <h1 class="mb-3">My Community</h1>
-    <h4 class="mb-3">커뮤니티에 오신 것을 환영합니다.</h4>
+
+<div class="navbar">
+    <i class="fas fa-file-archive"></i>
+    <h1>커뮤니티</h1>
 </div>
 
 <div class="container">
-    <!-- 검색 폼 -->
-    <form method="get" action="/community/list" class="mb-4">
-        <div class="input-group">
-            <input type="text" name="keyword" class="form-control" placeholder="검색"
-                   th:value="${keyword}" />
-            <button type="submit" class="btn btn-primary">검색</button>
+    <form method="get" action="/community/list" class="mb-4 d-flex">
+        <div class="input-group mr-2" style="max-width: 1000px;">
+            <input type="text" name="keyword" class="form-control" placeholder="검색" th:value="${keyword}" />
+        </div>
+        <div class="d-flex">
+            <button type="submit" class="btn btn-primary mr-2" style="min-width: 80px;">검색</button>
+            <button type="button" class="btn btn-success" style="min-width: 100px;" th:onclick="|location.href='@{/community/new}'|">글 등록</button>
         </div>
     </form>
-    <!-- 글 등록 버튼 -->
-    <div class="d-flex justify-content-end">
-        <button type="button" class="btn btn-success btn-sm"
-                th:onclick="|location.href='@{/community/new}'|">글 등록</button>
-    </div>
 
-    <!-- 게시글 목록 -->
+
     <div class="row">
-        <!-- 게시글이 없을 때 -->
         <div th:if="${articles.size() == 0}" class="col-lg-12">
-            <div class="alert alert-info text-center" role="alert">
+            <div class="alert text-center" role="alert">
                 등록된 게시글이 없습니다. 새로운 게시글을 등록해보세요!
             </div>
         </div>
 
-        <!-- 게시글이 있을 때 -->
         <div th:each="item : ${articles}" class="col-lg-12">
-            <div class="card shadow-sm">
-                <div class="card-header">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
                     <span>작성자: <span th:text="${item.writer}">익명</span></span>
-                    <span class="float-right">조회수: <span th:text="${item.views}">0</span></span> <!-- 조회수 표시 -->
+                    <span>조회수: <span th:text="${item.views}">0</span></span>
                 </div>
                 <div class="card-body">
                     <h5 class="card-title" th:text="${item.title}">게시글 제목</h5>
                     <p class="card-text text-truncate" th:text="${item.content}">게시글 내용</p>
-                    <a th:href="@{/community/{id}(id=${item.id})}" class="btn btn-primary btn-sm">보러가기</a>
                 </div>
                 <div class="card-footer">
-                    <div class="reaction-container">
-                        <!-- 추천/비추천 수 -->
-                        <div>
-                            <span>👍 추천: <span th:text="${item.likes}">0</span></span>
-                            <span>👎 비추천: <span th:text="${item.dislikes}">0</span></span>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a th:href="@{/community/{id}(id=${item.id})}" class="btn btn-primary">자세히 보기</a>
+                        <div class="reaction-container d-flex align-items-center">
+                            <div class="reaction-buttons d-flex align-items-center mr-3">
+                                <button type="button" class="btn btn-success"
+                                        th:onclick="|reactToPost(${item.id}, 'LIKE')|">
+                                    👍 추천 <span class="ml-2" th:text="${item.likes}">0</span>
+                                </button>
+                            </div>
+                            <div class="reaction-buttons d-flex align-items-center">
+                                <button type="button" class="btn btn-danger"
+                                        th:onclick="|reactToPost(${item.id}, 'DISLIKE')|">
+                                    👎 비추천 <span class="ml-2" th:text="${item.dislikes}">0</span>
+                                </button>
+                            </div>
                         </div>
-                        <!-- 추천/비추천 버튼 -->
-                        <div class="reaction-buttons">
-                            <button type="button" class="btn btn-success btn-sm"
-                                    th:onclick="|reactToPost(${item.id}, 'LIKE')|">
-                                👍 추천
-                            </button>
-                            <button type="button" class="btn btn-danger btn-sm"
-                                    th:onclick="|reactToPost(${item.id}, 'DISLIKE')|">
-                                👎 비추천
-                            </button>
-                        </div>
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- 페이징 버튼 -->
+
     <nav aria-label="Page navigation">
         <ul class="pagination justify-content-center">
-            <!-- 이전 버튼 -->
             <li th:classappend="${currentPage == 0} ? 'disabled' : ''" class="page-item">
                 <a th:href="@{/community/list(page=${currentPage - 1}, keyword=${keyword})}" class="page-link">이전</a>
             </li>
-            <!-- 페이지 번호 -->
             <li th:each="i : ${#numbers.sequence(0, totalPage - 1)}"
                 th:classappend="${currentPage == i} ? 'active' : ''" class="page-item">
-                <a th:href="@{/community/list(page=${i}, keyword=${keyword})}" class="page-link"
-                   th:text="${i + 1}">1</a>
+                <a th:href="@{/community/list(page=${i}, keyword=${keyword})}" class="page-link" th:text="${i + 1}">1</a>
             </li>
-            <!-- 다음 버튼 -->
             <li th:classappend="${currentPage == totalPage - 1} ? 'disabled' : ''" class="page-item">
                 <a th:href="@{/community/list(page=${currentPage + 1}, keyword=${keyword})}" class="page-link">다음</a>
             </li>

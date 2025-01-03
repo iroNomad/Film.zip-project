@@ -3,6 +3,8 @@ package com.crazy.filmzip.controller;
 import com.crazy.filmzip.TmdbApiEndpoint;
 import com.crazy.filmzip.dto.Movie;
 import com.crazy.filmzip.dto.Video;
+import com.crazy.filmzip.entity.User;
+import com.crazy.filmzip.repository.UserRepository;
 import com.crazy.filmzip.service.DetailResponseService;
 import com.crazy.filmzip.service.GeneralResponseService;
 import com.crazy.filmzip.service.WatchListService;
