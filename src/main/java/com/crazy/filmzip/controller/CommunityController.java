@@ -27,7 +27,6 @@ public class CommunityController {
     private final CommentService commentService;
 
     private final CommunityService communityService;
-    private final CommentService commentService;
 
     /**
      * 게시글 목록 조회
