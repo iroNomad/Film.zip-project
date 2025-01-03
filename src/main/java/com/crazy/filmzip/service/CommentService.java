@@ -3,13 +3,17 @@ package com.crazy.filmzip.service;
 import com.crazy.filmzip.dto.AddCommunityPostRequest;
 import com.crazy.filmzip.dto.CommentRequest;
 import com.crazy.filmzip.dto.CommentResponse;
+import com.crazy.filmzip.dto.ReactionRequest;
 import com.crazy.filmzip.entity.Comment;
+import com.crazy.filmzip.entity.CommentReaction;
 import com.crazy.filmzip.entity.CommunityPost;
 import com.crazy.filmzip.entity.User;
+import com.crazy.filmzip.repository.CommentReactionRepository;
 import com.crazy.filmzip.repository.CommentRepository;
 
 import com.crazy.filmzip.repository.CommunityRepository;
 import com.crazy.filmzip.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +28,7 @@ public class CommentService {
     private final UserRepository userRepository;
 
     private final CommunityRepository communityRepository;
+    private final CommentReactionRepository reactionRepository;
 
     public Comment create(CommunityPost post, String content, AddCommunityPostRequest request, Long parentCommentId) {
         // 사용자를 찾기
@@ -91,6 +96,102 @@ public class CommentService {
     public CommunityPost findPostById(Long postId) {
         return communityRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다. ID: " + postId));
+    }
+
+    // 댓글 추천
+    public int recommendComment(Long commentId) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new EntityNotFoundException("Comment not found"));
+        comment.setRecommends(comment.getRecommends() + 1);
+        return comment.getRecommends();
+    }
+
+    // 댓글 비추천
+    public int notRecommendComment(Long commentId) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new EntityNotFoundException("Comment not found"));
+        comment.setNotRecommends(comment.getNotRecommends() + 1);
+        return comment.getNotRecommends();
+    }
+
+    // 댓글 추천/비추천 리셋 저장
+    public void save(Comment comment) {
+        commentRepository.save(comment);
+    }
+
+    /*
+    public void handleReaction(Long commentId, Long userId, ReactionRequest request) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("Comment not found"));
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다. ID: " + userId));
+
+        Optional<CommentReaction> existingReaction = reactionRepository.findByCommentAndUser(comment, user);
+
+        if (existingReaction.isPresent()) {
+            CommentReaction reaction = existingReaction.get();
+
+            if (reaction.getReactionType() == request.getReaction()) {
+                throw new IllegalArgumentException("이미 이 댓글에 반응했습니다.");
+            }
+
+            // 기존 반응 제거 후 새로운 반응 추가
+            System.out.println("================================= reaction.getReactionType() = " + reaction.getReactionType());
+            System.out.println("================================= CommentReaction.ReactionType.RECOMMEND = " + CommentReaction.ReactionType.RECOMMEND);
+            if (reaction.getReactionType().equals(CommentReaction.ReactionType.RECOMMEND)) {
+                comment.setRecommends(comment.getRecommends() - 1);
+            } else if (reaction.getReactionType().equals(CommentReaction.ReactionType.NOTRECOMMEND)) {
+                comment.setNotRecommends(comment.getNotRecommends() - 1);
+            }
+            reactionRepository.delete(reaction);
+        }
+
+        // 새로운 반응 추가
+        CommentReaction newReaction = new CommentReaction();
+        newReaction.setComment(comment);
+        newReaction.setUser(user);
+        newReaction.setReactionType(request.getReaction());
+
+        if (request.getReaction().equals(CommentReaction.ReactionType.RECOMMEND)) {
+            comment.setRecommends(comment.getRecommends() + 1);
+        } else if (request.getReaction().equals(CommentReaction.ReactionType.NOTRECOMMEND)) {
+            comment.setNotRecommends(comment.getNotRecommends() + 1);
+        }
+
+        reactionRepository.save(newReaction);
+        commentRepository.save(comment);
+    }
+    */
+
+    public boolean handleReaction(Long commentId, Long userId, ReactionRequest request) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("Comment not found"));
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다. ID: " + userId));
+
+        Optional<CommentReaction> existingReaction = reactionRepository.findByCommentAndUser(comment, user);
+
+        if (existingReaction.isPresent()) {
+            CommentReaction reaction = existingReaction.get();
+
+            System.out.println("====================== reaction.getReactionType() = " + reaction.getReactionType());
+            System.out.println("====================== request.getReaction() = " + request.getReaction());
+            if (reaction.getReactionType().equals(request.getReaction())) {
+                return false;
+            } else {
+                reactionRepository.delete(reaction);
+            }
+        }
+
+        CommentReaction newReaction = new CommentReaction();
+        newReaction.setComment(comment);
+        newReaction.setUser(user);
+        newReaction.setReactionType(request.getReaction());
+        reactionRepository.save(newReaction);
+
+        return true;
     }
 }
 
