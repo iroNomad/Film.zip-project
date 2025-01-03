@@ -31,16 +31,13 @@ public class MainController {
     private final WatchListService watchListService;
     private final UserService userService;
 
-
     @Value("${themoviedb.api.key}")
     private String apiKey;
 
     // Constructor-based dependency injection
-
     public MainController(DetailResponseService detailResponseService, WatchListService watchListService, UserService userService) {
         this.detailResponseService = detailResponseService;
         this.watchListService = watchListService;
-
         this.userService = userService;
     }
 
