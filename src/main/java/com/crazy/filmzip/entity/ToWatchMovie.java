@@ -12,6 +12,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.sql.ConnectionBuilder;
 import java.time.LocalDateTime;
 
+@NoArgsConstructor
 @Getter
 @Setter
 @Entity
