@@ -1,7 +1,6 @@
 package com.crazy.filmzip.dto;
 
 import com.crazy.filmzip.entity.ToWatchMovie;
-import com.crazy.filmzip.entity.User;
 import lombok.Getter;
 import lombok.Setter;
 

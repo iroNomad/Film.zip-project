@@ -86,7 +86,7 @@ function addToWatchList() {
     const title = document.getElementById('title').textContent;
     const backdropPath = document.getElementById('backdropPath').textContent;
 
-    const url = "/api/toWatchList";
+    const url = "/api/watchList";
 
     console.log(movieApiId, title, backdropPath);
 
@@ -108,7 +108,7 @@ function addToWatchList() {
 
             if (response.ok) {
                 alert('내 리스트에 추가되었습니다.');
-//                location.replace('/main');
+                location.replace('/main');
             }
             else {
                 alert('등록에 실패했습니다.');
@@ -118,6 +118,33 @@ function addToWatchList() {
             console.error('Error:', error);
             alert('서버와의 통신 중 문제가 발생했습니다.');
         });
+}
+
+function deleteFromWatchList() {
+    const movieApiId = document.getElementById('movieID').textContent;
+
+        const url = "/api/watchList/" + movieApiId;
+        console.log("Deleting movie with ID: " + movieApiId);
+
+        fetch(url, {
+            method: "DELETE",
+            headers: {
+                "Authorization": 'Bearer ' + localStorage.getItem('access_token'),
+                "Content-Type": "application/json",
+            },
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert('내 관심 리스트에서 삭제되었습니다.');
+                    location.replace('/main');
+                } else {
+                    alert('삭제에 실패했습니다.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('서버와의 통신 중 문제가 발생했습니다.');
+            });
 }
 
 // HTTP 요청을 보내는 함수

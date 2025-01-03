@@ -60,7 +60,25 @@
             </div>
         </div>
     </div>
-
+    <br>
+    <h2>나의 관심 리스트</h2>
+    <div class="d-flex overflow-auto gap-1">
+        <div th:each="movie : ${watchList}"
+             class="card mb-3 bg-transparent text-white rounded-0 border-0"
+             style="flex: 0 0 auto; width: 300px; height: auto;">
+            <!-- Dynamically set the image source -->
+            <a th:href="@{/detail/{id}(id=${movie.movieApiId})}">
+                <img th:src="${movie.backdropPath}"
+                     class="card-img-top rounded-0"
+                     alt="Movie image"
+                     style="object-fit: cover;">
+            </a>
+            <div class="card-body p-1" style="height: 30px; overflow: hidden;">
+                <!-- Display movie title -->
+                <p class="text-center">[[${movie.title}]]</p>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Genre Selection Modal -->

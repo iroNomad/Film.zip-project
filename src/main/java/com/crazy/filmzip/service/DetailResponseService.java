@@ -2,6 +2,7 @@ package com.crazy.filmzip.service;
 
 import com.crazy.filmzip.dto.Movie;
 import com.crazy.filmzip.dto.Video;
+import com.crazy.filmzip.repository.WatchListRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.OkHttpClient;
@@ -19,10 +20,12 @@ public class DetailResponseService {
     private static final Logger logger = LoggerFactory.getLogger(DetailResponseService.class);
     private final OkHttpClient client;
     private final ObjectMapper mapper;
+    private final WatchListRepository watchListRepository;
 
-    public DetailResponseService(OkHttpClient client, ObjectMapper mapper) {
+    public DetailResponseService(OkHttpClient client, ObjectMapper mapper, WatchListRepository watchListRepository) {
         this.client = client;
         this.mapper = mapper;
+        this.watchListRepository = watchListRepository;
     }
 
     public Movie getMovieData(Request request) {
@@ -74,5 +77,10 @@ public class DetailResponseService {
             System.out.println(e.getMessage());
         }
         return videoObject;
+    }
+
+    public boolean checkWatchList(Integer movieId) {
+
+        return !watchListRepository.findByMovieApiId(movieId).isEmpty();
     }
 }
