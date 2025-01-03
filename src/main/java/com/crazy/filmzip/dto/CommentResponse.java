@@ -13,5 +13,9 @@ public class CommentResponse {
     private String writer;
     private int likes;
     private int dislikes;
+    private int recommends;
+    private int notRecommends;
     private List<CommentResponse> replies;
+
 }
+

@@ -3,8 +3,6 @@ package com.crazy.filmzip.controller;
 import com.crazy.filmzip.TmdbApiEndpoint;
 import com.crazy.filmzip.dto.Movie;
 import com.crazy.filmzip.dto.Video;
-import com.crazy.filmzip.entity.User;
-import com.crazy.filmzip.repository.UserRepository;
 import com.crazy.filmzip.service.DetailResponseService;
 import com.crazy.filmzip.service.GeneralResponseService;
 import com.crazy.filmzip.service.WatchListService;
@@ -38,14 +36,7 @@ public class MainController {
     }
 
     @GetMapping("/main")
-    public String main(Model model, Principal principal) {
-
-        if(principal != null) {
-            User user = userRepository.findByEmail(principal.getName())
-                    .orElseThrow(() -> new IllegalArgumentException("Unexpected user"));
-            model.addAttribute("userId", user.getId());
-            System.out.println("id: " + user.getId());
-        }
+    public String main(Model model) {
 
         HttpUrl trendingURL = HttpUrl.parse(TmdbApiEndpoint.TRENDING.getFullUrl() + "?language=ko");
         HttpUrl recommendedURL = HttpUrl.parse(TmdbApiEndpoint.DISCOVER.getFullUrl())

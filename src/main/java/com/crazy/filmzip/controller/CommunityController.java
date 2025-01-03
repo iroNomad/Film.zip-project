@@ -61,6 +61,11 @@ public class CommunityController {
     public String getArticle(@PathVariable Long id, Model model) {
         communityService.incrementViewCount(id); // 조회수 증가
         CommunityPostDetailResponse article = communityService.findById(id); // findById 사용
+
+        // 댓글 목록 가져오기
+        List<Comment> comments = commentService.findByPostId(id);
+
+        model.addAttribute("comments", comments);
         model.addAttribute("article", article);
         return "community/article";
     }

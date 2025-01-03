@@ -13,4 +13,5 @@ public class CommentRequestDto {
     public void setContent(String content) {
         this.content = content;
     }
+
 }
