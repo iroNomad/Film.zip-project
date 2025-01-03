@@ -3,7 +3,6 @@ package com.crazy.filmzip.controller;
 import com.crazy.filmzip.TmdbApiEndpoint;
 import com.crazy.filmzip.dto.Movie;
 import com.crazy.filmzip.dto.Video;
-import com.crazy.filmzip.entity.User;
 import com.crazy.filmzip.repository.UserRepository;
 import com.crazy.filmzip.service.DetailResponseService;
 import com.crazy.filmzip.service.GeneralResponseService;
@@ -11,12 +10,10 @@ import com.crazy.filmzip.service.WatchListService;
 import okhttp3.HttpUrl;
 import okhttp3.Request;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 
-import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 

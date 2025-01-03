@@ -8,36 +8,49 @@
     <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/styles.css}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <title>HomePage</title>
+    <title>Film.zip</title>
 </head>
 <body class="bg-dark text-white">
 <!-- 기본 템플릿 안에 삽입될 내용 Start -->
-<nav class="navbar navbar-expand-lg bg-dark p-3">
+<nav class="navbar navbar-expand-lg bg-dark p-3 mb-0">
     <div class="container-fluid">
         <!-- Left Side: Logo -->
         <a class="navbar-brand text-white" href="/main">Film.zip</a>
 
         <!-- Middle: Form and Links (collapse area) -->
-        <form action="/search/1" method="GET" class="d-flex me-3 w-50 d-none" role="search">
+        <form id="navSearchBar" action="/search/1" method="GET" class="d-flex me-3 w-50 position-absolute top-10 start-50 translate-middle-x" role="search">
             <!-- Input field for search query -->
             <input class="form-control me-2" type="search" name="keyword" placeholder="Search" aria-label="Search" required>
             <button class="btn btn-outline-light w-25" type="submit">검색</button>
         </form>
 
-
         <!-- Right Side: Login Button -->
-        <ul class="navbar-nav d-flex align-items-center flex-row">
-            <li class="nav-item">
-                <a class="nav-link active text-white" aria-current="page" href="#">마이페이지</a>
-            </li>
-            <li class="nav-item">
-                <button type="button" class="btn btn-light" id="logout-btn"><strong>로그아웃</strong></button>
-            </li>
+        <ul class="navbar-nav d-flex align-items-center flex-row gap-3">
+            <li class="nav-item"><a class="nav-link active text-white" aria-current="page" href="/community/list">커뮤니티</a></li>
+            <li class="nav-item"><a class="nav-link active text-white" aria-current="page" href="#">마이페이지</a></li>
+            <li class="nav-item"><button type="button" class="btn btn-light" id="logout-btn"><strong>로그아웃</strong></button></li>
         </ul>
     </div>
 </nav>
 <th:block layout:fragment="content"></th:block>
 <!-- 기본 템플릿 안에 삽입될 내용 End -->
+<nav class="navbar navbar-expand-lg bg-dark p-3 mt-5 border-top border-1">
+    <div class="container-fluid mx-20 mx-5">
+        <div class="navbar-brand d-flex w-100 justify-content-between align-items-center">
+            <div>
+                <img width="30" height="30"
+                     src="https://img.icons8.com/ios-glyphs/30/FFFFFF/github.png"
+                     alt="github"
+                     class="d-inline-block align-text-top me-3"/>
+                <a href="https://github.com/nmskfkai" class="link-light link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover me-3">이지민</a>
+                <a href="https://github.com/ekdms6" class="link-light link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover me-3">장다은</a>
+                <a href="https://github.com/jinwon0988" class="link-light link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover me-3">김진원</a>
+                <a href="https://github.com/jaka0926" class="link-light link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover me-3">자카</a>
+            </div>
+            <p class="text-white mb-0">Film.zip© 2025</p>
+        </div>
+    </div>
+</nav>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
