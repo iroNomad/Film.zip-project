@@ -31,5 +31,6 @@ public class CommentReaction {
 
     @CreatedDate
     private LocalDateTime createdAt;
+
 }
 

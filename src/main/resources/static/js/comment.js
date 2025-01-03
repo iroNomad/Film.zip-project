@@ -152,3 +152,79 @@ function toggleReplyForm(commentId) {
         form.style.display = 'none';
     }
 }
+
+// 댓글 추처언
+function recommendComment(commentId) {
+    // 서버와 통신하는 AJAX 요청 (예제 코드)
+    fetch(`/comments/reaction`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            commentId: commentId,
+            reaction: 'RECOMMEND',
+        }),
+    })
+    .then(response => response.json())
+    .then(responseData => {
+        if (responseData.status === "OK") {
+            const recommendCountElem = document.getElementById(`recommendCount_${commentId}`);
+            const notRecommendCountElem = document.getElementById(`notRecommendCount_${commentId}`);
+
+            let recommendCount = parseInt(recommendCountElem.innerText.replace('👍 ', '')) || 0;
+            let notRecommendCount = parseInt(notRecommendCountElem.innerText.replace('👎 ', '')) || 0;
+
+            // 추천 증가, 비추천 감소
+            if (notRecommendCount > 0) {
+                notRecommendCount--;
+                notRecommendCountElem.innerText = `👎 ${notRecommendCount}`;
+            }
+            recommendCount++;
+            recommendCountElem.innerText = `👍 ${recommendCount}`;
+        } else if (responseData.status === "NOT_OK") {
+            alert("이미 추천을 하셨습니다.");
+        } else {
+            alert("알 수 없는 응답이 발생했습니다.");
+        }
+    }).catch(error => console.error('Error:', error));
+
+}
+
+// 댓글 비이추우처언
+function notRecommendComment(commentId) {
+    // 서버와 통신하는 AJAX 요청 (예제 코드)
+    fetch(`/comments/reaction`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            commentId: commentId,
+            reaction: 'NOTRECOMMEND',
+        }),
+    })
+    .then(response => response.json())
+    .then(responseData => {
+        if (responseData.status === "OK") {
+            const recommendCountElem = document.getElementById(`recommendCount_${commentId}`);
+            const notRecommendCountElem = document.getElementById(`notRecommendCount_${commentId}`);
+
+            let recommendCount = parseInt(recommendCountElem.innerText.replace('👍 ', '')) || 0;
+            let notRecommendCount = parseInt(notRecommendCountElem.innerText.replace('👎 ', '')) || 0;
+
+            // 비추천 증가, 추천 감소
+            if (recommendCount > 0) {
+                recommendCount--;
+                recommendCountElem.innerText = `👍 ${recommendCount}`;
+            }
+            notRecommendCount++;
+            notRecommendCountElem.innerText = `👎 ${notRecommendCount}`;
+        } else if (responseData.status === "NOT_OK") {
+            alert("이미 비추천을 하셨습니다.");
+        } else {
+            alert("알 수 없는 응답이 발생했습니다.");
+        }
+    }).catch(error => console.error('Error:', error));
+}
+
