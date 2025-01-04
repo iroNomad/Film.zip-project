@@ -116,7 +116,6 @@ function deleteUser() {
                     // 로컬 스토리지 / 쿠키 정리
                     localStorage.removeItem('access_token');
                     deleteCookie('refresh_token');
-                    alert('회원 탈퇴가 완료되었습니다.');
                     window.location.href = '/login';
                 },
                 () => {
