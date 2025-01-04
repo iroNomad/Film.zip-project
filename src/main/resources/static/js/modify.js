@@ -1,9 +1,33 @@
 document.addEventListener('DOMContentLoaded', () => {
+    if (!isAuthenticated()) {
+        alert('로그인이 필요합니다.');
+        window.location.href = '/login';
+        return;
+    }
+
     loadUserInfo();
     initializeProfileModal();
     initializeGenreModal();
     initializeEventListeners();
 });
+
+// ✅ 인증 확인
+function isAuthenticated() {
+    const accessToken = localStorage.getItem('access_token');
+    return accessToken && validateToken(accessToken);
+}
+
+// ✅ 토큰 유효성 검사
+function validateToken(token) {
+    try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        const currentTime = Math.floor(Date.now() / 1000);
+        return payload.exp > currentTime;
+    } catch (e) {
+        console.error('토큰 검증 실패:', e);
+        return false;
+    }
+}
 
 let originalNickname = ''; // 전역 변수
 
