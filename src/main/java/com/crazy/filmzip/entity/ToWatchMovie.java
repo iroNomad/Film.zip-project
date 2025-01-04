@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-@NoArgsConstructor
 @Table(name = "to_watch_movies")
 @EntityListeners(AuditingEntityListener.class)
 public class ToWatchMovie {

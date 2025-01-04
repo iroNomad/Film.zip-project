@@ -1,5 +1,3 @@
-
-
 // 좋아요 기능
 function likeComment(commentId) {
     fetch(`/comments/like/${commentId}`, {
@@ -71,10 +69,11 @@ function saveComment(commentId) {
         return;
     }
 
-    fetch(`/comments/edit/${commentId}`, {
+    fetch(`/api/comments/edit/${commentId}`, {
         method: 'PUT',
         headers: {
-            'Content-Type': 'application/json',
+            "Authorization": 'Bearer ' + localStorage.getItem('access_token'),
+            "Content-Type": "application/json",
         },
         body: JSON.stringify({ content: newContent }),
     })
@@ -120,10 +119,13 @@ function cancelEdit(commentId, originalContent) {
 // 댓글 삭제
 function deleteComment(commentId) {
     if (confirm("정말 이 댓글을 삭제하시겠습니까?")) {
-        fetch(`/comments/delete/${commentId}`, {
+        fetch(`/api/comments/delete/${commentId}`, {
             method: 'DELETE',
+            headers: {
+                "Authorization": 'Bearer ' + localStorage.getItem('access_token'),
+                "Content-Type": "application/json",
+            },
         })
-
             .then(response => {
                 if (response.ok) {
                     alert('댓글이 삭제되었습니다.');
@@ -156,10 +158,11 @@ function toggleReplyForm(commentId) {
 // 댓글 추처언
 function recommendComment(commentId) {
     // 서버와 통신하는 AJAX 요청 (예제 코드)
-    fetch(`/comments/reaction`, {
+    fetch(`/api/comments/reaction`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
+            "Authorization": 'Bearer ' + localStorage.getItem('access_token'),
+            "Content-Type": "application/json",
         },
         body: JSON.stringify({
             commentId: commentId,
@@ -194,10 +197,11 @@ function recommendComment(commentId) {
 // 댓글 비이추우처언
 function notRecommendComment(commentId) {
     // 서버와 통신하는 AJAX 요청 (예제 코드)
-    fetch(`/comments/reaction`, {
+    fetch(`/api/comments/reaction`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
+            "Authorization": 'Bearer ' + localStorage.getItem('access_token'),
+            "Content-Type": "application/json",
         },
         body: JSON.stringify({
             commentId: commentId,
@@ -228,3 +232,113 @@ function notRecommendComment(commentId) {
     }).catch(error => console.error('Error:', error));
 }
 
+function fn_saveAnswer(articleId) {
+    const content = document.getElementById('commentContent').value; // 텍스트 박스 내용 가져오기
+
+    if (!content.trim()) {
+        alert('댓글 내용을 입력하세요.');
+        return;
+    }
+
+    fetch(`/api/comments/create/${articleId}`, {
+        method: 'POST',
+        headers: {
+            "Authorization": 'Bearer ' + localStorage.getItem('access_token'),
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ content: content }), // JSON 형식으로 전송
+    })
+        .then(response => {
+            if (response.ok) {
+                alert('댓글이 성공적으로 등록되었습니다.');
+                window.location.reload(); // 페이지 새로고침
+            } else {
+                alert('댓글 등록에 실패했습니다.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('오류가 발생했습니다.');
+        });
+}
+
+function fn_saveReply(articleId,commentId) {
+    const content = document.getElementById('content_'+commentId).value; // 텍스트 박스 내용 가져오기
+
+    if (!content.trim()) {
+        alert('답글 내용을 입력하세요!');
+        return;
+    }
+
+    fetch(`/api/comments/reply/${articleId}/${commentId}`, {
+        method: 'POST',
+        headers: {
+            "Authorization": 'Bearer ' + localStorage.getItem('access_token'),
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ content: content }), // JSON 형식으로 전송
+    })
+        .then(response => {
+            if (response.ok) {
+                alert('답글이 성공적으로 등록되었습니다.');
+                window.location.reload(); // 페이지 새로고침
+            } else {
+                alert('답글 등록에 실패했습니다.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('오류가 발생했습니다.');
+        });
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    // 서버에서 로그인 사용자 ID 가져오기
+    fetch("/api/comments/user/current", {
+        method: "GET",
+        headers: {
+            "Authorization": "Bearer " + localStorage.getItem("access_token"),
+            "Content-Type": "application/json"
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("로그인 사용자 정보를 가져올 수 없습니다.");
+        }
+        return response.json();
+    })
+    .then(data => {
+        const loggedInUserId = data.userId;
+        const loggedInUserNickname = data.userNickName;
+        //console.log("loggedInUserNickname = "+loggedInUserNickname);
+        //console.log("loggedInUserId = "+loggedInUserId);
+
+        // 게시글 작성자 닉네임과 로그인 사용자 닉네임를 비교하여 버튼 표시
+        const articleWriter = document.getElementById('articleWriter').textContent;
+        //console.log("articleWriter = "+articleWriter);
+        if(loggedInUserNickname == articleWriter) {
+            document.getElementById('btnMod').style.display = "block";
+            document.getElementById('btnDel').style.display = "block";
+        }
+
+        // 댓글 작성자와 로그인 사용자 ID를 비교하여 해당 댓글의 버튼 표시
+        document.querySelectorAll("[id^='answerBtns_']").forEach(div => {
+            const userId = div.id.split("_")[1]; // answerBtns_ 뒤의 숫자(ID) 추출
+            if (userId == loggedInUserId) { // 문자열/숫자 비교를 위해 ==
+                div.style.display = "block"; // div 표시
+            }
+        });
+
+        // 답글 작성자와 로그인 사용자 ID를 비교하여 해당 댓글의 버튼 표시
+        document.querySelectorAll("[id^='replyBtns_']").forEach(div => {
+            const userId = div.id.split("_")[1]; // replyBtns_ 뒤의 숫자(ID) 추출
+            if (userId == loggedInUserId) { // 문자열/숫자 비교를 위해 ==
+                div.style.display = "block"; // div 표시
+            }
+        });
+
+    })
+    .catch(error => {
+        console.error("Error fetching user info:", error);
+    });
+});
