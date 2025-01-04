@@ -8,13 +8,13 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeEventListeners();
 });
 
-// ✅ 인증 확인
+// 인증 확인
 function isAuthenticated() {
     const accessToken = localStorage.getItem('access_token');
     return accessToken && validateToken(accessToken);
 }
 
-// ✅ 토큰 유효성 검사
+// 토큰 유효성 검사
 function validateToken(token) {
     try {
         const payload = JSON.parse(atob(token.split('.')[1]));
@@ -26,7 +26,7 @@ function validateToken(token) {
     }
 }
 
-// ✅ 사용자 정보 로드
+// 사용자 정보 로드
 function loadUserInfo() {
     fetch('/api/user/mypage', {
         method: 'GET',
@@ -60,7 +60,7 @@ function loadUserInfo() {
         });
 }
 
-// ✅ 장르 ID를 이름으로 변환
+// 장르 ID를 이름으로 변환
 function convertGenreIdsToNames(genreString) {
     const genres = [
         { id: 28, name: '액션' }, { id: 12, name: '모험' }, { id: 16, name: '애니메이션' },
@@ -86,7 +86,7 @@ function convertGenreIdsToNames(genreString) {
     return genreNames.length > 0 ? genreNames.join(', ') : '-';
 }
 
-// ✅ 회원 탈퇴 (JS fetch)
+// 회원 탈퇴 (JS fetch)
 function deleteUser() {
     if (!confirm('정말로 회원 탈퇴를 진행하시겠습니까?')) return;
 
@@ -129,7 +129,7 @@ function deleteUser() {
         });
 }
 
-// ✅ 이벤트 리스너 초기화
+// 이벤트 리스너 초기화
 function initializeEventListeners() {
     // 로그아웃 버튼
     document.getElementById('logout-btn').addEventListener('click', logout);
@@ -141,7 +141,7 @@ function initializeEventListeners() {
     }
 }
 
-// ✅ 로그아웃 기능
+// 로그아웃 기능
 function logout() {
     if (!confirm('로그아웃 하시겠습니까?')) return;
 

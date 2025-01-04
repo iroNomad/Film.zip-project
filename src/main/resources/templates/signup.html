@@ -144,7 +144,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body d-flex flex-wrap justify-content-center profile-option" id="profileOptions">
-                <!-- 이미지 옵션이 JavaScript에서 추가됩니다 -->
+                <!-- 이미지 옵션이 JavaScript에서 추가됨 -->
             </div>
         </div>
     </div>
@@ -160,7 +160,7 @@
             </div>
             <div class="modal-body">
                 <div class="d-flex flex-wrap" id="genreOptions">
-                    <!-- 장르 버튼이 JavaScript에서 동적으로 추가됩니다 -->
+                    <!-- 장르 버튼이 JavaScript에서 동적으로 추가됨 -->
                 </div>
             </div>
             <div class="modal-footer">
@@ -202,7 +202,6 @@
 </script>
 
 <script>
-
     // 중복 확인 함수
     async function checkDuplicate(field, value) {
         const url = `/check-${field}?${field}=${encodeURIComponent(value)}`;
@@ -303,6 +302,7 @@
 
         // 유효성 검사 통과 시 폼 제출
         this.submit();
+        alert('회원가입이 완료되었습니다.');
     });
 </script>
 

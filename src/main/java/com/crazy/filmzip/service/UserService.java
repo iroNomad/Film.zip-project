@@ -1,14 +1,11 @@
 package com.crazy.filmzip.service;
 
 import com.crazy.filmzip.dto.AddUserRequest;
-import com.crazy.filmzip.dto.ProfileDto;
 import com.crazy.filmzip.entity.User;
 import com.crazy.filmzip.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service

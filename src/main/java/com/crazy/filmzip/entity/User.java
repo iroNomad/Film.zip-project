@@ -1,7 +1,5 @@
 package com.crazy.filmzip.entity;
 
-import com.crazy.filmzip.dto.ProfileDto;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -75,7 +73,6 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ToWatchMovie> toWatchMovies = new ArrayList<>();
 
-    // 생성자에 nickname 추가
     @Builder
     public User(String email, String password, String name, Integer birth, String nickname, String profileImage, String genre) {
         this.email = email;
@@ -122,7 +119,6 @@ public class User implements UserDetails {
         return true;
     }
 
-    // 사용자 이름, 출생 연도 변경
     public User update(String name) {
         this.name = name;
 
