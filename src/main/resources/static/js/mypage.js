@@ -86,32 +86,6 @@ function convertGenreIdsToNames(genreString) {
     return genreNames.length > 0 ? genreNames.join(', ') : '-';
 }
 
-// 로그아웃
-function logout() {
-    if (confirm('로그아웃 하시겠습니까?')) {
-        fetch('/api/refresh-token', {
-            method: 'DELETE',
-            headers: {
-                "Authorization": 'Bearer ' + localStorage.getItem('access_token'),
-                "Content-Type": "application/json"
-            }
-        })
-            .then(response => {
-                if (response.ok) {
-                    localStorage.removeItem('access_token');
-                    alert('로그아웃 되었습니다.');
-                    window.location.href = '/login';
-                } else {
-                    alert('로그아웃 실패했습니다.');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('서버와의 통신 중 문제가 발생했습니다.');
-            });
-    }
-}
-
 // ✅ 회원 탈퇴
 function deleteUser() {
     if (confirm('정말로 회원 탈퇴를 진행하시겠습니까?')) {
@@ -142,4 +116,97 @@ function deleteUser() {
 function initializeEventListeners() {
     document.getElementById('logout-btn').addEventListener('click', logout);
     document.getElementById('delete-user-btn').addEventListener('click', deleteUser);
+}
+
+// 로그아웃 기능 (버튼이 있다면)
+const logoutButton = document.getElementById('logout-btn');
+if (logoutButton) {
+    logoutButton.addEventListener('click', event => {
+        function success() {
+            // 로컬 스토리지 토큰 삭제
+            localStorage.removeItem('access_token');
+            // 쿠키 리프레시 토큰 삭제
+            deleteCookie('refresh_token');
+            location.replace('/login');
+        }
+        function fail() {
+            alert('로그아웃 실패');
+        }
+        httpRequest('DELETE','/api/refresh-token', null, success, fail);
+    });
+}
+
+/*****************************************************************
+ * 4) 공용 함수들 (httpRequest, getCookie, deleteCookie 등)
+ *****************************************************************/
+
+/** 쿠키 가져오기 */
+function getCookie(key) {
+    let result = null;
+    const cookieArr = document.cookie.split(';');
+    cookieArr.some(item => {
+        item = item.trim();
+        const dic = item.split('=');
+        if (key === dic[0]) {
+            result = dic[1];
+            return true;
+        }
+    });
+    return result;
+}
+
+/** 쿠키 삭제 */
+function deleteCookie(name) {
+    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+}
+
+/** HTTP 요청(재발급 로직 포함) */
+function httpRequest(method, url, body, success, fail) {
+    fetch(url, {
+        method: method,
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('access_token'),
+            'Content-Type': 'application/json'
+        },
+        body: body
+    })
+        .then(response => {
+            if (response.status === 200 || response.status === 201) {
+                return success && success();
+            }
+            const refresh_token = getCookie('refresh_token');
+            if (response.status === 401 && refresh_token) {
+                // 재발급 시도
+                fetch('/api/token', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('access_token'),
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        refreshToken: refresh_token
+                    })
+                })
+                    .then(res => {
+                        if (!res.ok) throw new Error('Token refresh failed.');
+                        return res.json();
+                    })
+                    .then(result => {
+                        // 새 액세스 토큰 교체
+                        localStorage.setItem('access_token', result.accessToken);
+                        // 재시도
+                        httpRequest(method, url, body, success, fail);
+                    })
+                    .catch(error => {
+                        console.error(error);
+                        fail && fail();
+                    });
+            } else {
+                fail && fail();
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            fail && fail();
+        });
 }
