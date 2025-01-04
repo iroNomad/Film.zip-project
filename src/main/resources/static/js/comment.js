@@ -181,10 +181,10 @@ function recommendComment(commentId) {
             // 추천 증가, 비추천 감소
             if (notRecommendCount > 0) {
                 notRecommendCount--;
-                notRecommendCountElem.innerText = `👎 ${notRecommendCount}`;
+                notRecommendCountElem.innerText = ` ${notRecommendCount}`;
             }
             recommendCount++;
-            recommendCountElem.innerText = `👍 ${recommendCount}`;
+            recommendCountElem.innerText = ` ${recommendCount}`;
         } else if (responseData.status === "NOT_OK") {
             alert("이미 추천을 하셨습니다.");
         } else {
@@ -220,10 +220,10 @@ function notRecommendComment(commentId) {
             // 비추천 증가, 추천 감소
             if (recommendCount > 0) {
                 recommendCount--;
-                recommendCountElem.innerText = `👍 ${recommendCount}`;
+                recommendCountElem.innerText = ` ${recommendCount}`;
             }
             notRecommendCount++;
-            notRecommendCountElem.innerText = `👎 ${notRecommendCount}`;
+            notRecommendCountElem.innerText = ` ${notRecommendCount}`;
         } else if (responseData.status === "NOT_OK") {
             alert("이미 비추천을 하셨습니다.");
         } else {
