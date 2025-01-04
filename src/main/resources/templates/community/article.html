@@ -5,15 +5,159 @@
     <title>게시글 상세</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        /* 좋아요 버튼을 오른쪽 하단에 위치시키는 스타일 */
-        .comment-container {
-            position: relative;
-            margin-bottom: 10px;
+        body {
+            background-color: #141414;
+            color: #f5f5f5;
+            font-family: 'Roboto', Arial, sans-serif;
         }
+
+        .navbar {
+            background-color: #1e1e1e;
+            padding: 15px 30px;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #333;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        .navbar h1 {
+            color: #e50914;
+            font-size: 1rem;
+            font-weight: bold;
+            margin: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+            color: #e50914;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin-top: 30px;
+        }
+
+        .card {
+            background-color: #1f1f1f;
+            border: none;
+            margin-bottom: 1.5rem;
+            color: #f5f5f5;
+            border-radius: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card-header, .card-footer {
+            background-color: #2b2b2b;
+            border: none;
+            color: #f5f5f5;
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .card-text {
+            font-size: 0.8rem;
+            color: #b0b0b0;
+            margin-bottom: 20px;
+        }
+
+        .reaction-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .reaction-buttons {
+            display: flex;
+            gap: 10px;
+            border: none;
+        }
+
+        .btn-success, .btn-danger {
+            font-size: 0.7rem;
+            padding: 0.6rem 1rem;
+            text-transform: uppercase;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .btn-success {
+            background-color: #606466 !important;
+            color: white;
+            border: none;
+            box-shadow: none !important;
+        }
+
+        .btn-success:hover {
+            background-color: #3a3c3d !important;
+            border: none;
+            box-shadow: none !important;
+        }
+
+        .btn-danger {
+            background-color: #606466;
+            color: white;
+            border: none;
+        }
+
+        .btn-danger:hover {
+            background-color: #3a3c3d;
+            border: none;
+        }
+
+        .btn-danger:focus, .btn-danger:active {
+            background-color: #606466 !important;
+            border : none;
+            box-shadow: none;
+        }
+
+        .btn-success:focus, .btn-success:active {
+            background-color: #606466;
+            border-color: #606466;
+            box-shadow: none;
+        }
+
+        .pagination .page-item .page-link {
+            background-color: #2b2b2b;
+            color: #f5f5f5;
+            border: none;
+            font-size: 1rem;
+            font-weight: bold;
+            margin: 0 5px;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #e50914;
+            color: #fff;
+        }
+
+        .btn-primary {
+            font-size: 0.7rem;
+            background-color: #7da4ad;
+            color: #082f38;
+            padding: 0.4rem 0.7rem;
+            text-transform: uppercase;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #0a364d;
+            border: none;
+        }
+
         .like-button {
             position: absolute;
             bottom: 10px;
             right: 50px;
+            border: none;
         }
 
         .like-cnt {
@@ -33,20 +177,48 @@
         }
 
         .form-actions {
-            text-align: left; /* 버튼을 왼쪽 정렬 */
+            text-align: left;
         }
 
         #submitButton {
-            padding: 5px 10px; /* 버튼 크기 조정 */
-            font-size: 14px;  /* 글씨 크기 줄이기 */
-            margin-top: 10px; /* 상단 여백 추가 */
+            padding: 5px 10px;
+            font-size: 14px;
+            margin-top: 10px;
+            border: none;
+        }
+
+        #commentContent {
+            background-color: #3d3e40;
+            color: #f0f1f2;
+            border: none;
+        }
+
+        #commentContent:focus {
+            background-color: #59606b;
+            outline: none;
+            border-color: none;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
+        }
+
+        .reply-form textarea {
+            background-color: #3d3e40;
+            color: #f7f9fc !important;
+            border: none;
+        }
+
+        .reply-form textarea:focus {
+            background-color: #59606b;
+            outline: none;
+            border-color: none;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
         }
     </style>
 
 </head>
 <body>
-<div class="p-5 mb-5 text-center bg-light">
-    <h1 class="mb-3">게시글 상세</h1>
+<div class="navbar">
+    <i class="fas fa-file-archive"></i>
+    <h1>커뮤니티</h1>
 </div>
 
 <div class="container">
@@ -73,10 +245,15 @@
                                 </p>
 
                                 <div style="display: flex; justify-content: flex-end; align-items: center;">
-                                    <span th:id="'recommendCount_'+${comment.id}" class="mr-2">👍 [[${comment.recommends}]]</span>
-                                    <button type="button" class="btn btn-success btn-sm" th:onclick="recommendComment('[[${comment.id}]]')">👍 추천</button>
-                                    <span th:id="'notRecommendCount_'+${comment.id}" class="ml-2 mr-2">👎 [[${comment.notRecommends}]]</span>
-                                    <button type="button" class="btn btn-danger btn-sm" th:onclick="notRecommendComment('[[${comment.id}]]')">👎 비추천</button>
+                                    <button type="button" class="btn btn-success btn-sm" th:onclick="recommendComment('[[${comment.id}]]')">
+                                        <span>👍 추천</span>
+                                        <span th:id="'recommendCount_'+${comment.id}" class="ml-1">[[${comment.recommends}]]</span>
+                                    </button>
+
+                                    <button type="button" class="btn btn-danger btn-sm ml-2" th:onclick="notRecommendComment('[[${comment.id}]]')">
+                                        <span>👎 비추천</span>
+                                        <span th:id="'notRecommendCount_'+${comment.id}" class="ml-1">[[${comment.notRecommends}]]</span>
+                                    </button>
                                 </div>
 
                                 <div th:id="'answerBtns_' + ${comment.user.id}" style="display:none">
@@ -85,40 +262,28 @@
                                     <button type="button" class="btn btn-primary btn-sm" th:onclick="editComment(this, '[[${comment.id}]]','[[${comment.content}]]')">수정</button>
                                     <button type="button" class="btn btn-sm btn-danger" th:onclick="deleteComment('[[${comment.id}]]')">삭제</button>
                                 </div>
-                                <!-- 좋아요 버튼과 좋아요 수 -->
-                                <!--div style="display: inline-flex; align-items: center;">
-                                    <span id="likeCount_[[${comment.id}]]" class="mr-2 like-cnt">[[${comment.reactions.size()}]]</span>
-                                    <button type="button" class="btn btn-success btn-sm like-button" th:onclick="likeComment('[[${comment.id}]]')">👍 좋아요</button>
-                                </div-->
 
                                 <!-- 답글 달기 버튼 -->
                                 <div class="reply-button">
                                     <button type="button" class="btn btn-sm btn-info" th:onclick="toggleReplyForm('[[${comment.id}]]')">답글 달기</button>
                                 </div>
 
-                                <!-- 대댓글 표시 -->
+                                <!-- 답글 표시 -->
                                 <div th:each="reply : ${comment.replies}" class="ml-4 mt-2">
                                     <p>
                                         <strong th:text="${reply.user.nickname}">작성자</strong>:
-                                        <span th:id="'commentContent_' + ${reply.id}" th:text="${reply.content}">대댓글 내용</span>
+                                        <span th:id="'commentContent_' + ${reply.id}" th:text="${reply.content}">답글 내용</span>
                                     </p>
 
-                                    <!-- 대댓글 수정, 삭제 -->
+                                    <!-- 답글 수정, 삭제 -->
                                     <div th:id="'replyBtns_' + ${reply.user.id}" style="display:none">
                                         <button type="button" class="btn btn-primary btn-sm" th:onclick="editComment(this, '[[${reply.id}]]','[[${reply.content}]]')">수정</button>
                                         <button type="button" class="btn btn-sm btn-danger" th:onclick="deleteComment('[[${reply.id}]]')">삭제</button>
                                     </div>
                                 </div>
 
-                                <!-- 대댓글 입력 폼 (토글로 보이거나 숨기기) -->
+                                <!-- 답글 입력 폼 (토글로 보이거나 숨기기) -->
                                 <div th:id="'replyForm_'+${comment.id}" class="reply-form">
-                                    <!--form th:action="@{|/comments/reply/${article.id}/${comment.id}|}" method="post">
-                                        <div class="form-group">
-                                            <textarea name="content" class="form-control" rows="3" placeholder="대댓글을 입력하세요"></textarea>
-                                        </div>
-                                        <button type="submit" class="btn btn-primary btn-sm">답글 등록</button>
-                                        <button type="button" class="btn btn-secondary btn-sm" th:onclick="toggleReplyForm('[[${comment.id}]]')">취소</button>
-                                    </form-->
                                     <div class="form-group">
                                         <textarea th:id="'content_'+${comment.id}" class="form-control" rows="5" placeholder="답글 내용을 입력하세요"></textarea>
                                     </div>
@@ -126,7 +291,6 @@
                                         <button id="submitReplyButton" class="btn btn-primary btn-sm" th:onclick="fn_saveReply('[[${article.id}]]','[[${comment.id}]]')">답글 등록</button>
                                         <button type="button" class="btn btn-secondary btn-sm" th:onclick="toggleReplyForm('[[${comment.id}]]')">취소</button>
                                     </div>
-
                                 </div>
                                 <hr>
                             </div>
@@ -135,30 +299,24 @@
                 </div>
 
                 <div class="card-footer">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <!-- 추천/비추천 수 -->
-                        <div>
-                            <span>👍 추천: <span th:text="${article.likes}">0</span></span>
-                            <span>👎 비추천: <span th:text="${article.dislikes}">0</span></span>
-                        </div>
+                    <div class="d-flex justify-content-end align-items-center">
                         <!-- 추천/비추천 버튼 -->
                         <div class="reaction-buttons">
                             <!-- 추천 버튼 -->
                             <button type="button" class="btn btn-success btn-sm"
                                     th:onclick="|reactToPost(${article.id}, 'LIKE')|">
-                                👍 추천
+                                👍 추천 <span th:text="${article.likes}">0</span>
                             </button>
 
                             <!-- 비추천 버튼 -->
                             <button type="button" class="btn btn-danger btn-sm"
                                     th:onclick="|reactToPost(${article.id}, 'DISLIKE')|">
-                                👎 비추천
+                                👎 비추천 <span th:text="${article.dislikes}">0</span>
                             </button>
-
-
                         </div>
                     </div>
-                    <hr>
+                </div>
+                <hr>
                     <div class="button-group" style="display: flex; gap: 10px;">
                         <!-- 수정 버튼 -->
                         <button id="btnMod" type="button" class="btn btn-primary btn-sm" style="display:none"
@@ -174,7 +332,6 @@
                     </div>
                 </div>
 
-
                 <!-- 답변 작성 폼 -->
                 <div class="form-group">
                     <textarea id="commentContent" class="form-control" rows="5" placeholder="댓글 내용을 입력하세요"></textarea>
@@ -183,13 +340,10 @@
                     <button id="submitButton" class="btn btn-primary btn-sm" th:onclick="fn_saveAnswer('[[${article.id}]]')">댓글 등록</button>
                 </div>
                 <br>
-
-
             </div>
         </div>
     </div>
 </div>
-
 
 <script src="/js/comment.js"></script>
 <script src="/js/token.js"></script>
