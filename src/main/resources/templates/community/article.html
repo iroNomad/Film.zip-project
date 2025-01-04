@@ -31,7 +31,18 @@
         .reply-button {
             margin-top: 10px;
         }
+
+        .form-actions {
+            text-align: left; /* 버튼을 왼쪽 정렬 */
+        }
+
+        #submitButton {
+            padding: 5px 10px; /* 버튼 크기 조정 */
+            font-size: 14px;  /* 글씨 크기 줄이기 */
+            margin-top: 10px; /* 상단 여백 추가 */
+        }
     </style>
+
 </head>
 <body>
 <div class="p-5 mb-5 text-center bg-light">
@@ -43,7 +54,7 @@
         <div class="col-lg-12">
             <div class="card shadow-sm">
                 <div class="card-header">
-                    <h4>작성자: <span th:text="${article.writer}">익명</span></span></h4>
+                    <h4>작성자: <span id="articleWriter" th:text="${article.writer}">익명</span></h4>
                     <h6>조회수: <span th:text="${article.views}"></span></h6>
                 </div>
                 <div class="card-body">
@@ -68,9 +79,7 @@
                                     <button type="button" class="btn btn-danger btn-sm" th:onclick="notRecommendComment('[[${comment.id}]]')">👎 비추천</button>
                                 </div>
 
-
-                                <div th:if="${comment.user.id == 5}">
-
+                                <div th:id="'answerBtns_' + ${comment.user.id}" style="display:none">
                                     <button type="button" class="btn btn-primary btn-sm" style="display: none;" onclick="saveComment('[[${comment.id}]]')">저장</button>
                                     <button type="button" class="btn btn-secondary btn-sm" style="display: none;" onclick="cancelEdit('[[${comment.id}]]')">취소</button>
                                     <button type="button" class="btn btn-primary btn-sm" th:onclick="editComment(this, '[[${comment.id}]]','[[${comment.content}]]')">수정</button>
@@ -82,7 +91,7 @@
                                     <button type="button" class="btn btn-success btn-sm like-button" th:onclick="likeComment('[[${comment.id}]]')">👍 좋아요</button>
                                 </div-->
 
-                                <!-- 대댓글 달기 버튼 -->
+                                <!-- 답글 달기 버튼 -->
                                 <div class="reply-button">
                                     <button type="button" class="btn btn-sm btn-info" th:onclick="toggleReplyForm('[[${comment.id}]]')">답글 달기</button>
                                 </div>
@@ -95,23 +104,29 @@
                                     </p>
 
                                     <!-- 대댓글 수정, 삭제 -->
-                                    <div th:if="${reply.user.id == 5}">
-
+                                    <div th:id="'replyBtns_' + ${reply.user.id}" style="display:none">
                                         <button type="button" class="btn btn-primary btn-sm" th:onclick="editComment(this, '[[${reply.id}]]','[[${reply.content}]]')">수정</button>
                                         <button type="button" class="btn btn-sm btn-danger" th:onclick="deleteComment('[[${reply.id}]]')">삭제</button>
                                     </div>
                                 </div>
 
                                 <!-- 대댓글 입력 폼 (토글로 보이거나 숨기기) -->
-                                <!--div id="replyForm_${comment.id}" class="reply-form"-->
                                 <div th:id="'replyForm_'+${comment.id}" class="reply-form">
-                                    <form th:action="@{|/comments/reply/${article.id}/${comment.id}|}" method="post">
+                                    <!--form th:action="@{|/comments/reply/${article.id}/${comment.id}|}" method="post">
                                         <div class="form-group">
                                             <textarea name="content" class="form-control" rows="3" placeholder="대댓글을 입력하세요"></textarea>
                                         </div>
                                         <button type="submit" class="btn btn-primary btn-sm">답글 등록</button>
                                         <button type="button" class="btn btn-secondary btn-sm" th:onclick="toggleReplyForm('[[${comment.id}]]')">취소</button>
-                                    </form>
+                                    </form-->
+                                    <div class="form-group">
+                                        <textarea th:id="'content_'+${comment.id}" class="form-control" rows="5" placeholder="답글 내용을 입력하세요"></textarea>
+                                    </div>
+                                    <div class="form-actions">
+                                        <button id="submitReplyButton" class="btn btn-primary btn-sm" th:onclick="fn_saveReply('[[${article.id}]]','[[${comment.id}]]')">답글 등록</button>
+                                        <button type="button" class="btn btn-secondary btn-sm" th:onclick="toggleReplyForm('[[${comment.id}]]')">취소</button>
+                                    </div>
+
                                 </div>
                                 <hr>
                             </div>
@@ -144,31 +159,31 @@
                         </div>
                     </div>
                     <hr>
-                    <!-- 수정/삭제 버튼 (작성자만 보임) -->
-                    <!--                    <div th:if="${isOwner}">-->
+                    <div class="button-group" style="display: flex; gap: 10px;">
+                        <!-- 수정 버튼 -->
+                        <button id="btnMod" type="button" class="btn btn-primary btn-sm" style="display:none"
+                                th:onclick="|location.href='@{/community/new?id={articleId}(articleId=${article.id})}'|">
+                            수정
+                        </button>
+                        <!-- 삭제 버튼 -->
+                        <input type="hidden" id="article-id" th:value="${article.id}" />
+                        <button type="button" id="btnDel" class="btn btn-danger btn-sm" style="display:none" onclick="deleteArticle()">삭제</button>
 
-                    <!-- 수정 버튼 -->
-                    <button type="button" class="btn btn-primary btn-sm"
-                            th:onclick="|location.href='@{/community/new?id={articleId}(articleId=${article.id})}'|">
-                        수정
-                    </button>
-                    <!-- 삭제 버튼 -->
-                    <input type="hidden" id="article-id" th:value="${article.id}" />
-                    <button type="button" class="btn btn-danger btn-sm" onclick="deleteArticle()">삭제</button>
-                    <!--                    </div>-->
-
-                    <!-- 목록으로 돌아가기 -->
-                    <button type="button" class="btn btn-secondary btn-sm" onclick="location.href='/community/list'">목록</button>
+                        <!-- 목록으로 돌아가기 -->
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="location.href='/community/list'">목록</button>
+                    </div>
                 </div>
 
 
                 <!-- 답변 작성 폼 -->
-                <form th:action="@{|/comments/create/${article.id}|}" method="post">
-                    <div class="form-group">
-                        <textarea name="content" class="form-control" rows="5" placeholder="댓글 내용을 입력하세요"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">댓글 등록</button>
-                </form>
+                <div class="form-group">
+                    <textarea id="commentContent" class="form-control" rows="5" placeholder="댓글 내용을 입력하세요"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button id="submitButton" class="btn btn-primary btn-sm" th:onclick="fn_saveAnswer('[[${article.id}]]')">댓글 등록</button>
+                </div>
+                <br>
+
 
             </div>
         </div>
