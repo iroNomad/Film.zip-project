@@ -54,10 +54,11 @@ public class WebSecurityConfig {
                 // 토큰 재발급 URL은 인증 없이 접근 가능하도록 설정. 나머지 API URL은 인증 필요
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(new AntPathRequestMatcher("/api/token")).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/api/**")).authenticated()
+                        .requestMatchers(new AntPathRequestMatcher("/api/**")).permitAll()
                         .anyRequest().permitAll())
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/login")
+                        .failureUrl("/login?error=true")
                         // Authorization 요청과 관련된 상태 저장
                         .authorizationEndpoint(authorizationEndpoint -> authorizationEndpoint.authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository()))
                         .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint.userService(oAuth2UserCustomService))
@@ -66,6 +67,7 @@ public class WebSecurityConfig {
                 )
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login")
+                        .failureUrl("/login?error=true")
                         .successHandler(oAuth2SuccessHandler())
                 )
                 // /api로 시작하는 url인 경우 401 상태 코드를 반환하도록 예외 처리
