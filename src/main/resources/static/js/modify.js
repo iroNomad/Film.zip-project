@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeEventListeners();
 });
 
+let originalNickname = ''; // 전역 변수
+
 // 1) 사용자 정보 로드
 function loadUserInfo() {
     fetch('/api/user/mypage', {
@@ -26,6 +28,7 @@ function loadUserInfo() {
 
             // 닉네임
             document.getElementById('nickname').value = data.nickname || '';
+            originalNickname = data.nickname || '';
 
             // 장르
             let genreString = data.genre || '28 OR 12 OR 16';
@@ -105,11 +108,13 @@ function initializeEventListeners() {
     document.getElementById('saveBtn').addEventListener('click', async () => {
         // 닉네임 중복 확인
         const nickname = document.getElementById('nickname').value;
-        if (await checkDuplicateNickname(nickname)) {
-            document.getElementById('nicknameHelp').textContent = '이미 사용 중인 닉네임입니다.';
-            return;
-        } else {
-            document.getElementById('nicknameHelp').textContent = '';
+        if (nickname !== originalNickname) {
+            if (await checkDuplicateNickname(nickname)) {
+                document.getElementById('nicknameHelp').textContent = '이미 사용 중인 닉네임입니다.';
+                return;
+            } else {
+                document.getElementById('nicknameHelp').textContent = '';
+            }
         }
 
         // body 생성

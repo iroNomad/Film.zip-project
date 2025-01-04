@@ -51,4 +51,8 @@ public class UserService {
     public Long modifyProfile(User user) {
         return userRepository.save(user).getId();
     }
+
+    public void deleteUser(User user) {
+        userRepository.delete(user);
+    }
 }

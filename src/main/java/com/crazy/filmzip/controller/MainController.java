@@ -42,14 +42,9 @@ public class MainController {
     }
 
     @GetMapping("/api/main")
-    public ResponseEntity<Map<String, Object>> main(Principal principal) {
-        System.out.println("/api/main");
-
-        System.out.println("principal: " + principal);
+    public ResponseEntity<Map<String, Object>> main() {
 
         User user = getCurrentUser();
-
-        System.out.println("user: " + user);
 
         String genres = user.getGenre();
 
