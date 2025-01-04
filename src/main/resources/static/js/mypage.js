@@ -45,14 +45,14 @@ function loadUserInfo() {
             // 프로필 이미지 설정
             document.querySelector('.profile-img').src = data.profileImage || '/profile/default.png';
 
-            // 사용자 정보 설정
-            document.getElementById('user-email').textContent = data.email || '-';
-            document.getElementById('user-name').textContent = data.name || '-';
-            document.getElementById('user-birth').textContent = data.birth || '-';
-            document.getElementById('user-nickname').textContent = data.nickname || '-';
+            // 사용자 정보 설정 (★ textContent => value 로 변경 ★)
+            document.getElementById('user-email').value = data.email || '-';
+            document.getElementById('user-name').value = data.name || '-';
+            document.getElementById('user-birth').value = data.birth || '-';
+            document.getElementById('user-nickname').value = data.nickname || '-';
 
             // 장르 변환
-            document.getElementById('user-genre').textContent = convertGenreIdsToNames(data.genre);
+            document.getElementById('user-genre').value = convertGenreIdsToNames(data.genre);
         })
         .catch(error => {
             console.error('Error:', error);
@@ -101,16 +101,12 @@ function deleteUser() {
             if (!response.ok) {
                 throw new Error('회원 탈퇴 요청 실패');
             }
-            return response.text(); // "회원 탈퇴가 완료되었습니다." 등
+            return response.text(); // 예: "회원 탈퇴가 완료되었습니다."
         })
         .then(msg => {
             alert(msg);
 
-            // 회원 탈퇴 서버 로직은 DB에서 사용자 삭제만 함.
-            // refresh_token 쿠키는 아직 서버에서 안 지워졌을 수 있으므로,
-            // 여기서 다시 DELETE /api/refresh-token 호출 -> 서버에서 refresh_token 쿠키를 만료시킨다.
-
-            // --> 동일한 로직을 로그아웃과 동일하게, httpRequest('DELETE','/api/refresh-token') 사용
+            // 회원 탈퇴 후, refresh_token 삭제 로직 (서버 호출)
             httpRequest('DELETE','/api/refresh-token', null,
                 () => {
                     // 로컬 스토리지 / 쿠키 정리
