@@ -11,13 +11,13 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeEventListeners();
 });
 
-// ✅ 인증 확인
+// 인증 확인
 function isAuthenticated() {
     const accessToken = localStorage.getItem('access_token');
     return accessToken && validateToken(accessToken);
 }
 
-// ✅ 토큰 유효성 검사
+// 토큰 유효성 검사
 function validateToken(token) {
     try {
         const payload = JSON.parse(atob(token.split('.')[1]));
@@ -31,7 +31,7 @@ function validateToken(token) {
 
 let originalNickname = ''; // 전역 변수
 
-// 1) 사용자 정보 로드
+// 사용자 정보 로드
 function loadUserInfo() {
     fetch('/api/user/mypage', {
         method: 'GET',
@@ -66,7 +66,7 @@ function loadUserInfo() {
         .catch(err => console.error('Failed to load user info:', err));
 }
 
-// 2) 프로필 이미지 모달 초기화
+// 프로필 이미지 모달 초기화
 function initializeProfileModal() {
     document.getElementById('profilePreview').addEventListener('click', () => {
         const modal = new bootstrap.Modal(document.getElementById('profileModal'));
@@ -90,7 +90,7 @@ function initializeProfileModal() {
     }
 }
 
-// 3) 장르 모달 초기화
+// 장르 모달 초기화
 function initializeGenreModal() {
     const genreOptions = document.getElementById('genreOptions');
     genres.forEach(g => {
@@ -127,7 +127,7 @@ function initializeGenreModal() {
     });
 }
 
-// 4) 버튼 이벤트 리스너
+// 버튼 이벤트 리스너
 function initializeEventListeners() {
     document.getElementById('saveBtn').addEventListener('click', async () => {
         // 닉네임 중복 확인
