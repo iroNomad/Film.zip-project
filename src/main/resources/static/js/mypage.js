@@ -60,7 +60,7 @@ function loadUserInfo() {
         });
 }
 
-// 장르 ID를 이름으로 변환
+// ✅ 장르 ID를 이름으로 변환
 function convertGenreIdsToNames(genreString) {
     const genres = [
         { id: 28, name: '액션' }, { id: 12, name: '모험' }, { id: 16, name: '애니메이션' },
@@ -74,66 +74,93 @@ function convertGenreIdsToNames(genreString) {
 
     if (!genreString) return '-';
 
-    // 장르 ID 문자열을 배열로 변환
+    // 장르 ID 문자열을 배열로 변환 (예: "28 OR 12" -> [28,12])
     const genreIds = genreString.split(' OR ').map(id => parseInt(id.trim()));
 
     // 매칭되는 장르 이름 찾기
     const genreNames = genreIds
         .map(id => genres.find(genre => genre.id === id))
-        .filter(genre => genre !== undefined)
+        .filter(Boolean)
         .map(genre => genre.name);
 
     return genreNames.length > 0 ? genreNames.join(', ') : '-';
 }
 
-// ✅ 회원 탈퇴
+// ✅ 회원 탈퇴 (JS fetch)
 function deleteUser() {
-    if (confirm('정말로 회원 탈퇴를 진행하시겠습니까?')) {
-        fetch('/user/delete', {
-            method: 'POST',
-            headers: {
-                "Authorization": 'Bearer ' + localStorage.getItem('access_token'),
-                "Content-Type": "application/json"
+    if (!confirm('정말로 회원 탈퇴를 진행하시겠습니까?')) return;
+
+    fetch('/api/user/delete', {
+        method: 'POST',
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('access_token'),
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('회원 탈퇴 요청 실패');
             }
+            return response.text(); // "회원 탈퇴가 완료되었습니다." 등
         })
-            .then(response => {
-                if (response.ok) {
+        .then(msg => {
+            alert(msg);
+
+            // 회원 탈퇴 서버 로직은 DB에서 사용자 삭제만 함.
+            // refresh_token 쿠키는 아직 서버에서 안 지워졌을 수 있으므로,
+            // 여기서 다시 DELETE /api/refresh-token 호출 -> 서버에서 refresh_token 쿠키를 만료시킨다.
+
+            // --> 동일한 로직을 로그아웃과 동일하게, httpRequest('DELETE','/api/refresh-token') 사용
+            httpRequest('DELETE','/api/refresh-token', null,
+                () => {
+                    // 로컬 스토리지 / 쿠키 정리
                     localStorage.removeItem('access_token');
+                    deleteCookie('refresh_token');
                     alert('회원 탈퇴가 완료되었습니다.');
                     window.location.href = '/login';
-                } else {
-                    alert('회원 탈퇴에 실패했습니다.');
+                },
+                () => {
+                    // refresh-token 삭제 실패 시에도 일단 로컬 토큰은 삭제
+                    localStorage.removeItem('access_token');
+                    deleteCookie('refresh_token');
+                    alert('회원 탈퇴가 완료되었지만, refresh_token 삭제는 실패했습니다.');
+                    window.location.href = '/login';
                 }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('서버와의 통신 중 문제가 발생했습니다.');
-            });
-    }
+            );
+        })
+        .catch(error => {
+            console.error(error);
+            alert('회원 탈퇴에 실패했습니다.');
+        });
 }
 
 // ✅ 이벤트 리스너 초기화
 function initializeEventListeners() {
+    // 로그아웃 버튼
     document.getElementById('logout-btn').addEventListener('click', logout);
-    document.getElementById('delete-user-btn').addEventListener('click', deleteUser);
+
+    // 회원 탈퇴 버튼
+    const deleteButton = document.getElementById('delete-user-btn');
+    if (deleteButton) {
+        deleteButton.addEventListener('click', deleteUser);
+    }
 }
 
-// 로그아웃 기능 (버튼이 있다면)
-const logoutButton = document.getElementById('logout-btn');
-if (logoutButton) {
-    logoutButton.addEventListener('click', event => {
-        function success() {
-            // 로컬 스토리지 토큰 삭제
-            localStorage.removeItem('access_token');
-            // 쿠키 리프레시 토큰 삭제
-            deleteCookie('refresh_token');
-            location.replace('/login');
-        }
-        function fail() {
-            alert('로그아웃 실패');
-        }
-        httpRequest('DELETE','/api/refresh-token', null, success, fail);
-    });
+// ✅ 로그아웃 기능
+function logout() {
+    if (!confirm('로그아웃 하시겠습니까?')) return;
+
+    function success() {
+        // 로컬 스토리지 토큰 삭제
+        localStorage.removeItem('access_token');
+        // 쿠키 리프레시 토큰 삭제
+        deleteCookie('refresh_token');
+        location.replace('/login');
+    }
+    function fail() {
+        alert('로그아웃 실패');
+    }
+    httpRequest('DELETE','/api/refresh-token', null, success, fail);
 }
 
 /*****************************************************************
@@ -157,7 +184,7 @@ function getCookie(key) {
 
 /** 쿠키 삭제 */
 function deleteCookie(name) {
-    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    document.cookie = name + '=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
 
 /** HTTP 요청(재발급 로직 포함) */
@@ -172,29 +199,27 @@ function httpRequest(method, url, body, success, fail) {
     })
         .then(response => {
             if (response.status === 200 || response.status === 201) {
-                return success && success();
+                success && success();
+                return;
             }
             const refresh_token = getCookie('refresh_token');
             if (response.status === 401 && refresh_token) {
-                // 재발급 시도
+                // 토큰 재발급
                 fetch('/api/token', {
                     method: 'POST',
                     headers: {
                         'Authorization': 'Bearer ' + localStorage.getItem('access_token'),
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({
-                        refreshToken: refresh_token
-                    })
+                    body: JSON.stringify({ refreshToken: refresh_token })
                 })
                     .then(res => {
                         if (!res.ok) throw new Error('Token refresh failed.');
                         return res.json();
                     })
                     .then(result => {
-                        // 새 액세스 토큰 교체
+                        // 새 access_token 교체 후 재시도
                         localStorage.setItem('access_token', result.accessToken);
-                        // 재시도
                         httpRequest(method, url, body, success, fail);
                     })
                     .catch(error => {
