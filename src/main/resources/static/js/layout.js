@@ -328,59 +328,41 @@ function httpRequest(method, url, body, success, fail) {
             console.error(err);
             fail && fail();
         });
+}
 
-    function addToWatchList() {
+function addToWatchList() {
 
-        const movieApiId = parseInt(document.getElementById('movieID').textContent, 10);
-        const title = document.getElementById('title').textContent;
-        const backdropPath = document.getElementById('backdropPath').textContent;
+    const movieApiId = parseInt(document.getElementById('movieID').textContent, 10);
+    const title = document.getElementById('title').textContent;
+    const backdropPath = document.getElementById('backdropPath').textContent;
 
-        const url = "/api/watchList";
+    const url = "/api/watchList";
 
-        console.log(movieApiId, title, backdropPath);
+    console.log(movieApiId, title, backdropPath);
 
-        fetch(url, {
-            method: "POST",
-            headers: {
-                "Authorization": 'Bearer ' + localStorage.getItem('access_token'),
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(
-                {
-                    movieApiId,
-                    title,
-                    backdropPath
-                }
-            )
-        })
-            .then(response => {
+    fetch(url, {
+        method: "POST",
+        headers: {
+            "Authorization": 'Bearer ' + localStorage.getItem('access_token'),
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(
+            {
+                movieApiId,
+                title,
+                backdropPath
+            }
+        )
+    })
+        .then(response => {
 
-                if (response.ok) {
-                    alert('내 리스트에 추가되었습니다.');
-                    location.replace('/main');
-                }
-                else {
-                    alert('등록에 실패했습니다.');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('서버와의 통신 중 문제가 발생했습니다.');
-            });
-    }
-
-    function deleteFromWatchList() {
-        const movieApiId = document.getElementById('movieID').textContent;
-
-        const url = "/api/watchList/" + movieApiId;
-        console.log("Deleting movie with ID: " + movieApiId);
-
-        fetch(url, {
-            method: "DELETE",
-            headers: {
-                "Authorization": 'Bearer ' + localStorage.getItem('access_token'),
-                "Content-Type": "application/json",
-            },
+            if (response.ok) {
+                alert('내 리스트에 추가되었습니다.');
+                location.replace('/main');
+            }
+            else {
+                alert('등록에 실패했습니다.');
+            }
         })
             .then(response => {
                 if (response.ok) {
@@ -395,4 +377,31 @@ function httpRequest(method, url, body, success, fail) {
                 alert('서버와의 통신 중 문제가 발생했습니다.');
             });
     }
+}
+
+function deleteFromWatchList() {
+    const movieApiId = document.getElementById('movieID').textContent;
+
+    const url = "/api/watchList/" + movieApiId;
+    console.log("Deleting movie with ID: " + movieApiId);
+
+    fetch(url, {
+        method: "DELETE",
+        headers: {
+            "Authorization": 'Bearer ' + localStorage.getItem('access_token'),
+            "Content-Type": "application/json",
+        },
+    })
+        .then(response => {
+            if (response.ok) {
+                alert('내 관심 리스트에서 삭제되었습니다.');
+                location.replace('/main');
+            } else {
+                alert('삭제에 실패했습니다.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('서버와의 통신 중 문제가 발생했습니다.');
+        });
 }
