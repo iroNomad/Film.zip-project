@@ -364,19 +364,18 @@ function addToWatchList() {
                 alert('등록에 실패했습니다.');
             }
         })
-            .then(response => {
-                if (response.ok) {
-                    alert('내 관심 리스트에서 삭제되었습니다.');
-                    location.reload();
-                } else {
-                    alert('삭제에 실패했습니다.');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('서버와의 통신 중 문제가 발생했습니다.');
-            });
-    }
+        .then(response => {
+            if (response.ok) {
+                alert('내 관심 리스트에서 삭제되었습니다.');
+                location.reload();
+            } else {
+                alert('삭제에 실패했습니다.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('서버와의 통신 중 문제가 발생했습니다.');
+        });
 }
 
 function deleteFromWatchList() {
