@@ -7,8 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @RequiredArgsConstructor
 @Service
 public class UserService {
@@ -45,5 +43,13 @@ public class UserService {
 
     public boolean existsByNickname(String nickname) {
         return userRepository.existsByNickname(nickname);
+    }
+
+    public Long modifyProfile(User user) {
+        return userRepository.save(user).getId();
+    }
+
+    public void deleteUser(User user) {
+        userRepository.delete(user);
     }
 }
