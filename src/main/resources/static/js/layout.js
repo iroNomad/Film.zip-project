@@ -40,6 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
             renderTrendingList(data.trendingList);
             renderRecommendedList(data.recommendedList);
             renderWatchList(data.watchList);
+            renderUserName(data.userName);
         })
         .catch(error => {
             console.error('Error fetching /api/main:', error);
@@ -159,6 +160,10 @@ function renderTrendingList(trendingList) {
 
         inner.appendChild(carouselItem);
     });
+}
+
+function renderUserName(userName) {
+    document.getElementById("userNameDisplay").textContent = userName + "님께 추천";
 }
 
 /** 추천 리스트 */

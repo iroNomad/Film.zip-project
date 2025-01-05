@@ -45,6 +45,7 @@ public class MainController {
         User user = getCurrentUser();
 
         String genres = user.getGenre();
+        String userName = user.getName();
 
         // 예시) TMDB API 등으로부터 받아온 데이터
         HttpUrl trendingURL = HttpUrl.parse(TmdbApiEndpoint.TRENDING.getFullUrl() + "?language=ko");
@@ -72,6 +73,7 @@ public class MainController {
         result.put("trendingList", trendingList);
         result.put("recommendedList", recommendedList);
         result.put("watchList", watchList);
+        result.put("userName", userName);
 
         // 200 OK와 함께 Map 반환
         return ResponseEntity.ok(result);
