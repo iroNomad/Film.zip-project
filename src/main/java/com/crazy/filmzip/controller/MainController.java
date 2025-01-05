@@ -45,6 +45,7 @@ public class MainController {
         User user = getCurrentUser();
 
         String genres = user.getGenre();
+        String userName = user.getName();
 
         // 예시) TMDB API 등으로부터 받아온 데이터
         HttpUrl trendingURL = HttpUrl.parse(TmdbApiEndpoint.TRENDING.getFullUrl() + "?language=ko");
@@ -60,7 +61,7 @@ public class MainController {
 
         // watchList는 로그인 사용자 기반으로 불러오도록 구현
         // 예시로 1L(하드코딩) -> 실제로는 user.getId() 등으로 처리
-        List<?> watchList = watchListService.getMovieListByUserID(1L);
+        List<?> watchList = watchListService.getMovieListByUserID(user.getId());
 
         // 디버깅 출력
         System.out.println(">>> trendingList = " + trendingList);
@@ -72,6 +73,7 @@ public class MainController {
         result.put("trendingList", trendingList);
         result.put("recommendedList", recommendedList);
         result.put("watchList", watchList);
+        result.put("userName", userName);
 
         // 200 OK와 함께 Map 반환
         return ResponseEntity.ok(result);
