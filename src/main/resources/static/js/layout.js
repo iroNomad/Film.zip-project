@@ -289,6 +289,7 @@ function httpRequest(method, url, body, success, fail) {
         body: body
     })
         .then(response => {
+
             if (response.status === 200 || response.status === 201) {
                 return success && success();
             }
@@ -384,7 +385,7 @@ function httpRequest(method, url, body, success, fail) {
             .then(response => {
                 if (response.ok) {
                     alert('내 관심 리스트에서 삭제되었습니다.');
-                    location.replace('/main');
+                    location.reload();
                 } else {
                     alert('삭제에 실패했습니다.');
                 }
