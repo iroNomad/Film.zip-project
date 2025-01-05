@@ -1,8 +1,6 @@
 package com.crazy.filmzip.service;
 
 import com.crazy.filmzip.dto.AddCommunityPostRequest;
-import com.crazy.filmzip.dto.CommentRequest;
-import com.crazy.filmzip.dto.CommentResponse;
 import com.crazy.filmzip.dto.ReactionRequest;
 import com.crazy.filmzip.entity.Comment;
 import com.crazy.filmzip.entity.CommentReaction;
@@ -99,7 +97,7 @@ public class CommentService {
     }
 
     // 댓글 추천
-    public int recommendComment(Long commentId) {
+    public int recommendComment(Long commentId, Long id) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new EntityNotFoundException("Comment not found"));
         comment.setRecommends(comment.getRecommends() + 1);
@@ -107,7 +105,7 @@ public class CommentService {
     }
 
     // 댓글 비추천
-    public int notRecommendComment(Long commentId) {
+    public int notRecommendComment(Long commentId, Long id) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new EntityNotFoundException("Comment not found"));
         comment.setNotRecommends(comment.getNotRecommends() + 1);
@@ -176,8 +174,8 @@ public class CommentService {
         if (existingReaction.isPresent()) {
             CommentReaction reaction = existingReaction.get();
 
-            System.out.println("====================== reaction.getReactionType() = " + reaction.getReactionType());
-            System.out.println("====================== request.getReaction() = " + request.getReaction());
+            //System.out.println("====================== reaction.getReactionType() = " + reaction.getReactionType());
+            //System.out.println("====================== request.getReaction() = " + request.getReaction());
             if (reaction.getReactionType().equals(request.getReaction())) {
                 return false;
             } else {
@@ -194,4 +192,3 @@ public class CommentService {
         return true;
     }
 }
-
