@@ -60,7 +60,7 @@ public class MainController {
 
         // watchList는 로그인 사용자 기반으로 불러오도록 구현
         // 예시로 1L(하드코딩) -> 실제로는 user.getId() 등으로 처리
-        List<?> watchList = watchListService.getMovieListByUserID(1L);
+        List<?> watchList = watchListService.getMovieListByUserID(user.getId());
 
         // 디버깅 출력
         System.out.println(">>> trendingList = " + trendingList);
