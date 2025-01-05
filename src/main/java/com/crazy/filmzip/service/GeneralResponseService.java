@@ -49,6 +49,10 @@ public class GeneralResponseService {
                     poster_path = "/images/NotFound.jpg";
                 }
 
+                if (movie.get("backdrop_path").isNull()) {
+                    backdrop_path = "/images/NotFound.jpg";
+                }
+
                 // Add each movie as a map (key-value pairs) to the list
                 movieList.add(Map.of(
                         "title", title,

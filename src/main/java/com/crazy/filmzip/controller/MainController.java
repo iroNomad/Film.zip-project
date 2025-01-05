@@ -3,17 +3,22 @@ package com.crazy.filmzip.controller;
 import com.crazy.filmzip.TmdbApiEndpoint;
 import com.crazy.filmzip.dto.Movie;
 import com.crazy.filmzip.dto.Video;
-import com.crazy.filmzip.repository.UserRepository;
+import com.crazy.filmzip.entity.User;
 import com.crazy.filmzip.service.DetailResponseService;
 import com.crazy.filmzip.service.GeneralResponseService;
+import com.crazy.filmzip.service.UserService;
 import com.crazy.filmzip.service.WatchListService;
 import okhttp3.HttpUrl;
 import okhttp3.Request;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,41 +26,57 @@ import java.util.Map;
 public class MainController {
 
     private final DetailResponseService detailResponseService;
-    private final UserRepository userRepository;
     private final WatchListService watchListService;
+    private final UserService userService;
 
     @Value("${themoviedb.api.key}")
     private String apiKey;
 
     // Constructor-based dependency injection
-    public MainController(DetailResponseService detailResponseService, UserRepository userRepository, WatchListService watchListService) {
+    public MainController(DetailResponseService detailResponseService, WatchListService watchListService, UserService userService) {
         this.detailResponseService = detailResponseService;
-        this.userRepository = userRepository;
         this.watchListService = watchListService;
+        this.userService = userService;
     }
 
-    @GetMapping("/main")
-    public String main(Model model) {
+    @GetMapping("/api/main")
+    public ResponseEntity<Map<String, Object>> main() {
 
+        User user = getCurrentUser();
+
+        String genres = user.getGenre();
+        String userName = user.getName();
+
+        // 예시) TMDB API 등으로부터 받아온 데이터
         HttpUrl trendingURL = HttpUrl.parse(TmdbApiEndpoint.TRENDING.getFullUrl() + "?language=ko");
         HttpUrl recommendedURL = HttpUrl.parse(TmdbApiEndpoint.DISCOVER.getFullUrl())
                 .newBuilder()
                 .addQueryParameter("language", "ko")
                 .addQueryParameter("sort_by", "popularity.desc")
-                .addQueryParameter("with_genres", "18 OR 28 OR 36")
+                .addQueryParameter("with_genres", genres)
                 .build();
 
-        List recommendedList = GeneralResponseService.responseHandler(createRequest(recommendedURL));
-        List trendingList = GeneralResponseService.responseHandler(createRequest(trendingURL));
+        List<?> recommendedList = GeneralResponseService.responseHandler(createRequest(recommendedURL));
+        List<?> trendingList = GeneralResponseService.responseHandler(createRequest(trendingURL));
 
-        List watchList = watchListService.getMovieListByUserID(1L);
-        System.out.println("watchList = " + watchList);
+        // watchList는 로그인 사용자 기반으로 불러오도록 구현
+        // 예시로 1L(하드코딩) -> 실제로는 user.getId() 등으로 처리
+        List<?> watchList = watchListService.getMovieListByUserID(user.getId());
 
-        model.addAttribute("trendingList", trendingList);
-        model.addAttribute("recommendedList", recommendedList);
-        model.addAttribute("watchList", watchList);
+        // 디버깅 출력
+        System.out.println(">>> trendingList = " + trendingList);
+        System.out.println(">>> recommendedList = " + recommendedList);
+        System.out.println(">>> watchList = " + watchList);
 
-        return "main"; // This points to templates/main.html
+        // JSON으로 내려줄 Map 구성
+        Map<String, Object> result = new HashMap<>();
+        result.put("trendingList", trendingList);
+        result.put("recommendedList", recommendedList);
+        result.put("watchList", watchList);
+        result.put("userName", userName);
+
+        // 200 OK와 함께 Map 반환
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/search/{pageNum}")
@@ -111,5 +132,20 @@ public class MainController {
                 .addHeader("Authorization", "Bearer " + apiKey)
                 .build();
         return request;
+    }
+
+    // 현재 인증된 사용자 가져오기
+    private User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println("Authentication: " + authentication);
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new IllegalStateException("현재 사용자 인증 정보가 없습니다.");
+        }
+
+        String email = authentication.getName();
+        System.out.println("Authenticated User Email: " + email);
+
+        return userService.findByEmail(email);
     }
 }
