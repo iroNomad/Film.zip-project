@@ -1,5 +1,7 @@
-<!DOCTYPE html>
-<html lang="ko">
+<!--<!DOCTYPE html>-->
+<!--<html lang="ko">-->
+<html layout:decorate="~{layout}">
+<div layout:fragment="content">
 <head>
   <meta charset="UTF-8">
   <title>My Page</title>
@@ -40,6 +42,7 @@
     /* 페이지 상단 여백 제거 */
     .content-container {
       padding-top: 0; /* 상단 여백 완전히 제거 */
+      margin-top: 50px; /* 원하는 값으로 수정 */
     }
 
     /* 카드 가로 길이 제한 및 중앙 정렬 */
@@ -119,8 +122,13 @@
 </section>
 
 <!-- JS 스크립트 -->
+<script th:inline="javascript">
+  const navSearchBar = document.getElementById("navSearchBar");
+  navSearchBar.classList.add("d-none");
+</script>
 <script src="/js/token.js"></script>
 <script src="/js/mypage.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+</div>
 </html>

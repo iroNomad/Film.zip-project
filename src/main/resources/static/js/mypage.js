@@ -1,9 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
-    if (!isAuthenticated()) {
-        alert('로그인이 필요합니다.');
-        window.location.href = '/login';
-        return;
-    }
+    // if (!isAuthenticated()) {
+    //     alert('로그인이 필요합니다.');
+    //     window.location.href = '/login';
+    //     return;
+    // }
     loadUserInfo();
     initializeEventListeners();
 });
