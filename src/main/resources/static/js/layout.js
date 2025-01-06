@@ -191,6 +191,7 @@ function renderRecommendedList(recommendedList) {
         img.alt = 'Movie Poster';
         img.className = 'card-img-top rounded-0';
         img.style.objectFit = 'cover';
+        img.style.height = '168.75px';
 
         link.appendChild(img);
         card.appendChild(link);
@@ -237,6 +238,7 @@ function renderWatchList(watchList) {
         img.alt = 'Movie Poster';
         img.className = 'card-img-top rounded-0';
         img.style.objectFit = 'cover';
+        img.style.height = '168.75px';
 
         link.appendChild(img);
         card.appendChild(link);
