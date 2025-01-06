@@ -1,3 +1,6 @@
+/**
+ * 장다은
+ */
 // 좋아요 기능
 function likeComment(commentId) {
     fetch(`/comments/like/${commentId}`, {

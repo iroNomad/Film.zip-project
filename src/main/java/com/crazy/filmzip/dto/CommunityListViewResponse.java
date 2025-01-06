@@ -1,3 +1,6 @@
+/**
+ * 이지민
+ */
 package com.crazy.filmzip.dto;
 
 import com.crazy.filmzip.entity.CommunityPost;

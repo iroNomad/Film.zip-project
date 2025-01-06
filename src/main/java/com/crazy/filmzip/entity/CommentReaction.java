@@ -1,3 +1,6 @@
+/**
+ * 장다은
+ */
 package com.crazy.filmzip.entity;
 
 import jakarta.persistence.*;

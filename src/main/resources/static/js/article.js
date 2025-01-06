@@ -1,3 +1,6 @@
+/**
+ * 이지민
+ */
 // 공통 fetch 요청 처리 함수
 function sendRequest(url, method, data, successMessage, failureMessage, redirectUrl) {
     fetch(url, {
