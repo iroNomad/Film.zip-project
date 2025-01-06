@@ -343,13 +343,13 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-    if (!isAuthenticated()) {
-        alert('로그인이 필요합니다.');
-        window.location.href = '/login';
-        return;
-    }
-});
+// document.addEventListener('DOMContentLoaded', () => {
+//     if (!isAuthenticated()) {
+//         alert('로그인이 필요합니다.');
+//         window.location.href = '/login';
+//         return;
+//     }
+// });
 
 // ✅ 인증 확인
 function isAuthenticated() {
