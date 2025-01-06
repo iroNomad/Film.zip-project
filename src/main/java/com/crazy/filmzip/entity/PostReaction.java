@@ -1,3 +1,6 @@
+/**
+ * 이지민
+ */
 package com.crazy.filmzip.entity;
 
 import jakarta.persistence.*;
