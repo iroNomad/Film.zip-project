@@ -36,13 +36,13 @@ public class WatchListService {
     }
 
     @Transactional
-    public void deleteMovieFromWatchList(Integer movieApiId) {
-        if (!watchListRepository.existsByMovieApiId(movieApiId)) {
-            throw new IllegalArgumentException("게시글을 찾을 수 없습니다. ID: " + movieApiId);
+    public void deleteMovieFromWatchList(Long userID, Integer movieApiId) {
+        System.out.println("UserID and MovieID = " + userID + " " + movieApiId);
+        if (watchListRepository.existsByUserIdAndMovieApiId(userID, movieApiId)) {
+            watchListRepository.deleteByUserIdAndMovieApiId(userID, movieApiId);
+            System.out.println("Movie deleted from watchlist!");
+        } else {
+            System.out.println("Movie not found in watchlist!");
         }
-        System.out.println("MovieID in service - ");
-        System.out.println(movieApiId);
-
-        watchListRepository.deleteByMovieApiId(movieApiId);
     };
 }

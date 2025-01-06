@@ -20,12 +20,13 @@ public class WatchListApiController {
 
     private final WatchListService watchListService;
     private final UserService userService;
+    Long userID = null;
 
     @PostMapping("")
     public ResponseEntity<WatchListResponse> addMovieToWatchList(@RequestBody AddWatchListRequest request) {
 
         User user = getCurrentUser();
-
+        userID = user.getId();
         // Set a test user ID for now (replace with real user authentication later)
         request.setUserId(user.getId());
         System.out.println("movieApiId: " + request.getMovieApiId());
@@ -40,7 +41,8 @@ public class WatchListApiController {
 
     @DeleteMapping("/{movieApiId}")
     public ResponseEntity<Void> deleteMovieFromWatchList(@PathVariable Integer movieApiId) {
-        watchListService.deleteMovieFromWatchList(movieApiId);
+//        watchListService.deleteMovieFromWatchList(movieApiId);
+        watchListService.deleteMovieFromWatchList(userID, movieApiId);
         System.out.println("MovieID in controller - ");
         System.out.println(movieApiId);
         return ResponseEntity.ok().build();

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,8 @@ public class MainController {
     private final DetailResponseService detailResponseService;
     private final WatchListService watchListService;
     private final UserService userService;
+
+    Long userId = 0L;
 
     @Value("${themoviedb.api.key}")
     private String apiKey;
@@ -43,9 +46,10 @@ public class MainController {
     public ResponseEntity<Map<String, Object>> main() {
 
         User user = getCurrentUser();
-
+        userId = user.getId();
         String genres = user.getGenre();
         String userName = user.getName();
+
 
         // 예시) TMDB API 등으로부터 받아온 데이터
         HttpUrl trendingURL = HttpUrl.parse(TmdbApiEndpoint.TRENDING.getFullUrl() + "?language=ko");
@@ -107,14 +111,18 @@ public class MainController {
     }
 
     @GetMapping("/detail/{movieID}")
-    public String detail(@PathVariable("movieID") int movieID, Model model) {
+    public String detail(@PathVariable("movieID") Integer movieID, Model model) {
+
+//        User user = getCurrentUser();
+
+        System.out.println("userid: " + userId);
 
         HttpUrl detailURL = HttpUrl.parse(TmdbApiEndpoint.DETAIL.getFullUrl() + movieID + "?language=ko");
         HttpUrl videoURL = HttpUrl.parse(TmdbApiEndpoint.DETAIL.getFullUrl() + movieID + "/videos?language=ko");
 
         Movie movie = detailResponseService.getMovieData(createRequest(detailURL));
         Video video = detailResponseService.getVideoData(createRequest(videoURL));
-        boolean isInWatchList = detailResponseService.checkWatchList(movieID);
+        boolean isInWatchList = detailResponseService.checkWatchList(userId, movieID);
 
         // Pass the movie list to the view (detail.html)
         model.addAttribute("movie", movie);
