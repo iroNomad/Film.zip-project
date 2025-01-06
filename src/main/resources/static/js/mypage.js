@@ -1,9 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // if (!isAuthenticated()) {
-    //     alert('로그인이 필요합니다.');
-    //     window.location.href = '/login';
-    //     return;
-    // }
+    if (!isAuthenticated()) {
+        alert('로그인이 필요합니다.');
+        window.location.href = '/login';
+        return;
+    }
     loadUserInfo();
     initializeEventListeners();
 });
@@ -132,7 +132,7 @@ function deleteUser() {
 // 이벤트 리스너 초기화
 function initializeEventListeners() {
     // 로그아웃 버튼
-    document.getElementById('logout-btn').addEventListener('click', logout);
+    document.getElementById('logout-btn2').addEventListener('click', logout);
 
     // 회원 탈퇴 버튼
     const deleteButton = document.getElementById('delete-user-btn');
