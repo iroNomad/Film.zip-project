@@ -1,3 +1,6 @@
+/**
+ * 자카
+ */
 package com.crazy.filmzip.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;

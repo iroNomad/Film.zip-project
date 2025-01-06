@@ -1,3 +1,6 @@
+/**
+ * 김진원
+ */
 package com.crazy.filmzip.config.jwt;
 
 import lombok.Getter;

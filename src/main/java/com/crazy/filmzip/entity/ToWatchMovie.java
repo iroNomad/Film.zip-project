@@ -1,3 +1,6 @@
+/**
+ * 자카
+ */
 package com.crazy.filmzip.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;

@@ -1,3 +1,6 @@
+/**
+ * 김진원
+ */
 package com.crazy.filmzip.entity;
 
 import jakarta.persistence.*;

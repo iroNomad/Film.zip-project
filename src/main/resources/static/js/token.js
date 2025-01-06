@@ -1,3 +1,6 @@
+/**
+ * 김진원
+ */
 const token = searchParam('token')
 
 if (token) {

@@ -1,3 +1,6 @@
+/**
+ * 김진원
+ */
 package com.crazy.filmzip.util;
 
 import jakarta.servlet.http.Cookie;
