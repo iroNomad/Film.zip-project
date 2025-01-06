@@ -11,4 +11,6 @@ public interface WatchListRepository extends JpaRepository<ToWatchMovie, Number>
     List<ToWatchMovie> findByMovieApiId(Integer movieId);
     List<ToWatchMovie> findByUserIdOrderByAddedAtDesc(Long id);
     void deleteByMovieApiId(Integer movieId);
+    boolean existsByUserIdAndMovieApiId(Long userId, Integer movieId);
+    void deleteByUserIdAndMovieApiId(Long userId, Integer movieId);
 }

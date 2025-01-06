@@ -2,6 +2,7 @@ package com.crazy.filmzip.service;
 
 import com.crazy.filmzip.dto.Movie;
 import com.crazy.filmzip.dto.Video;
+import com.crazy.filmzip.entity.ToWatchMovie;
 import com.crazy.filmzip.repository.WatchListRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.IOException;
+import java.util.List;
 
 @Service
 public class DetailResponseService {
@@ -79,8 +81,20 @@ public class DetailResponseService {
         return videoObject;
     }
 
-    public boolean checkWatchList(Integer movieId) {
+    public boolean checkWatchList(Long userId, Integer movieID) {
 
-        return !watchListRepository.findByMovieApiId(movieId).isEmpty();
+        List<ToWatchMovie> movieList = watchListRepository.findByUserIdOrderByAddedAtDesc(userId);
+        if (movieList.isEmpty()) {
+            return false;
+        }
+
+        for (ToWatchMovie movie : movieList) {
+            System.out.println("getMovieID = " + movie.getMovieApiId());
+            System.out.println("arg movieID = " + movieID);
+            if (movie.getMovieApiId().equals(movieID)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
