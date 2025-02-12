@@ -1,3 +1,7 @@
+/**
+ * 자카
+ */
+
 .card-title {
   display: -webkit-box;               /* Enables flexbox-based layout */
   -webkit-line-clamp: 2;              /* Limits the text to 2 lines */
