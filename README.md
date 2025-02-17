@@ -1,42 +1,43 @@
-# 🎬 Film.zip - Film Discovery Platform  
+# 🎬 Film.zip - 영화 탐색 플랫폼  
 
-Film.zip is a **film discovery web application** that allows users to explore and search for movies. The platform provides essential details about films and helps users find interesting movies to watch.  
+**Film.zip**은 사용자가 영화를 탐색하고 검색할 수 있는 **영화 탐색 웹 애플리케이션**입니다. 이 플랫폼은 영화의 주요 정보를 제공하며, 흥미로운 영화를 쉽게 찾을 수 있도록 도와줍니다.  
 
-## 📌 Project Overview  
+## 📌 프로젝트 개요  
 
-| Feature | Description |
-|---------|------------|
-| 🔍 **Movie Search** | Search for movies by title |
-| 📋 **Movie Details** | View movie information (title, genre, rating, description, etc.) |
-| 🎯 **Personalized Recommendations** | Suggest movies based on users' preferred genres (planned feature) |
-| ❤️ **Watch List** | Save movies to a personal watch list |
-| 🏆 **Trending & Popular Movies** | Discover trending and top-rated films |
-| 💬 **Community Page** | A space where users can discuss movies, share reviews, and interact with others |
+| 기능 | 설명 |
+|------|------|
+| 🔍 **영화 검색** | 영화 제목으로 검색 가능 |
+| 📋 **영화 상세 정보** | 제목, 장르, 평점, 설명 등 영화 정보 제공 |
+| 🎯 **맞춤 추천** | 사용자의 선호 장르 기반 영화 추천 (추후 개발 예정) |
+| ❤️ **감상 목록** | 관심 있는 영화를 개인 감상 목록에 저장 |
+| 🏆 **트렌딩 & 인기 영화** | 현재 인기 있는 영화 및 높은 평점의 영화 탐색 |
+| 💬 **커뮤니티 페이지** | 사용자들이 영화에 대해 토론하고 리뷰를 공유하는 공간 |
 
-## 🛠 Tech Stack  
+## 🛠 기술 스택  
 
-| Layer | Technology |
-|-------|------------|
-| **Backend** | Spring Boot, Spring Data JPA, Oracle DB |
-| **Frontend** | HTML, CSS, JavaScript, Thymeleaf, Bootstrap |
-| **API Integration** | TMDb API |
-| **Build & Deployment** | Gradle, AWS EC2 / Render (planned) |
+| 계층 | 기술 |
+|------|------|
+| **백엔드** | Spring Boot, Spring Data JPA, Oracle DB |
+| **프론트엔드** | HTML, CSS, JavaScript, Thymeleaf, Bootstrap |
+| **API 연동** | TMDb API |
+| **빌드 & 배포** | Gradle, AWS EC2 / Render (추후 계획) |
 
-## 📂 Project Structure  
+## 📂 프로젝트 구조  
 
-| Directory/File | Description |
-|---------------|------------|
-| `src/` | Source code |
-| `src/main/` | Application code |
-| `src/main/java/com/filmzip/` | Backend logic |
-| `src/main/resources/` | Static resources (HTML, templates, config) |
-| `src/test/` | Test cases |
-| `build.gradle` | Gradle build script |
-| `settings.gradle` | Gradle settings |
-| `README.md` | Project documentation |
-| `.gitignore` | Git ignore rules |
+| 디렉토리/파일 | 설명 |
+|--------------|------|
+| `src/` | 소스 코드 |
+| `src/main/` | 애플리케이션 코드 |
+| `src/main/java/com/filmzip/` | 백엔드 로직 |
+| `src/main/resources/` | 정적 리소스 (HTML, 템플릿, 설정 파일) |
+| `src/test/` | 테스트 코드 |
+| `build.gradle` | Gradle 빌드 스크립트 |
+| `settings.gradle` | Gradle 설정 파일 |
+| `README.md` | 프로젝트 문서 |
+| `.gitignore` | Git 제외 규칙 |
 
-## UI Preview
+## UI 미리보기  
+
 ![Main page](https://private-user-images.githubusercontent.com/89756508/413120483-7f30872d-0468-4eba-a3fa-d8a83558d157.gif?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3Mzk0OTkwMDUsIm5iZiI6MTczOTQ5ODcwNSwicGF0aCI6Ii84OTc1NjUwOC80MTMxMjA0ODMtN2YzMDg3MmQtMDQ2OC00ZWJhLWEzZmEtZDhhODM1NThkMTU3LmdpZj9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNTAyMTQlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjUwMjE0VDAyMDUwNVomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTcwMzNlNzZhZTEzY2U4NDRmMmZkOGIwNzQ4ZGYwZWJkNWM2OWQ0ZDUyOTZiOGQwMDIzNGNjODk2OWU4N2MyZTkmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.Mh95deiGnwGXEXFH09fRegKWA_LGR3s2Qpzw_MHhd3c)
 
 ---
