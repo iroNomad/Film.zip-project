@@ -1,5 +1,3 @@
-![Image](https://github.com/user-attachments/assets/6464773a-8cdd-4d60-bc06-494d1af52e69)
-
 # 🎬 Film.zip - 영화 탐색 플랫폼  
 
 **Film.zip**은 사용자가 영화를 탐색하고 검색할 수 있는 **영화 탐색 웹 애플리케이션**입니다. 이 플랫폼은 영화의 주요 정보를 제공하며, 흥미로운 영화를 쉽게 찾을 수 있도록 도와줍니다.  
@@ -38,17 +36,9 @@
 | `README.md` | 프로젝트 문서 |
 | `.gitignore` | Git 제외 규칙 |
 
----
-
-![Screen Recording 2025-02-14 102327 (1)](https://github.com/user-attachments/assets/a3569a2c-5023-4c6e-87ee-57a9148f2ce1)
-
-
-![Screenshot 2025-02-13 174913](https://github.com/user-attachments/assets/be14279f-c9b2-40c1-89c8-076f17083a7b)
-
-
 ## UI 미리보기  
 
-![Image](https://github.com/user-attachments/assets/6464773a-8cdd-4d60-bc06-494d1af52e69)
+![ghefhfd](https://github.com/user-attachments/assets/6464773a-8cdd-4d60-bc06-494d1af52e69)
 
 ---
 
