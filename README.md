@@ -1,5 +1,3 @@
-![Image](https://github.com/user-attachments/assets/d4dca544-49b5-4395-835e-ca98aa90fde6)
-
 # 🎬 Film.zip - 영화 탐색 플랫폼  
 
 **Film.zip**은 사용자가 영화를 탐색하고 검색할 수 있는 **영화 탐색 웹 애플리케이션**입니다. 이 플랫폼은 영화의 주요 정보를 제공하며, 흥미로운 영화를 쉽게 찾을 수 있도록 도와줍니다.  
@@ -39,6 +37,8 @@
 | `.gitignore` | Git 제외 규칙 |
 
 ## UI 미리보기  
+
+![Image](https://github.com/user-attachments/assets/f22c2110-80a0-4c61-8756-bff80a023f59)
 
 ![Main page](https://private-user-images.githubusercontent.com/89756508/413120483-7f30872d-0468-4eba-a3fa-d8a83558d157.gif?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3Mzk0OTkwMDUsIm5iZiI6MTczOTQ5ODcwNSwicGF0aCI6Ii84OTc1NjUwOC80MTMxMjA0ODMtN2YzMDg3MmQtMDQ2OC00ZWJhLWEzZmEtZDhhODM1NThkMTU3LmdpZj9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNTAyMTQlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjUwMjE0VDAyMDUwNVomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTcwMzNlNzZhZTEzY2U4NDRmMmZkOGIwNzQ4ZGYwZWJkNWM2OWQ0ZDUyOTZiOGQwMDIzNGNjODk2OWU4N2MyZTkmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.Mh95deiGnwGXEXFH09fRegKWA_LGR3s2Qpzw_MHhd3c)
 
